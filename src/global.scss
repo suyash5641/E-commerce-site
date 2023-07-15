@@ -1,0 +1,21 @@
+@import './variables.scss';
+@font-face {
+    font-family: Lato;
+    src: url('../public/assets/fonts/Lato-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: FORTA;
+    src: url('../public/assets/fonts/FORTE.TTF') format('truetype');
+    font-weight: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: Lato;
+    src: url('../public/assets/fonts/Lato-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-display: swap;
+}
