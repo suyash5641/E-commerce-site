@@ -8,6 +8,8 @@ export const colors = {
     primaryBlack: '#000000',
     primaryBlue: '#306FBC',
     primaryText: '#212121',
+    secondaryText:'#0F1111',
+    tertiaryText:'#282c3f',
     primaryError: '#E13A3A',
     primarySuccess: '#42AE40',
     primaryInactive: '#828282',
@@ -19,6 +21,7 @@ export const colors = {
     secondaryBackground: '#F9F9F9',
     shadow: 'rgba(48, 111, 188, 0.2)'
 }
+
 export const createPalette = (mode: PaletteMode): PaletteOptions => ({
     background: {
       default: colors.primaryBackground,

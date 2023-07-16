@@ -30,9 +30,16 @@ const createTypography: Func = () => ({
   },
   h3: {
     fontSize: '18px',
-    fontWeight: 500,
-    color: colors.primaryText,
+    fontWeight: 700,
+    color: colors.tertiaryText,
     fontFamily: 'Roboto',
+  },
+  h5: {
+    fontSize: '16px',
+    fontWeight: 400,
+    color: colors.secondaryText,
+    fontFamily: 'Roboto',
+    lineHeight: '24px',
   },
   h6: {
     fontSize: '14px',
