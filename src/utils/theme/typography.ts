@@ -17,7 +17,7 @@ const createTypography: Func = () => ({
     'Montserrat',
   ].join(','),
   h1: {
-    fontSize: '36px',
+    fontSize: '28px',
     fontWeight: 500,
     color: colors.primaryText,
     fontFamily: 'Roboto',

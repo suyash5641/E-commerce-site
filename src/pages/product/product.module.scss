@@ -1,0 +1,43 @@
+.productcontainer {
+   flex-direction: row !important;
+  .productimage {
+    flex-grow: 1;
+    flex-basis: 41.6666666667%;
+    max-width: 41.6666666667%;
+    padding: 32px 8px 0px 8px;
+  }
+  .productinfo {
+    flex-grow: 1;
+    flex-basis: 58.3333333333%;
+    max-width: 58.3333333333%;
+    padding: 60px 8px 0px 8px;
+  }
+  .discountedPrice{
+    font-weight: 700;
+  }
+  .price{
+    text-decoration: line-through;
+    color: #878787;
+
+  }
+  .discountPercent{
+    color:#388E3C;
+  }
+}
+@media screen and (max-width:640px){
+    .productcontainer{
+        flex-direction: column !important;
+        .productimage {
+            flex-grow: 1;
+            flex-basis: 100%;
+            max-width: 100%;
+            padding: 16px 8px 0px 8px;
+          }
+          .productinfo {
+            flex-grow: 1;
+            flex-basis: 100%;
+            max-width: 100%;
+            padding: 24px 8px 0px 8px;
+          }
+    }
+}

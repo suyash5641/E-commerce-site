@@ -16,7 +16,7 @@ import styles from "./filter.module.scss";
 import {
     useSearchParams,
   } from 'react-router-dom';
-import { FilterDrawer } from "../../shared/components/ProductCard/FilterDrawer";
+import { FilterDrawer } from "../../shared/components/FilterDrawer";
 const sortby = ["Price: High to Low", "Price: Low to High"];
 
 export const Filter = () => {

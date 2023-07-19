@@ -1,7 +1,7 @@
 import { Box, Drawer, Slider, Typography,SelectChangeEvent, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox, FormLabel, FormGroup } from "@mui/material";
 import { useEffect, useState } from "react";
 import styles from "./filterdrawer.module.scss"
-import { useProduct } from "../../../../sdk/hooks/products/useProduct";
+import { useProduct } from "../../../sdk/hooks/products/useProduct";
 
 const drawerWidth = 240;
 interface Props {
