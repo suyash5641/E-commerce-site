@@ -31,4 +31,9 @@ export interface IProductLists {
         categorytype: string
       }
   }
+
+  export interface ILoginModalProps{
+    open: boolean,
+    setModalOpen:React.Dispatch<React.SetStateAction<boolean>>
+  }
   
