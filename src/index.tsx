@@ -1,20 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.scss';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ThemeProvider } from './utils/theme';
-import {BrowserRouter as Router} from 'react-router-dom';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.scss";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider } from "./utils/theme";
+import { BrowserRouter as Router } from "react-router-dom";
+import { AuthContextProvider } from "./sdk/context/AuthContext/AuthProvider";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
-    <ThemeProvider>
+  <ThemeProvider>
     <Router>
-    <App />
+      <AuthContextProvider>
+        <App />
+      </AuthContextProvider>
     </Router>
-    </ThemeProvider>
+  </ThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
