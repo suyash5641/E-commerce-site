@@ -60,6 +60,7 @@ export const LoginModal = () => {
       };
       try {
         await signIn(payload);
+        handleClose();
       } catch (error) {
         setIsSnackBar({
           isOpen: true,
@@ -73,6 +74,9 @@ export const LoginModal = () => {
   useEffect(() => {
     if (searchParams.has("login")) {
       setModalOpen(true);
+    }
+    else{
+      setModalOpen(false);
     }
   }, [searchParams]);
 

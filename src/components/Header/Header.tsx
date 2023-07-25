@@ -14,21 +14,24 @@ export const Header = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [show, setIsShow] = useState(false);
   const location = useLocation();
-  const searchParams = new URLSearchParams(window.location.search);
   const token = localStorage.getItem("authToken");
-  
+
   const addQueryParam = useCallback((key: string, value: string) => {
-    searchParams.set(key, value);
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.append(key, value);
     const updatedSearchString = `?${searchParams.toString()}`;
+    console.log(updatedSearchString,"test",window.location.search)
     navigate({ search: `?${searchParams.toString()}` });
-  },[location?.search]);
+  },[window.location?.search,navigate]);
 
   const removeQueryParam = (key: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
     searchParams.delete(key);
     navigate({ search: `?${searchParams.toString()}` });
   };
 
   const handleModalOpen = useCallback((params: string) => {
+    const searchParams = new URLSearchParams(window.location.search);
     addQueryParam(params, "true");
     if (searchParams.has(params === "login" ? "signup" : "login")) {
       removeQueryParam(params === "login" ? "signup" : "login");
@@ -36,11 +39,13 @@ export const Header = () => {
   }, []);
 
   const handleProductCartOpen = useCallback(() => {
+    console.log(isLogin,"cartttt")
     if (isLogin) {
+
     } else {
       handleModalOpen("login");
     }
-  }, []);
+  }, [isLogin]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -66,7 +71,7 @@ export const Header = () => {
     fetchUser();
   }, [token]);
 
-  // console.log(show, isLogin,"test");
+   console.log(isLogin,"test");
   return (
     <>
       {!show ? (

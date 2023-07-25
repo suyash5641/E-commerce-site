@@ -61,6 +61,7 @@ export const SignUpModal = () => {
       };
       try {
        await register(payload);
+       handleClose();
       } catch (error) {
         setIsSnackBar({
           isOpen: true,
@@ -75,6 +76,9 @@ export const SignUpModal = () => {
   useEffect(() => {
     if (searchParams.has("signup")) {
       setModalOpen(true);
+    }
+    else {
+      setModalOpen(false);
     }
   }, [searchParams]);
 
