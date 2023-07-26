@@ -21,13 +21,21 @@ export const Header = () => {
     searchParams.append(key, value);
     const updatedSearchString = `?${searchParams.toString()}`;
     console.log(updatedSearchString,"test",window.location.search)
-    navigate({ search: `?${searchParams.toString()}` });
+    navigate({
+      pathname: location.pathname,
+      search: `?${searchParams.toString()}`,
+    });
+    // navigate({ search: `?${searchParams.toString()}` });
   },[window.location?.search,navigate]);
 
   const removeQueryParam = (key: string) => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.delete(key);
-    navigate({ search: `?${searchParams.toString()}` });
+    navigate({
+      pathname: location.pathname,
+      search: `?${searchParams.toString()}`,
+    });
+    // navigate({ search: `?${searchParams.toString()}` });
   };
 
   const handleModalOpen = useCallback((params: string) => {
@@ -41,7 +49,7 @@ export const Header = () => {
   const handleProductCartOpen = useCallback(() => {
     console.log(isLogin,"cartttt")
     if (isLogin) {
-
+      navigate('/cart');
     } else {
       handleModalOpen("login");
     }
@@ -49,7 +57,7 @@ export const Header = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      console.log(token);
+      // console.log(token);
       if (token) {
         try {
           const res = await fetchLoggedInUser(token);
@@ -75,7 +83,9 @@ export const Header = () => {
   return (
     <>
       {!show ? (
-        <Skeleton variant="rectangular" width={"100%"} className={styles.header}/>
+        // <Skeleton variant="rectangular" width={"100%"} className={styles.header}/>
+        <Stack
+          className={styles.header}/>
       ) : (
         <Stack
           className={styles.header}
@@ -85,7 +95,7 @@ export const Header = () => {
           {isLogin ? (
             <>
               <p>Header</p>
-              <AddShoppingCartIcon onClick={handleProductCartOpen} />
+              {location.pathname != "/cart" && <AddShoppingCartIcon onClick={handleProductCartOpen} />}
               <UserProfile />
             </>
           ) : (

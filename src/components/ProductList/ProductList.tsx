@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
-import { Stack, Grid } from "@mui/material";
+import { Stack, Grid, Skeleton } from "@mui/material";
 import { ProductCard } from "../../shared/components/ProductCard";
 import styles from "./product-list.module.scss"
 import { useSearchParams } from "react-router-dom";
@@ -10,6 +10,10 @@ export const ProductList = () => {
   const { getProduct, productList, loading } = useProduct();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  const getProductList = useCallback(async(query:any)=>{
+      await getProduct(query);
+  },[getProduct])
 
   useEffect(()=>{
     const query = {
@@ -27,8 +31,9 @@ export const ProductList = () => {
         "filters[price][$gte]": searchParams.get("maxPrice"),
       }),
     };
-    getProduct(query)
-  },[searchParams])
+    
+    getProductList(query);
+  },[searchParams,getProductList])
 
   const handleProductCardClick=(id:number)=>{
     navigate({
@@ -37,8 +42,9 @@ export const ProductList = () => {
     });
   }
 
-
   return (
+    <>
+    {loading ? <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />:
     <Stack className={styles.productlist}>
       <Grid container spacing={1}>
         {productList?.map((data,index) => (
@@ -47,6 +53,7 @@ export const ProductList = () => {
           </Grid>
         ))}
       </Grid>
-    </Stack>
+    </Stack>}
+    </>
   );
 };

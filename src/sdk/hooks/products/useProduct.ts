@@ -4,7 +4,7 @@ import { IProductLists, ICategory } from "../../../shared/interfaces/interface";
 export const useProduct = () => {
   const [productList, setProductList] = useState<IProductLists[]>();
   const [categoryList, setCategoryList] = useState<ICategory[]>();
-  const [loading, setLoading] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(true);
   const [productDetail, setProductDetail] = useState<IProductLists>();
 
   const getProduct = useCallback(async (filters: any) => {
@@ -19,10 +19,11 @@ export const useProduct = () => {
         setProductList(response?.data);
       }
     } catch (err) {
+      setLoading(false);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setLoading,setProductList]);
 
   const getCategories = useCallback(async () => {
     try {
@@ -32,11 +33,11 @@ export const useProduct = () => {
         setCategoryList(response?.data);
       }
     } catch (err) {}
-  }, []);
+  }, [setCategoryList]);
 
   const getProductDetail = useCallback(async (id:number) => {
     try {
-      setLoading(true);
+      // setLoading(true);
       const res = await fetch(
         `http://localhost:1337/api/products/${id}?populate=*`
       );
@@ -45,10 +46,11 @@ export const useProduct = () => {
         setProductDetail(response?.data);
       }
     } catch (err) {
+      setLoading(false);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setLoading,setProductDetail]);
 
   useEffect(() => {
     getCategories();
