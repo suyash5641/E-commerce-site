@@ -47,6 +47,17 @@ export const LoginModal = () => {
     svg: "",
   });
 
+  const handleClose = () => {
+    setModalOpen(false);
+    removeQueryParam("login");
+  };
+
+  const removeQueryParam = (key: string) => {
+    searchParams.delete(key);
+    navigate({ search: `?${searchParams.toString()}` });
+  };
+
+
   const formik: any = useFormik<FormValues>({
     initialValues: {
       email: "",
@@ -72,24 +83,15 @@ export const LoginModal = () => {
   });
 
   useEffect(() => {
-    if (searchParams.has("login")) {
+    if (searchParams.has("login") && localStorage.getItem("authToken") ==null) {
       setModalOpen(true);
     }
     else{
       setModalOpen(false);
     }
-  }, [searchParams]);
+  }, [searchParams,localStorage,setModalOpen]);
 
-  const handleClose = () => {
-    setModalOpen(false);
-    removeQueryParam("login");
-  };
-
-  const removeQueryParam = (key: string) => {
-    searchParams.delete(key);
-    navigate({ search: `?${searchParams.toString()}` });
-  };
-
+ 
   useEffect(() => {
     if (isModalOpen) {
       setIsSnackBar({

@@ -15,21 +15,30 @@ export const Header = () => {
   const [show, setIsShow] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("authToken");
-
+  let url = new URL(window.location.href);
+  let searchParams = new URLSearchParams(url.search);
   const addQueryParam = useCallback((key: string, value: string) => {
-    const searchParams = new URLSearchParams(window.location.search);
-    searchParams.append(key, value);
-    const updatedSearchString = `?${searchParams.toString()}`;
-    console.log(updatedSearchString,"test",window.location.search)
-    navigate({
-      pathname: location.pathname,
-      search: `?${searchParams.toString()}`,
-    });
+
+    // searchParams.append(key, value);
+    // const updatedSearchString = `?${searchParams.toString()}`;
+    // console.log(updatedSearchString,searchParams,"test",window.location.href,window.location.pathname)
+    // navigate({
+    //   pathname: window.location.pathname,
+    //   search: `?${searchParams.toString()}`,
+    // });
     // navigate({ search: `?${searchParams.toString()}` });
-  },[window.location?.search,navigate]);
+    const currentURL = window.location.href;
+    const urlParams = new URLSearchParams(window.location.search); 
+    urlParams.set(key, value);
+    // const updatedURL = `${currentURL.split('?')[0]}?${urlParams.toString()}`;
+    // console.log(updatedURL,"up",`?${urlParams.toString()}`)
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${urlParams.toString()}`,
+    });
+  },[navigate]);
 
   const removeQueryParam = (key: string) => {
-    const searchParams = new URLSearchParams(window.location.search);
     searchParams.delete(key);
     navigate({
       pathname: location.pathname,
@@ -39,7 +48,6 @@ export const Header = () => {
   };
 
   const handleModalOpen = useCallback((params: string) => {
-    const searchParams = new URLSearchParams(window.location.search);
     addQueryParam(params, "true");
     if (searchParams.has(params === "login" ? "signup" : "login")) {
       removeQueryParam(params === "login" ? "signup" : "login");

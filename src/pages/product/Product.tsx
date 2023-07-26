@@ -35,7 +35,11 @@ export const Product = () => {
     (key: string, value: string) => {
       const searchParams = new URLSearchParams(window.location.search);
       searchParams.append(key, value);
-      navigate({ search: `?${searchParams.toString()}` });
+      // navigate({ search: `?${searchParams.toString()}` });
+      navigate({
+        pathname: window.location.pathname,
+        search: `?${searchParams.toString()}`,
+      });
     },
     [window.location?.search, navigate]
   );
