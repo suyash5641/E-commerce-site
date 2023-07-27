@@ -39,3 +39,18 @@ export interface IProductLists {
     setModalOpen:React.Dispatch<React.SetStateAction<boolean>>
   }
   
+  export interface IUser {
+    id: number;
+    username: string;
+    email: string;
+    cart: Cart[];
+    discountPrice: number;
+    cartActualPrice: number;
+    cartTotalPrice: number;
+  }
+  
+  export interface Cart {
+    quantity: number;
+    id: number;
+    attributes: IAttributes;
+  }

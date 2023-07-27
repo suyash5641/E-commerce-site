@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { IProductLists, ICategory } from "../../../shared/interfaces/interface";
+import { IProductLists, ICategory, IUser, Cart } from "../../../shared/interfaces/interface";
 import { useProduct } from "../products/useProduct";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
 import { ProductCard } from "../../../shared/components/ProductCard";
@@ -18,44 +18,87 @@ export const useCart = () => {
   const getPayload = useCallback(
     (productObject: any) => {
       if (user?.cart === null) {
-        return [productObject];
+        // console.log(productObject,"po")
+        const payload ={
+          discountPrice: parseInt(productObject?.attributes?.price) - parseInt(productObject?.attributes?.discountedPrice),
+          cartActualPrice: parseInt(productObject?.attributes?.discountedPrice),
+          cartTotalPrice: parseInt(productObject?.attributes?.price),
+          cart:[productObject]
+        }
+        return payload;
       } else {
+
         const res = user?.cart;
         res?.push(productObject);
-        return res;
+        const payload ={
+          discountPrice:parseInt(productObject?.attributes?.price) - parseInt(productObject?.attributes?.discountedPrice)+parseInt(user?.discountPrice?.toString() || "0"),
+          cartActualPrice: parseInt(productObject?.attributes?.discountedPrice)+parseInt(user?.cartActualPrice?.toString() || "0"),
+          cartTotalPrice: parseInt(productObject?.attributes?.price)+parseInt(user?.cartTotalPrice?.toString() || "0"),
+          cart: res
+        }
+        return payload;
+      
       }
     },
     [user?.cart]
   );
 
   const getUpdateCartPayload = useCallback(
-    (productid: number,removeProduct:boolean,productQuantity:number) => {
+    (data: Cart,removeProduct:boolean,operationType:string) => {
       if(removeProduct){
         const filterCart = user?.cart?.filter(
-          (item) => item.id != productid
+          (item) => item.id != data?.id
         );
-        console.log(filterCart,"test")
+        if(filterCart?.length === 0){
+          const payload ={
+            discountPrice:null,
+            cartActualPrice: null,
+            cartTotalPrice: null,
+            cart: null
+          }
+          return payload;
+        }
+        else{
 
-        return filterCart;
+          const payload ={
+            discountPrice:parseInt(user?.discountPrice?.toString() || "0") - ((parseInt(data?.attributes?.price) - parseInt(data?.attributes?.discountedPrice)))*data?.quantity,
+            cartActualPrice: parseInt(user?.cartActualPrice?.toString() || "0") - parseInt(data?.attributes?.discountedPrice)*data?.quantity,
+            cartTotalPrice: parseInt(user?.cartTotalPrice?.toString() || "0") - parseInt(data?.attributes?.price)*data?.quantity,
+            cart: filterCart
+          }
+          return payload;
+        }
+
       }
       else{
-        const cartIndexToUpdate = user?.cart?.findIndex((item) => item.id === productid);
+        const cartIndexToUpdate = user?.cart?.findIndex((item) => item.id === data?.id);
         const filterCart = user?.cart;
         if (filterCart != undefined && cartIndexToUpdate !== undefined && cartIndexToUpdate >= 0) {
-          filterCart[cartIndexToUpdate].quantity = productQuantity;
+          filterCart[cartIndexToUpdate].quantity = operationType ==="inc"?data?.quantity+1 :data?.quantity-1 ;
         }
-        
-        // const filterCart = user?.cart?.find(
-        //   (item) => item.id === productid
-        // );
-        // if (filterCart) {
-        //   filterCart.quantity = productQuantity;
-        // } 
-        console.log(filterCart,"testnbbbug",)
-        return filterCart;
+        // console.log(data,user?.discountPrice?.toString() || "0",parseInt(data?.attributes?.price),parseInt(data?.attributes?.discountedPrice),"bug")
+        if(operationType ==="inc"){
+          const payload ={
+            discountPrice:parseInt(user?.discountPrice?.toString() || "0") + parseInt(data?.attributes?.price) - parseInt(data?.attributes?.discountedPrice),
+            cartActualPrice: parseInt(user?.cartActualPrice?.toString() || "0") + parseInt(data?.attributes?.discountedPrice),
+            cartTotalPrice: parseInt(user?.cartTotalPrice?.toString() || "0") + parseInt(data?.attributes?.price),
+            cart: filterCart
+          }
+          return payload;
+        }
+        else{
+          const payload ={
+            discountPrice:parseInt(user?.discountPrice?.toString() || "0") - (parseInt(data?.attributes?.price) - parseInt(data?.attributes?.discountedPrice)),
+            cartActualPrice: parseInt(user?.cartActualPrice?.toString() || "0") - parseInt(data?.attributes?.discountedPrice),
+            cartTotalPrice: parseInt(user?.cartTotalPrice?.toString() || "0") - parseInt(data?.attributes?.price),
+            cart: filterCart
+          }
+          return payload;
+        }
+      
       }
     },
-    [user?.cart]
+    [user]
   );
 
   const getProductDetail = useCallback(async (id: number) => {
@@ -75,20 +118,21 @@ export const useCart = () => {
 
   const updateCart = useCallback(
     async (productid: number) => {
-      console.log(user, "cc");
+      // console.log(user, "cc");
       if (user != null) {
         const productObject = await getProductDetail(productid);
         if (Object.keys(productObject).length > 0) {
           try {
             productObject.quantity = 1;
             const result = getPayload(productObject);
+            console.log(result,"result")
             const requestOptions = {
               method: "PUT",
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ cart: result }),
+              body: JSON.stringify(result),
             };
             const res = await fetch(
               `http://localhost:1337/api/users/${user?.id}`,
@@ -109,19 +153,20 @@ export const useCart = () => {
   );
 
   const updateProductCart = useCallback(
-    async (productid: number,removeProduct:boolean,productQuantity:number) => {
+    async (data: Cart,removeProduct:boolean,operationType:string) => {
       setCartDetailLoading(true);
       // const result = getUpdateCartPayload(productid,removeProduct,productQuantity);
       if (user != null) {
           try {
-            const result = getUpdateCartPayload(productid,removeProduct,productQuantity);
+            const result = getUpdateCartPayload(data,removeProduct,operationType);
+            console.log("result",result)
             const requestOptions = {
               method: "PUT",
               headers: {
                 Authorization: `Bearer ${token}`,
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ cart: result }),
+              body: JSON.stringify( result ),
             };
             const res = await fetch(
               `http://localhost:1337/api/users/${user?.id}`,
@@ -141,8 +186,8 @@ export const useCart = () => {
     [user, fetchLoggedInUser, setCartDetailLoading,getUpdateCartPayload]
   );
 
-  const handleQuantityChange = useCallback(async(productid : number,removeProduct:boolean,productQuantity:number) => {
-    await updateProductCart(productid,removeProduct,productQuantity)
+  const handleQuantityChange = useCallback(async(data: Cart,removeProduct:boolean,operationType:string) => {
+    await updateProductCart(data,removeProduct,operationType)
    
   }, [updateProductCart]);
 

@@ -6,17 +6,19 @@ import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 export const Cart = () => {
   const { user } = useAuth();
   const {handleQuantityChange,cartdetailloading} = useCart();
-  console.log(cartdetailloading);
+  console.log(cartdetailloading,user,"che",cartdetailloading || user === null);
   return (
     <>
     {cartdetailloading || user === null?
        (<Skeleton variant="rectangular" width={"100%"} height={"90vh"} />):
-      (<Stack className={styles.cart}>
+      (user?.cart?.length > 0 ?(<Stack className={styles.cart}>
         <Stack flexDirection={"column"} className={styles.product}>
           {user?.cart?.map((data, index) => (
             <Stack className={styles.productcontainer} key={index}>
               <Stack className={styles.productimage}>
                 <img
+                  width={"180px"}
+                  
                   src={`http://localhost:1337${data?.attributes?.imageurl?.data?.attributes?.url}`}
                   alt="product"
                 />
@@ -40,7 +42,7 @@ export const Cart = () => {
                       variant="contained"
                       color="primary"
                       disabled={data?.quantity === 1}
-                      onClick={()=>handleQuantityChange(data?.id,false,data?.quantity-1)}
+                      onClick={()=>handleQuantityChange(data,false,"dec")}
                     >
                       -
                     </Button>
@@ -50,14 +52,14 @@ export const Cart = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={()=>handleQuantityChange(data?.id,false,data?.quantity+1)}
+                      onClick={()=>handleQuantityChange(data,false,"inc")}
                     >
                       +
                     </Button>
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={()=>handleQuantityChange(data?.id,true,0)}
+                      onClick={()=>handleQuantityChange(data,true,"")}
               
                     >Remove from cart</Button>
                   </Stack>
@@ -69,18 +71,20 @@ export const Cart = () => {
         <Typography variant="h5">Price details</Typography>
           <Stack flexDirection={"row"}>
             <Typography variant="h5">Price {user?.cart?.length} items</Typography>
-            <Typography variant="h5">11</Typography>
+            <Typography variant="h5">{user?.cartTotalPrice}</Typography>
           </Stack>
           <Stack flexDirection={"row"}>
             <Typography variant="h5">Discount</Typography>
-            <Typography variant="h5">11</Typography>
+            <Typography variant="h5">{user?.discountPrice}</Typography>
           </Stack>
           <Stack flexDirection={"row"}>
             <Typography variant="h5">Total amount</Typography>
-            <Typography variant="h5">11</Typography>
+            <Typography variant="h5">{user?.cartActualPrice}</Typography>
           </Stack>
         </Stack>
-      </Stack>)}
+      </Stack>):(
+        <Stack></Stack>
+      ))}
     </>
   );
 };

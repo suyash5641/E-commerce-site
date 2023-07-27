@@ -2,7 +2,7 @@
   flex-direction: row !important;
 
   .product {
-    width: 70%;
+    width: 90%;
     .productcontainer {
       flex-direction: row !important;
       .productimage {
@@ -30,9 +30,9 @@
     }
   }
   .checkoutbox {
-    width: 100%;
+    width: 30%;
     // height: 600px;
-    border: 1px solid red;
+    // border: 1px solid red;
     padding: 24px;
   }
 }
@@ -61,7 +61,7 @@
     .checkoutbox {
         width: 100%;
         // height: 600px;
-        border: 1px solid red;
+        // border: 1px solid red;
         padding: 16px;
       }
   }

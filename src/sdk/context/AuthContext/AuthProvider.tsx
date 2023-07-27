@@ -9,7 +9,7 @@ import React, {
   useEffect,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { IAttributes } from "../../../shared/interfaces/interface";
+import { IUser } from "../../../shared/interfaces/interface";
 
 const BaseUrl = "";
 
@@ -19,21 +19,21 @@ interface IProps {
   password: string;
 }
 
-interface IUser {
-  id: number;
-  username: string;
-  email: string;
-  cart: Cart[];
-  discountPrice: number;
-  cartActualPrice: number;
-  cartTotalPrice: number;
-}
+// interface IUser {
+//   id: number;
+//   username: string;
+//   email: string;
+//   cart: Cart[];
+//   discountPrice: number;
+//   cartActualPrice: number;
+//   cartTotalPrice: number;
+// }
 
-interface Cart {
-  quantity: number;
-  id: number;
-  attributes: IAttributes;
-}
+// interface Cart {
+//   quantity: number;
+//   id: number;
+//   attributes: IAttributes;
+// }
 
 interface ISignInProps {
   identifier: string;
