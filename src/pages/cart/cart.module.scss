@@ -1,0 +1,68 @@
+.cart {
+  flex-direction: row !important;
+
+  .product {
+    width: 70%;
+    .productcontainer {
+      flex-direction: row !important;
+      .productimage {
+        // flex-grow: 1;
+        // flex-basis: 20%;
+        max-width: 25%;
+        padding: 32px 8px 0px 8px;
+      }
+      .productinfo {
+        // flex-grow: 1;
+        // flex-basis: 50%;
+        // max-width: 50%;
+        padding: 40px 8px 0px 8px;
+      }
+      .discountedPrice {
+        font-weight: 700;
+      }
+      .price {
+        text-decoration: line-through;
+        color: #878787;
+      }
+      .discountPercent {
+        color: #388e3c;
+      }
+    }
+  }
+  .checkoutbox {
+    width: 100%;
+    // height: 600px;
+    border: 1px solid red;
+    padding: 24px;
+  }
+}
+@media screen and (max-width: 640px) {
+  .cart {
+    flex-direction: column !important;
+    .product {
+        width: 100%;
+      .productcontainer {
+        flex-direction: column !important;
+        width: 100%;
+        .productimage {
+        //   flex-grow: 1;
+        //   flex-basis: 100%;
+          max-width: 100%;
+          padding: 16px 8px 0px 8px;
+        }
+        .productinfo {
+        //   flex-grow: 1;
+        //   flex-basis: 100%;
+        //   max-width: 100%;
+          padding: 24px 8px 0px 8px;
+        }
+      }
+    }
+    .checkoutbox {
+        width: 100%;
+        // height: 600px;
+        border: 1px solid red;
+        padding: 16px;
+      }
+  }
+}

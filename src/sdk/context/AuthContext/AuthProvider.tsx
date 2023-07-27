@@ -24,10 +24,13 @@ interface IUser {
   username: string;
   email: string;
   cart: Cart[];
+  discountPrice: number;
+  cartActualPrice: number;
+  cartTotalPrice: number;
 }
 
 interface Cart {
-  quantitity: number;
+  quantity: number;
   id: number;
   attributes: IAttributes;
 }
@@ -106,7 +109,7 @@ const AuthContextProvider = ({ children }: any) => {
     }
     switch (authState.authToken) {
       case null:
-        if ((location.pathname === "/cart")) {
+        if (location.pathname === "/cart") {
           navigate("/");
         }
         break;
