@@ -16,6 +16,7 @@
         // flex-basis: 50%;
         // max-width: 50%;
         padding: 40px 8px 0px 8px;
+        gap: 8px;
       }
       .discountedPrice {
         font-weight: 700;
@@ -34,6 +35,34 @@
     // height: 600px;
     // border: 1px solid red;
     padding: 24px;
+    .title{
+        // font-family: "Graphik Webfont",-apple-system,"Helvetica Neue","Droid Sans",Arial,sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 28px;
+        color: #212121 !important;
+        font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI,
+        Roboto, Helvetica, Arial, sans-serif
+    }
+    .subtitle{
+        // font-family: "Graphik Webfont",-apple-system,"Helvetica Neue","Droid Sans",Arial,sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
+        color: #222 ;
+        font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI,
+        Roboto, Helvetica, Arial, sans-serif
+    }
+    .savingtext{
+        p{
+            font-weight: 600;
+            font-size: 16px;
+            line-height: 28px;
+            color: #219f27 !important;
+            font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI,
+            Roboto, Helvetica, Arial, sans-serif !important;
+        }
+    }
   }
 }
 @media screen and (max-width: 640px) {

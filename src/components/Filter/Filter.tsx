@@ -48,12 +48,14 @@ export const Filter = () => {
       justifyContent={"space-between"}
       className={styles.container}
     >
+      <Stack direction={"row"} gap="24px">
       <Button className={styles.filter} onClick={()=>setDrawerOpen(true)}>
         <Typography variant="h6">Filters</Typography>
       </Button>
       <Button className={styles.sortby} onClick={handleClick}>
         <Typography variant="h6">Sort By</Typography>
       </Button>
+      </Stack>
       <Popover
         ref={popoverRef}
         id={id}

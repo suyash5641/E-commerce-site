@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography,Skeleton } from "@mui/material";
+import { Box, Button, Stack, Typography,Skeleton, Divider } from "@mui/material";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
@@ -12,7 +12,7 @@ export const Cart = () => {
     {cartdetailloading || user === null?
        (<Skeleton variant="rectangular" width={"100%"} height={"90vh"} />):
       (user?.cart?.length > 0 ?(<Stack className={styles.cart}>
-        <Stack flexDirection={"column"} className={styles.product}>
+        <Stack flexDirection={"column"} className={styles.product} >
           {user?.cart?.map((data, index) => (
             <Stack className={styles.productcontainer} key={index}>
               <Stack className={styles.productimage}>
@@ -68,18 +68,24 @@ export const Cart = () => {
           ))}
         </Stack>
         <Stack flexDirection={"column"} className={styles.checkoutbox}>
-        <Typography variant="h5">Price details</Typography>
-          <Stack flexDirection={"row"}>
-            <Typography variant="h5">Price {user?.cart?.length} items</Typography>
-            <Typography variant="h5">{user?.cartTotalPrice}</Typography>
+        <Typography variant="h2">Price details</Typography>
+          <Stack flexDirection={"row"} justifyContent={"space-between"}>
+            <Typography className={styles.title}>Price ({user?.cart?.length} item)</Typography>
+            <Typography className={styles.subtitle}>Rs {user?.cartTotalPrice}</Typography>
           </Stack>
-          <Stack flexDirection={"row"}>
-            <Typography variant="h5">Discount</Typography>
-            <Typography variant="h5">{user?.discountPrice}</Typography>
+          <Stack flexDirection={"row"} justifyContent={"space-between"}>
+            <Typography className={styles.title} >Discount</Typography>
+            <Typography className={styles.subtitle} sx={{color:'#198b1e !important'}}>-Rs {user?.discountPrice}</Typography>
           </Stack>
-          <Stack flexDirection={"row"}>
-            <Typography variant="h5">Total amount</Typography>
-            <Typography variant="h5">{user?.cartActualPrice}</Typography>
+          <Divider />
+          <Stack flexDirection={"row"} justifyContent={"space-between"}>
+            <Typography className={styles.title}>Total amount</Typography>
+            <Typography className={styles.subtitle}>Rs {user?.cartActualPrice}</Typography>
+          </Stack>
+          <Divider />
+          <Stack flexDirection={"row"} justifyContent={"space-between"} className={styles.savingtext}>
+            <Typography >Total savings</Typography>
+            <Typography >Rs {user?.discountPrice}</Typography>
           </Stack>
         </Stack>
       </Stack>):(

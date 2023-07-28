@@ -99,19 +99,24 @@ export const Header = () => {
           className={styles.header}
           flexDirection={"row"}
           justifyContent={"space-between"}
+          alignItems={"center"}
         >
           {isLogin ? (
             <>
               <p>Header</p>
+              <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
               {location.pathname != "/cart" && <AddShoppingCartIcon onClick={handleProductCartOpen} />}
               <UserProfile />
+              </Stack>
             </>
           ) : (
             <>
               <p>Header</p>
+              <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
               <p onClick={() => handleModalOpen("login")}>Login</p>
               <p onClick={() => handleModalOpen("signup")}>Signup</p>
               <AddShoppingCartIcon onClick={handleProductCartOpen} />
+              </Stack>
             </>
           )}
         </Stack>

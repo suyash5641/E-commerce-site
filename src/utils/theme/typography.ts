@@ -16,6 +16,7 @@ const createTypography: Func = () => ({
     `'Segoe UI Symbol'`,
     'Montserrat',
   ].join(','),
+  
   h1: {
     fontSize: '28px',
     fontWeight: 500,
@@ -48,10 +49,10 @@ const createTypography: Func = () => ({
     fontFamily: 'Roboto',
   },
   h4: {
-    fontSize: '58px',
-    fontWeight: 700,
+    fontSize: '16px',
+    fontWeight: 400,
     color: colors.primaryHeadingText,
-    fontFamily: 'Roboto',
+    fontFamily: "Graphik Webfont",
   },
 })
 export { createTypography }
