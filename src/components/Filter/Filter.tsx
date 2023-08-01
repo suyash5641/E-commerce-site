@@ -14,12 +14,14 @@ import {
 } from "@mui/material";
 import styles from "./filter.module.scss";
 import {
+  useNavigate,
     useSearchParams,
   } from 'react-router-dom';
 import { FilterDrawer } from "../../shared/components/FilterDrawer";
 const sortby = ["Price: High to Low", "Price: Low to High"];
 
 export const Filter = () => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -35,8 +37,12 @@ export const Filter = () => {
 
   const handleChange =(value:string)=>{
     setAnchorEl(null);
-    setSearchParams({ sort: value==="Price: High to Low"?'price:desc':'price:asc' });
-    console.log(value)
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('sort',value==="Price: High to Low"?'price:desc':'price:asc');
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${searchParams.toString()}`,
+    });
   }
 
   const open = Boolean(anchorEl);

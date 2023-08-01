@@ -1,30 +1,47 @@
-import { Box, Drawer, Slider, Typography,SelectChangeEvent, FormControl, InputLabel, Select, MenuItem, FormControlLabel, Checkbox, FormLabel, FormGroup } from "@mui/material";
-import { useEffect, useState } from "react";
-import styles from "./filterdrawer.module.scss"
+import {
+  Box,
+  Drawer,
+  Slider,
+  Typography,
+  SelectChangeEvent,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
+  FormLabel,
+  FormGroup,
+  Button,
+} from "@mui/material";
+import { useEffect, useState, useCallback } from "react";
+import styles from "./filterdrawer.module.scss";
 import { useProduct } from "../../../sdk/hooks/products/useProduct";
+import { useParams, useSearchParams } from "react-router-dom";
 
 const drawerWidth = 240;
 interface Props {
   drawerOpen: boolean;
   setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
-  const {categoryList} = useProduct();
+interface Query {
+  id?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
+export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const { categoryList } = useProduct();
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
 
   const minDistance = 2500;
 
-  //  const [value, setValue] = useState([500, 30000]);
-
-  // const handleChange = (event: Event,
-  //    newValue: number ,) => {
-  //   setValue(newValue);
-  // };
-
-  const marks = [
+  const priceArray = [
     {
       value: 500,
       label: "500",
@@ -37,9 +54,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   // const step = 5000;
 
-  const [value2, setValue2] = useState<number[]>([500, 30000]);
+  const [price, setPrice] = useState<number[]>([500, 30000]);
 
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
 
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
@@ -55,12 +72,12 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   };
 
   const colors = [
-    { label: 'Red', value: 'red' },
-    { label: 'Green', value: 'green' },
-    { label: 'Blue', value: 'blue' },
-    { label: 'Black', value: 'black' },
-    { label: 'White', value: 'white' },
-    { label: 'Grey', value: 'grey' },
+    { label: "Red", value: "red" },
+    { label: "Green", value: "green" },
+    { label: "Blue", value: "blue" },
+    { label: "Black", value: "black" },
+    { label: "White", value: "white" },
+    { label: "Grey", value: "grey" },
   ];
 
   const renderColorCheckboxes = () => {
@@ -85,7 +102,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   const valueText = (value: number) => `${value} USD`;
 
-  const handleChange2 = (
+  const handlePriceChange = (
     event: Event,
     newValue: number | number[],
     activeThumb: number
@@ -95,49 +112,78 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     }
 
     if (activeThumb === 0) {
-      setValue2([Math.min(newValue[0], value2[1] - minDistance), value2[1]]);
+      setPrice([Math.min(newValue[0], price[1] - minDistance), price[1]]);
     } else {
-      setValue2([value2[0], Math.max(newValue[1], value2[0] + minDistance)]);
+      setPrice([price[0], Math.max(newValue[1], price[0] + minDistance)]);
     }
   };
 
+  const handleFilterChange = useCallback(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (category) {
+      searchParams.set("categoryid", category);
+    }
+    searchParams.set("minPrice", price[0].toString());
+    searchParams.set("maxPrice", price[1].toString());
+    setSearchParams(searchParams);
+    setDrawerOpen(false);
+  }, [setSearchParams,price,category]);
+
+  useEffect(() => {
+    const category = searchParams.get("categoryid");
+    const minPrice = parseInt(searchParams.get("minPrice") ?? "500");
+    const maxPrice = parseInt(searchParams.get("maxPrice") ?? "30000");
+    if (category) {
+      setCategory(category);
+    }
+    setPrice([minPrice, maxPrice]);
+  }, [searchParams]);
+
   const drawer = (
-    <Box className={styles.filter} sx={{ width: "70%", paddingTop: "40px", margin: "0 auto" }}>
+    <Box
+      className={styles.filter}
+      sx={{ width: "70%", paddingTop: "40px", margin: "0 auto" }}
+    >
       <Typography variant="h3">Price</Typography>
       <Slider
-        value={value2}
-        onChange={handleChange2}
+        value={price}
+        onChange={handlePriceChange}
         valueLabelDisplay="auto"
         min={500}
         max={30000}
-        marks={marks}
+        marks={priceArray}
         step={100}
         getAriaValueText={valueText}
       />
       <Box className={styles.category}>
-      <Typography variant="h3">Category</Typography>
-      <FormControl className={styles.formlabel}>
-        <Select
-          value={category}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-          className={styles.selectdropdown}
-        >
-           {categoryList?.map((data,index) => (
-            <MenuItem key={data?.id} value={data?.id}>{data?.attributes?.categorytype}</MenuItem>
-        ))}
-        
-        </Select>
-      </FormControl>
-      <FormControl className={styles.colorcheckbox} component="fieldset">
-      <FormLabel component="legend">Colors</FormLabel>
-      <FormGroup>{renderColorCheckboxes()}</FormGroup>
-    </FormControl>
+        <Typography variant="h3">Category</Typography>
+        <FormControl className={styles.formlabel}>
+          <Select
+            value={category}
+            onChange={handleChange}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+            className={styles.selectdropdown}
+          >
+            {categoryList?.map((data, index) => (
+              <MenuItem key={data?.id} value={data?.id}>
+                {data?.attributes?.categorytype}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl className={styles.colorcheckbox} component="fieldset">
+          <FormLabel component="legend">Colors</FormLabel>
+          <FormGroup>{renderColorCheckboxes()}</FormGroup>
+        </FormControl>
       </Box>
+      <Button variant="contained" color="primary" onClick={handleFilterChange}>
+        Apply filter
+      </Button>
     </Box>
   );
-   
+
   return (
     <Box
       component="nav"

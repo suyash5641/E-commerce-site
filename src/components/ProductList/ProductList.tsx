@@ -21,14 +21,14 @@ export const ProductList = () => {
       ...(searchParams.has("sort") && {
         sort: searchParams.get("sort")
       }),
-      ...(searchParams.has("category") && {
-        "filters[categoryid][$contains]": searchParams.get("category"),
+      ...(searchParams.has("categoryid") && {
+        "filters[categoryid][$contains]": searchParams.get("categoryid"),
       }),
       ...(searchParams.has("minPrice") && {
-        "filters[price][$lte]": searchParams.get("minPrice"),
+        "filters[price][$gte]": searchParams.get("minPrice"),
       }),
       ...(searchParams.has("maxPrice") && {
-        "filters[price][$gte]": searchParams.get("maxPrice"),
+        "filters[price][$lte]": searchParams.get("maxPrice"),
       }),
     };
     
