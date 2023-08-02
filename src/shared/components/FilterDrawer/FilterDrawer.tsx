@@ -137,6 +137,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     if (category) {
       setCategory(category);
     }
+    else{
+      setCategory('');
+    }
     setPrice([minPrice, maxPrice]);
   }, [searchParams]);
 
@@ -145,16 +148,16 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       className={styles.filter}
       sx={{ width: "70%", paddingTop: "40px", margin: "0 auto" }}
     >
-      <Typography variant="h3">Price</Typography>
+      <Typography variant="h3" sx={{marginBottom:'36px'}}>Price range</Typography>
       <Slider
         value={price}
         onChange={handlePriceChange}
-        valueLabelDisplay="auto"
+        valueLabelDisplay="on"
         min={500}
         max={30000}
         marks={priceArray}
         step={100}
-        getAriaValueText={valueText}
+        getAriaValueText={valueText}        
       />
       <Box className={styles.category}>
         <Typography variant="h3">Category</Typography>

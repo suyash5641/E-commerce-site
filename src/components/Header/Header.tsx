@@ -55,7 +55,7 @@ export const Header = () => {
   }, []);
 
   const handleProductCartOpen = useCallback(() => {
-    console.log(isLogin,"cartttt")
+    // console.log(isLogin,"cartttt")
     if (isLogin) {
       navigate('/cart');
     } else {
