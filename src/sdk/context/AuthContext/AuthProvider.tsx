@@ -214,7 +214,7 @@ const AuthContextProvider = ({ children }: any) => {
             authToken: token,
             user: res,
           });
-          return true;
+          return res?.id;
         } else if (res.data === null) {
           setAuthState({
             ...authState,
@@ -222,7 +222,7 @@ const AuthContextProvider = ({ children }: any) => {
             user: null,
           });
           localStorage.removeItem("authToken");
-          return false;
+          return "";
         }
       } catch (error) {
         console.error(error);

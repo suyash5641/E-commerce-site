@@ -15,19 +15,12 @@ export const Cart = () => {
   const token = localStorage.getItem("authToken");
   const { user } = useAuth();
   const { handleQuantityChange, cartdetailloading } = useCart();
-  // console.log(
-  //   cartdetailloading,
-  //   user,
-  //   "che",
-  //   cartdetailloading || user === null
-  // );
-
-  const stripePromise = loadStripe(
-    "pk_test_51NZCukSEFvyokD6c4VjZ43S6AOQuCKGdHtQBwVZrg6fbCbstRL3LxuspjkhqwgYS9dBmA6p0FmDJshWnzsMAjkVs00k7Ic4tCK"
-  );
-
+  
   const handlePayment = async () => {
     try {
+      const stripePromise = loadStripe(
+        "pk_test_51NZCukSEFvyokD6c4VjZ43S6AOQuCKGdHtQBwVZrg6fbCbstRL3LxuspjkhqwgYS9dBmA6p0FmDJshWnzsMAjkVs00k7Ic4tCK"
+      );
       const stripe = await stripePromise;
       const requestOptions = {
         method: "POST",

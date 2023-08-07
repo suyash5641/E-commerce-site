@@ -230,7 +230,9 @@ export const useCart = () => {
   );
 
   const emptyCart = useCallback(async () => {
-    if (user != null) {
+    
+    
+    if (token) {
       try {
         const payload = {
           discountPrice: null,
@@ -238,6 +240,7 @@ export const useCart = () => {
           cartTotalPrice: null,
           cart: null,
         };
+        const userid = await fetchLoggedInUser(token);
         const requestOptions = {
           method: "PUT",
           headers: {
@@ -247,16 +250,16 @@ export const useCart = () => {
           body: JSON.stringify(payload),
         };
         const res = await fetch(
-          `http://localhost:1337/api/users/${user?.id}`,
+          `http://localhost:1337/api/users/${userid}`,
           requestOptions
         );
-        if (res.status === 200) {
-          if (token) await fetchLoggedInUser(token);
-        }
+        // if (res.status === 200) {
+        //   if (token) await fetchLoggedInUser(token);
+        // }
       } catch (err) {
       } 
     }
-  }, [user,token]);
+  }, [token,fetchLoggedInUser]);
 
   return useMemo(
     () => ({

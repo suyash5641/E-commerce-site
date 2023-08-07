@@ -24,7 +24,7 @@ export const PaymentConfirmation = () => {
 //   const [decrypted, setDecrypted] = useState("");
   //   const { getProduct} = useProduct();
   const { emptyCart } = useCart();
-  const { user } = useAuth();
+//   const { fetchLoggedInUser} = useAuth();
   const { updateOrderPaymentStatus } = useOrder();
 
   const updateCart = useCallback(async ( sessionid: string) => {
@@ -34,12 +34,7 @@ export const PaymentConfirmation = () => {
     // setDecrypted(decryptedText);
 
     if (paymentStatus === "true") {
-      //   setPaymentSucessfull(true);
-      //    decryptedText.split(",").forEach((value, index) => {
-      //    const res = user?.cart?.find((data)=> data.id === parseInt(value));
-      //    if(res)
-      //    handleQuantityChange(res, true, "");
-      //   });
+      setPaymentSucessfull(true);
       await emptyCart();
     } else {
       setPaymentSucessfull(false);
@@ -47,7 +42,7 @@ export const PaymentConfirmation = () => {
     const filter = { populate: "*", "filters[stripeId][$eq]": sessionid };
     await updateOrderPaymentStatus(paymentStatus === "true", filter);
     setLoading(false);
-  }, [searchParams,updateOrderPaymentStatus,setLoading,emptyCart]);
+  }, [searchParams,updateOrderPaymentStatus,setLoading,emptyCart,setPaymentSucessfull]);
 
   useEffect(() => {
     const sessionid = searchParams.get("session_id");
