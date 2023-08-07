@@ -23,9 +23,10 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/product" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/payment" element={<PaymentConfirmation/>} />
+          
           {/* <Route path="/reset-password" element={<ResetPassword/>}/> */}
         </Route>
+        <Route path="/payment" element={<PaymentConfirmation/>} />
         {/* <Route path="/product" element={<Product/> } />  */}
       </Routes>
     </div>

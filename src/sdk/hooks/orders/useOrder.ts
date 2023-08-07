@@ -46,6 +46,8 @@ export const useOrder = () => {
   const updateOrderPaymentStatus = useCallback(
     async (status: boolean, filters: any) => {
       const result = await getOrder(filters);
+      if(result[0]?.attributes?.paymentSucessful === status)
+      return 
       const requestOptions = {
         method: "PUT",
         headers: {

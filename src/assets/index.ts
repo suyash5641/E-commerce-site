@@ -7,6 +7,8 @@ import headphone from './headphone.jpg'
 import earphone from './earphone.png'
 import speaker from './speaker.jpg'
 import smartwatch from './smartwatch.jpg'
+import sucess from './success.svg'
+import failure from './failure.png'
 
 export {
     sony,
@@ -17,5 +19,7 @@ export {
     headphone,
     earphone,
     speaker,
-    smartwatch
+    smartwatch,
+    sucess,
+    failure,
 }
