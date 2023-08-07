@@ -17,6 +17,8 @@ export const useProduct = () => {
       if (res.status === 200) {
         const response = await res.json();
         setProductList(response?.data);
+        setLoading(false);
+        return response?.data;
       }
     } catch (err) {
       setLoading(false);
@@ -64,7 +66,8 @@ export const useProduct = () => {
       productList,
       categoryList,
       loading,
+      setProductList
     }),
-    [getProduct,  getProductDetail,productDetail,productList, categoryList, loading]
+    [getProduct,  getProductDetail,productDetail,productList, categoryList, loading,setProductList]
   );
 };

@@ -3,6 +3,8 @@ import {
   Box,
   Button,
   CircularProgress,
+  IconButton,
+  InputAdornment,
   Modal,
   Stack,
   TextField,
@@ -10,6 +12,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import styles from "./loginmodal.module.scss";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -36,6 +39,7 @@ const validationSchemaa = yup.object({
 
 export const LoginModal = () => {
   // const [searchParams, setSearchParams] = useSearchParams();
+  const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
@@ -52,11 +56,27 @@ export const LoginModal = () => {
     removeQueryParam("login");
   };
 
+  const handleForgotPasswordModal =()=>{
+    searchParams.set("forgotpassword","true");
+    searchParams.delete("login");
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${searchParams.toString()}`,
+    });
+  }
+
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
     navigate({ search: `?${searchParams.toString()}` });
   };
 
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event: any) => {
+    event.preventDefault();
+  };
 
   const formik: any = useFormik<FormValues>({
     initialValues: {
@@ -83,15 +103,16 @@ export const LoginModal = () => {
   });
 
   useEffect(() => {
-    if (searchParams.has("login") && localStorage.getItem("authToken") ==null) {
+    if (
+      searchParams.has("login") &&
+      localStorage.getItem("authToken") == null
+    ) {
       setModalOpen(true);
-    }
-    else{
+    } else {
       setModalOpen(false);
     }
-  }, [searchParams,localStorage,setModalOpen]);
+  }, [searchParams, localStorage, setModalOpen]);
 
- 
   useEffect(() => {
     if (isModalOpen) {
       setIsSnackBar({
@@ -142,13 +163,28 @@ export const LoginModal = () => {
             <TextField
               label="Password"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && !!formik.errors.password}
               helperText={formik.touched.password && formik.errors.password}
               className={styles.formfield}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
+            <Button onClick={handleForgotPasswordModal}>forgot password</Button>
           </Stack>
           {loading ? (
             <CircularProgress />

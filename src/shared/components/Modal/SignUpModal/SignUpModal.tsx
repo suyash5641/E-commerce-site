@@ -7,6 +7,8 @@ import {
   Stack,
   TextField,
   Typography,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -15,6 +17,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
   username: string;
@@ -36,6 +39,8 @@ const validationSchemaa = yup.object({
 
 export const SignUpModal = () => {
   const location = useLocation();
+  const [showPassword, setShowPassword] = useState(false);
+
   const [isSnackBar, setIsSnackBar] = useState<any>({
     isOpen: false,
     message: "",
@@ -86,6 +91,15 @@ export const SignUpModal = () => {
     setModalOpen(false);
     removeQueryParam("signup");
   };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event: any) => {
+    event.preventDefault();
+  };
+
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
@@ -152,12 +166,26 @@ export const SignUpModal = () => {
               <TextField
                 label="Password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 error={formik.touched.password && !!formik.errors.password}
                 helperText={formik.touched.password && formik.errors.password}
                 className={styles.formfield}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Stack>
             {loading ? (

@@ -3,10 +3,11 @@ import styles from "./header.module.scss";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LoginModal, SignUpModal } from "../../shared/components/Modal";
+import { LoginModal, SignUpModal,ForgotPasswordModal } from "../../shared/components/Modal";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { UserProfile } from "../UserProfile";
+
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -124,6 +125,7 @@ export const Header = () => {
       <Outlet />
       <LoginModal />
       <SignUpModal />
+      {/* <ForgotPasswordModal/> */}
     </>
   );
 };

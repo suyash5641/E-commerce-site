@@ -40,10 +40,22 @@ interface ISignInProps {
   password: string;
 }
 
+interface IForgotPassword {
+  email: string;
+}
+
+interface IResetPassword {
+  code: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
 interface AuthState {
   signIn: (payload: ISignInProps) => Promise<any>;
   fetchLoggedInUser: (token: string) => Promise<any>;
   signOut: () => void;
+  forgotPassword: (payload: IForgotPassword) => Promise<any>;
+  resetPassword: (payload: IResetPassword) => Promise<any>;
   authFetch: (...arg: any) => Promise<any>;
   register: (payload: IProps) => Promise<any>;
   authToken: null | string;
@@ -55,6 +67,8 @@ const initialState: AuthState = {
   signIn: (payload: ISignInProps) => Promise.resolve(null),
   fetchLoggedInUser: (token: string) => Promise.resolve(null),
   signOut: () => {},
+  forgotPassword: (payload: IForgotPassword) => Promise.resolve(null),
+  resetPassword: (payload: IResetPassword) => Promise.resolve(null),
   authFetch: (...arg: any) => Promise.resolve(null),
   register: (payload: IProps) => Promise.resolve(null),
   authToken: "loading",
@@ -200,7 +214,6 @@ const AuthContextProvider = ({ children }: any) => {
             authToken: token,
             user: res,
           });
-          console.log("settt");
           return true;
         } else if (res.data === null) {
           setAuthState({
@@ -218,6 +231,66 @@ const AuthContextProvider = ({ children }: any) => {
       }
     },
     [setAuthState, token]
+  );
+
+  const forgotPassword = useCallback(
+    async (payload: IForgotPassword) => {
+      setIsLoading(true);
+
+      const response = await fetch(
+        `http://localhost:1337/api/users?filters[$and][0][email][$eq]=${payload?.email}`
+      );
+
+      const data = await response.json();
+      if (data.length > 0) {
+        const apiResponse = await fetch(
+          `http://localhost:1337/api/auth/forgot-password`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          }
+        );
+        if (apiResponse.status === 200) {
+          setIsLoading(false);
+          return `Forgot password link send to ${payload?.email}`;
+        } else if (apiResponse.status === 400 || apiResponse.status === 500) {
+          setIsLoading(false);
+          throw "error occured";
+        }
+      } else {
+        setIsLoading(false);
+        throw "Email is not registered";
+      }
+    },
+    [setIsLoading]
+  );
+
+  const resetPassword = useCallback(
+    async (payload: IResetPassword) => {
+      setIsLoading(true);
+      const apiResponse = await fetch(
+        `http://localhost:1337/api/auth/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      if (apiResponse.status === 200) {
+        setIsLoading(false);
+        return `Password changed succesfully , you can login using new password`;
+      } else if (apiResponse.status === 400 || apiResponse.status === 500) {
+        const res = await apiResponse.json();
+        setIsLoading(false);
+        throw res?.error?.message;
+      }
+    },
+    [setIsLoading]
   );
 
   const signOut = useCallback(() => {
@@ -238,9 +311,20 @@ const AuthContextProvider = ({ children }: any) => {
       signOut,
       register,
       loading,
+      forgotPassword,
       fetchLoggedInUser,
+      resetPassword
     }),
-    [authState, signIn, signOut, register, loading, fetchLoggedInUser]
+    [
+      authState,
+      signIn,
+      signOut,
+      register,
+      loading,
+      forgotPassword,
+      fetchLoggedInUser,
+      resetPassword
+    ]
   );
 
   // console.log(authState?.user,"tes-buggg")
