@@ -10,6 +10,7 @@ import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { loadStripe } from "@stripe/stripe-js";
+import { stripe_key } from "../../utils/constant/constant";
 
 export const Cart = () => {
   const token = localStorage.getItem("authToken");
@@ -40,9 +41,11 @@ export const Cart = () => {
       await stripe?.redirectToCheckout({
         sessionId: data?.stripeSession.id,
       });
+    
     } catch (err) {
       console.log(err);
     }
+  
   };
 
   return (

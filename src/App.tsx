@@ -10,6 +10,7 @@ import { Cart } from "./pages/cart";
 import { LandingPage } from "./pages/landingpage";
 import { ResetPassword } from "./pages/ResetPassword";
 import { PaymentConfirmation } from "./pages/paymentconfirmation";
+import { Order } from "./pages/orders";
 // import PaymentConfirmation from "./pages/pa"
 // import {PaymentConfirmation} from "./pages/PaymentConfirmation"
 // import { Home } from './pages/home/home';
@@ -27,6 +28,7 @@ function App() {
           {/* <Route path="/reset-password" element={<ResetPassword/>}/> */}
         </Route>
         <Route path="/payment" element={<PaymentConfirmation/>} />
+        <Route path="/orders" element={<Order/>} />
         {/* <Route path="/product" element={<Product/> } />  */}
       </Routes>
     </div>

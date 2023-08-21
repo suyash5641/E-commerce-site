@@ -1,0 +1,1 @@
+export const stripe_key = process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY;
