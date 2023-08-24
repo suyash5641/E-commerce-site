@@ -30,8 +30,8 @@ export const Category = () => {
 
   const Item = ({ item }: { item: { imagePath: string, label: string,categoryid:string } }) => {
     return (
-      <Grid className={styles.card} onClick={() => {navigate(`/home?categoryid=${item?.categoryid}`)}}>
-        <img src={item?.imagePath} width={"100%"} height={"280px"} />
+      <Grid className={styles.card} onClick={() => {navigate(`/productlist?categoryid=${item?.categoryid}`)}}>
+        <img src={item?.imagePath} width={"100%"} height={"100%"} />
         <Typography variant="h3" textAlign={"center"}>
           {item?.label}
         </Typography>

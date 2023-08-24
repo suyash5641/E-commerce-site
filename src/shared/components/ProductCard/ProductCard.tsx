@@ -10,7 +10,7 @@ export const ProductCard=({
          <Typography variant="h3">{data?.attributes?.brandName}</Typography>
          <Typography variant="h5">{data?.attributes?.title}</Typography>
          <Typography variant="h5">{data?.attributes?.price}</Typography>
-         <img height={300}  src={`http://localhost:1337${data?.attributes?.imageurl?.data?.attributes?.url}`} alt="product"/>
+         <img height={"100%"} width={"100%"}  src={`http://localhost:1337${data?.attributes?.imageurl?.data?.attributes?.url}`} alt="product"/>
        </Stack>
     )
 }

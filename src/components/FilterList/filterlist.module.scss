@@ -1,7 +1,10 @@
 .container {
   padding: 20px 40px;
-  max-width: 1400px;
+  // max-width: 1400px;
   margin: 0 auto;
+  position: sticky;
+  top: 146.39px;
+  background: #fff;
   .content {
     font-weight: 700;
     font-family: Assistant, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,

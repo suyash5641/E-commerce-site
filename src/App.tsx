@@ -11,9 +11,6 @@ import { LandingPage } from "./pages/landingpage";
 import { ResetPassword } from "./pages/ResetPassword";
 import { PaymentConfirmation } from "./pages/paymentconfirmation";
 import { Order } from "./pages/orders";
-// import PaymentConfirmation from "./pages/pa"
-// import {PaymentConfirmation} from "./pages/PaymentConfirmation"
-// import { Home } from './pages/home/home';
 
 function App() {
   return (
@@ -21,7 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Header />}>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/productlist" element={<Home />} />
           <Route path="/product" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           

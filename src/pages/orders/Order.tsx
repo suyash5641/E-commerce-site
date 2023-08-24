@@ -23,7 +23,8 @@ export const Order = () => {
                 {data?.attributes.products.map((val, pos) => (
                   <Stack direction={"row"} key={pos}>
                     <img
-                      width={"180px"}
+                      width={"100%"}
+                      height={"100%"}
                       src={`http://localhost:1337${val?.attributes?.imageurl?.data?.attributes?.url}`}
                       alt="product"
                     />

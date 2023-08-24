@@ -11,6 +11,7 @@ import {
 import styles from "./product.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
+import { Navbar } from "../../components/Navbar";
 
 export const Product = () => {
   const { getProductDetail, productDetail, loading } = useProduct();
@@ -101,6 +102,8 @@ export const Product = () => {
       {loading ? (
         <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
       ) : (
+        <>
+        <Navbar path="product" productTitle={productDetail?.attributes?.name ?? ''} changeTopPosition={true} />
         <Stack direction="column">
           <Stack className={styles.productcontainer}>
             <Stack className={styles.productimage}>
@@ -140,6 +143,7 @@ export const Product = () => {
             </Stack>
           </Stack>
         </Stack>
+        </>
       )}
     </>
   );

@@ -5,12 +5,15 @@ import {
   Typography,
   Skeleton,
   Divider,
+  IconButton,
 } from "@mui/material";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { loadStripe } from "@stripe/stripe-js";
 import { stripe_key } from "../../utils/constant/constant";
+import { Navbar } from "../../components/Navbar";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export const Cart = () => {
   const token = localStorage.getItem("authToken");
@@ -53,6 +56,8 @@ export const Cart = () => {
       {cartdetailloading || user === null ? (
         <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
       ) : user?.cart?.length > 0 ? (
+        <>
+         <Navbar path="cart" productTitle={''} changeTopPosition={true} />
         <Stack className={styles.cart}>
           <Stack flexDirection={"column"} className={styles.product}>
             {user?.cart?.map((data, index) => (
@@ -108,7 +113,7 @@ export const Cart = () => {
                       color="primary"
                       onClick={() => handleQuantityChange(data, true, "")}
                     >
-                      Remove from cart
+                      <DeleteIcon sx={{ color: '#fff' }} />
                     </Button>
                   </Stack>
                 </Stack>
@@ -116,7 +121,7 @@ export const Cart = () => {
             ))}
           </Stack>
           <Stack flexDirection={"column"} className={styles.checkoutbox}>
-            <Typography variant="h2">Price details</Typography>
+            <Typography variant="h2" textAlign={"center"}>Price details</Typography>
             <Stack flexDirection={"row"} justifyContent={"space-between"}>
               <Typography className={styles.title}>
                 Price ({user?.cart?.length} item)
@@ -153,6 +158,7 @@ export const Cart = () => {
             <Button onClick={handlePayment}>Checkout</Button>
           </Stack>
         </Stack>
+        </>
       ) : (
         <Stack></Stack>
       )}
