@@ -1,0 +1,46 @@
+.container {
+    padding: 16px 24px;
+  .box {
+    
+    .productimage{
+        width: 240px;
+    }
+    .boxcontainer {
+      .productname {
+        width: 100%;
+      }
+
+      .producttitle {
+       height: 100%;
+      }
+
+      .productprice {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .container {
+    .box {
+        .productimage{
+            width: 160px;
+        }
+      .boxcontainer {
+        .productname {
+          width: 100%;
+        }
+        .producttitle {
+          max-height: 100px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .productprice {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

@@ -62,3 +62,19 @@ a {
 .popover{
     top:"80px";
 }
+.title{
+    position: absolute;
+    top: 200px;
+    text-align: center;
+    width: 100%;
+    color: white;
+    font-size: 44px !important;
+    font-weight: 700 !important;
+}
+
+@media screen and (max-width:640px){
+    .title{
+        font-size: 32px !important;
+        font-weight: 700 !important;
+    }
+}

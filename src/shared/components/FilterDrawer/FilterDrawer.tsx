@@ -71,30 +71,30 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     }
   };
 
-  const colors = [
-    { label: "Red", value: "red" },
-    { label: "Green", value: "green" },
-    { label: "Blue", value: "blue" },
-    { label: "Black", value: "black" },
-    { label: "White", value: "white" },
-    { label: "Grey", value: "grey" },
-  ];
+  // const colors = [
+  //   { label: "Red", value: "red" },
+  //   { label: "Green", value: "green" },
+  //   { label: "Blue", value: "blue" },
+  //   { label: "Black", value: "black" },
+  //   { label: "White", value: "white" },
+  //   { label: "Grey", value: "grey" },
+  // ];
 
-  const renderColorCheckboxes = () => {
-    return colors.map((colorOption) => (
-      <FormControlLabel
-        key={colorOption.value}
-        control={
-          <Checkbox
-            checked={selectedColors.includes(colorOption.value)}
-            onChange={handleColorChange}
-            value={colorOption.value}
-          />
-        }
-        label={colorOption.label}
-      />
-    ));
-  };
+  // const renderColorCheckboxes = () => {
+  //   return colors.map((colorOption) => (
+  //     <FormControlLabel
+  //       key={colorOption.value}
+  //       control={
+  //         <Checkbox
+  //           checked={selectedColors.includes(colorOption.value)}
+  //           onChange={handleColorChange}
+  //           value={colorOption.value}
+  //         />
+  //       }
+  //       label={colorOption.label}
+  //     />
+  //   ));
+  // };
 
   const handleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value);
@@ -176,10 +176,10 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
             ))}
           </Select>
         </FormControl>
-        <FormControl className={styles.colorcheckbox} component="fieldset">
+        {/* <FormControl className={styles.colorcheckbox} component="fieldset">
           <FormLabel component="legend">Colors</FormLabel>
           <FormGroup>{renderColorCheckboxes()}</FormGroup>
-        </FormControl>
+        </FormControl> */}
       </Box>
       <Button variant="contained" color="primary" onClick={handleFilterChange}>
         Apply filter

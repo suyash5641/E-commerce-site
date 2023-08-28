@@ -1,5 +1,8 @@
 .box {
   margin: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   .container {
     gap: 24px;
     .card {

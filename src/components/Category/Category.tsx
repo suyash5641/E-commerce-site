@@ -8,22 +8,22 @@ export const Category = () => {
   const images = [
     {
       imgPath: headphone,
-      label: "headphone",
+      label: "Headphone",
       categoryid: "1",
     },
     {
       imgPath: earphone,
-      label: "earphone",
+      label: "Earphone",
       categoryid: "2",
     },
     {
       imgPath: speaker,
-      label: "speaker",
+      label: "Speaker",
       categoryid: "4",
     },
     {
       imgPath: smartwatch,
-      label: "smartwatch",
+      label: "Smartwatch",
       categoryid: "3",
     },
   ];
@@ -31,10 +31,12 @@ export const Category = () => {
   const Item = ({ item }: { item: { imagePath: string, label: string,categoryid:string } }) => {
     return (
       <Grid className={styles.card} onClick={() => {navigate(`/productlist?categoryid=${item?.categoryid}`)}}>
-        <img src={item?.imagePath} width={"100%"} height={"100%"} />
+        <img src={item?.imagePath} width={"100%"} height={"90%"} />
+        <Stack sx={{marginTop:"8px"}}>
         <Typography variant="h3" textAlign={"center"}>
           {item?.label}
         </Typography>
+        </Stack>
       </Grid>
     );
   };

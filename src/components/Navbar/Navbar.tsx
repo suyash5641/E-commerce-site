@@ -52,7 +52,7 @@ export const Navbar = ({ path, productTitle,changeTopPosition = false}: IProps) 
       direction={"row"}
       className={styles.navbar}
       justifyContent={"flex-start"}
-      sx={{top:changeTopPosition?"40px":"98.39px"}}
+      sx={{top:changeTopPosition?"40px":"100.39px"}}
     >
       {contentItems.map((item, idx) => (
         <Box key={idx}>
