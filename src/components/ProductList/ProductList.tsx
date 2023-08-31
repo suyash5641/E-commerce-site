@@ -30,6 +30,9 @@ export const ProductList = () => {
       ...(searchParams.has("maxPrice") && {
         "filters[price][$lte]": searchParams.get("maxPrice"),
       }),
+      ...(searchParams.has("brand") && {
+        "filters[brandName][$eq]": searchParams.get("brand"),
+      }),
     };
     
     getProductList(query);

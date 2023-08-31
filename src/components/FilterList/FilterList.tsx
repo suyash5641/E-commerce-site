@@ -23,6 +23,7 @@ export const FilterList = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     const sort = searchParams.get('sort');
+    const brandName = searchParams.get('brand');
     const categoryid = searchParams.get('categoryid'); 
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
@@ -36,6 +37,9 @@ export const FilterList = () => {
     }
     if(minPrice && maxPrice){
         filterArray.push({ value: `Budget : ${minPrice} - ${maxPrice}`, key: 'price' });
+    }
+    if(brandName){
+      filterArray.push({ value: `Brand : ${brandName}`, key: 'brand' });
     }
     showFilters(filterArray.length >0);
     setFilterData(filterArray);
@@ -63,6 +67,7 @@ export const FilterList = () => {
     searchParams.delete("maxPrice");
     searchParams.delete("categoryid");
     searchParams.delete("sort");
+    searchParams.delete("brand");
     navigate({
         pathname: location.pathname,
         search: `?${searchParams.toString()}`,

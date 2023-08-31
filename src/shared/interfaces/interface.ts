@@ -71,3 +71,16 @@ export interface Product {
   attributes: IAttributes;
   quantity: number;
 }
+
+export interface IBrand {
+  id: number
+  attributes: Attributes
+}
+
+export interface Attributes {
+  brandname: string
+  categorytype: string
+  createdAt: string
+  updatedAt: string
+  publishedAt: string
+}

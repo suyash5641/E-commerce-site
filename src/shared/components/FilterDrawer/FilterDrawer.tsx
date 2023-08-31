@@ -18,6 +18,7 @@ import { useEffect, useState, useCallback } from "react";
 import styles from "./filterdrawer.module.scss";
 import { useProduct } from "../../../sdk/hooks/products/useProduct";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useBrand } from "../../../sdk/hooks/brand/useBrand";
 
 const drawerWidth = 240;
 interface Props {
@@ -35,6 +36,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { categoryList } = useProduct();
+  const {brandList,getBrand} = useBrand();
   const handleDrawerToggle = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -56,7 +58,8 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   const [price, setPrice] = useState<number[]>([500, 30000]);
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<string>("");
+  const [brand, setBrand] = useState<string>("");
 
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
@@ -100,6 +103,10 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     setCategory(event.target.value);
   };
 
+  const handleBrandChange = (event: SelectChangeEvent) => {
+    setBrand(event.target.value);
+  };
+
   const valueText = (value: number) => `${value} USD`;
 
   const handlePriceChange = (
@@ -124,14 +131,18 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     if (category) {
       searchParams.set("categoryid", category);
     }
+    if(brand){
+      searchParams.set("brand", brand);
+    }
     searchParams.set("minPrice", price[0].toString());
     searchParams.set("maxPrice", price[1].toString());
     setSearchParams(searchParams);
     setDrawerOpen(false);
-  }, [setSearchParams,price,category]);
+  }, [setSearchParams,price,category,brand]);
 
   useEffect(() => {
     const category = searchParams.get("categoryid");
+    const brandName = searchParams.get("brand");
     const minPrice = parseInt(searchParams.get("minPrice") ?? "500");
     const maxPrice = parseInt(searchParams.get("maxPrice") ?? "30000");
     if (category) {
@@ -140,8 +151,22 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     else{
       setCategory('');
     }
+    if(brandName){
+      setBrand(brandName);
+    }
+    else{
+      setBrand('');
+    }
     setPrice([minPrice, maxPrice]);
-  }, [searchParams]);
+  }, [searchParams,setBrand,setCategory,setPrice]);
+
+  useEffect(() => {
+   if(category){
+    getBrand({populate:"*", "filters[categoryid][$eq]":category})
+   }
+  }, [category,getBrand]);
+
+  
 
   const drawer = (
     <Box
@@ -180,8 +205,26 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           <FormLabel component="legend">Colors</FormLabel>
           <FormGroup>{renderColorCheckboxes()}</FormGroup>
         </FormControl> */}
-      </Box>
-      <Button variant="contained" color="primary" onClick={handleFilterChange}>
+      </Box> 
+      {brandList && category && <Box className={styles.category}>
+        <Typography variant="h3">Select Brand</Typography>
+        <FormControl className={styles.formlabel}>
+          <Select
+            value={brand}
+            onChange={handleBrandChange}
+            displayEmpty
+            inputProps={{ "aria-label": "Without label" }}
+            className={styles.selectdropdown}
+          >
+            {brandList?.map((data, index) => (
+              <MenuItem key={data?.id} value={data?.attributes?.brandname}>
+                {data?.attributes?.brandname}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>}
+      <Button className={styles.categorybutton} variant="contained" color="primary" onClick={handleFilterChange}>
         Apply filter
       </Button>
     </Box>
