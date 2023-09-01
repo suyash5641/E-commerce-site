@@ -10,9 +10,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./loginmodal.module.scss";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -56,14 +56,14 @@ export const LoginModal = () => {
     removeQueryParam("login");
   };
 
-  const handleForgotPasswordModal =()=>{
-    searchParams.set("forgotpassword","true");
+  const handleForgotPasswordModal = () => {
+    searchParams.set("forgotpassword", "true");
     searchParams.delete("login");
     navigate({
       pathname: window.location.pathname,
       search: `?${searchParams.toString()}`,
     });
-  }
+  };
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
@@ -77,6 +77,12 @@ export const LoginModal = () => {
   const handleMouseDownPassword = (event: any) => {
     event.preventDefault();
   };
+
+  const handleModalOpen = ()=>{
+        searchParams.delete("login");
+        searchParams.set("signup","true");
+        navigate({ search: `?${searchParams.toString()}` });
+  }
 
   const formik: any = useFormik<FormValues>({
     initialValues: {
@@ -125,7 +131,11 @@ export const LoginModal = () => {
   }, [isModalOpen]);
 
   return (
-    <Modal open={isModalOpen} onClose={handleClose}>
+    <Modal
+      open={isModalOpen}
+      onClose={handleClose}
+      className={styles.modalcontainer}
+    >
       <Stack className={styles.loginmodal} flexDirection={"column"}>
         {isSnackBar?.isOpen && (
           <Stack sx={{ width: "100%" }} spacing={2}>
@@ -144,7 +154,12 @@ export const LoginModal = () => {
           </Stack>
         )}
         <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <Typography>Login Form</Typography>
+          <Stack sx={{ width:"86%"}} alignItems={"center"} flexDirection={"row"} justifyContent={"space-between"}>
+            <Typography>Login Form</Typography>
+            <Button variant="outlined" onClick={handleModalOpen}>
+            <Typography textTransform={"capitalize"}>SignUp</Typography>
+            </Button> 
+          </Stack>
           <Stack
             flexDirection={"column"}
             alignItems={"center"}
@@ -163,7 +178,7 @@ export const LoginModal = () => {
             <TextField
               label="Password"
               name="password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               value={formik.values.password}
               onChange={formik.handleChange}
               error={formik.touched.password && !!formik.errors.password}
@@ -184,7 +199,7 @@ export const LoginModal = () => {
                 ),
               }}
             />
-            <Button onClick={handleForgotPasswordModal}>forgot password</Button>
+            {/* <Button onClick={handleForgotPasswordModal}>forgot password</Button> */}
           </Stack>
           {loading ? (
             <CircularProgress />

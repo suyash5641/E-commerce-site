@@ -100,6 +100,12 @@ export const SignUpModal = () => {
     event.preventDefault();
   };
 
+  const handleModalOpen = ()=>{
+    searchParams.delete("signup");
+    searchParams.set("login","true");
+    navigate({ search: `?${searchParams.toString()}` });
+}
+
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
@@ -136,7 +142,12 @@ export const SignUpModal = () => {
             </Stack>
           )}
           <form onSubmit={formik.handleSubmit} className={styles.form}>
+            <Stack sx={{ width:"86%"}} alignItems={"center"} flexDirection={"row"} justifyContent={"space-between"}>
             <Typography>Create a new account</Typography>
+            <Button variant="outlined" onClick={handleModalOpen}>
+            <Typography textTransform={"capitalize"}>Login</Typography>
+            </Button> 
+          </Stack>
             <Stack
               flexDirection={"column"}
               alignItems={"center"}
