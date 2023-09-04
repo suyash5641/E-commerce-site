@@ -7,6 +7,7 @@ import {
   Divider,
   IconButton,
 } from "@mui/material";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
@@ -14,12 +15,37 @@ import { loadStripe } from "@stripe/stripe-js";
 import { stripe_key } from "../../utils/constant/constant";
 import { Navbar } from "../../components/Navbar";
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useProduct } from "../../sdk/hooks/products/useProduct";
 import { emptycart } from "../../assets";
 
-export const Cart = () => {
+export const BuyProductCart = () => {
   const token = localStorage.getItem("authToken");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {getProductDetail,productDetail,loading} = useProduct();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [productQuantity,setProductQuantity] = useState<number>(1);
+  const [isLogin, setIsLogin] = useState(false);
+  const idParam = searchParams.get("id");
   const { user } = useAuth();
-  const { handleQuantityChange, cartdetailloading } = useCart();
+  const handleQuantityChange = useCallback((key:string)=>{
+    if(key === "inc"){
+      setProductQuantity((prev)=>prev+1);
+    }
+    else if(key ==="dec"){
+      setProductQuantity((prev)=>prev-1);
+    }
+    else {
+      const searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete("id");
+      navigate({
+        pathname: location.pathname,
+        search: `?${searchParams.toString()}`,
+      });
+    }
+  },[setProductQuantity,navigate,location]);
+  // const { handleQuantityChange, cartdetailloading } = useCart();
   
   const handlePayment = async () => {
     try {
@@ -27,14 +53,19 @@ export const Cart = () => {
         "pk_test_51NZCukSEFvyokD6c4VjZ43S6AOQuCKGdHtQBwVZrg6fbCbstRL3LxuspjkhqwgYS9dBmA6p0FmDJshWnzsMAjkVs00k7Ic4tCK"
       );
       const stripe = await stripePromise;
+      const payload = {
+          ...productDetail,
+          quantity:productQuantity
+      }
       const requestOptions = {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+       
         body: JSON.stringify({
-          products: user?.cart,
+          products: [payload],
         }),
       };
       const res = await fetch(
@@ -52,37 +83,42 @@ export const Cart = () => {
   
   };
 
+  useEffect(() => {
+    if (searchParams.has("id") && idParam != null) {
+      getProductDetail(parseInt(idParam));
+    }
+  }, [searchParams, getProductDetail]);
+
   return (
     <>
-      {cartdetailloading || user === null ? (
+      {loading ? (
         <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
-      ) : user?.cart?.length > 0 ? (
+      ) : searchParams.has("id") && productDetail? (
         <>
-         <Navbar path="cart" productTitle={''} changeTopPosition={"40px"} />
+         <Navbar path="buynow" productTitle={''} changeTopPosition={"40px"} />
         <Stack className={styles.cart}>
           <Stack flexDirection={"column"} className={styles.product}>
-            {user?.cart?.map((data, index) => (
-              <Stack className={styles.productcontainer} key={index}>
+              <Stack className={styles.productcontainer}>
                 <Stack className={styles.productimage}>
                   <img
                     width={"180px"}
-                    src={`http://localhost:1337${data?.attributes?.imageurl?.data?.attributes?.url}`}
+                    src={`http://localhost:1337${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
                     alt="product"
                   />
                 </Stack>
                 <Stack className={styles.productinfo}>
                   <Typography variant="h2">
-                    {data?.attributes?.title}
+                    {productDetail?.attributes?.title}
                   </Typography>
                   <Typography variant="h2" className={styles.discountedPrice}>
-                    {data?.attributes?.discountedPrice}
+                    {productDetail?.attributes?.discountedPrice}
                   </Typography>
                   <Stack direction={"row"} gap={"24px"}>
                     <Typography variant="h5" className={styles.price}>
-                      {data?.attributes?.price}
+                      {productDetail?.attributes?.price}
                     </Typography>
                     <Typography variant="h5" className={styles.discountPercent}>
-                      {data?.attributes?.discountPercent}
+                      {productDetail?.attributes?.discountPercent}
                       {" off"}
                     </Typography>
                   </Stack>
@@ -94,41 +130,41 @@ export const Cart = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      disabled={data?.quantity === 1}
-                      onClick={() => handleQuantityChange(data, false, "dec")}
+                      disabled={productQuantity === 1}
+                      onClick={() => handleQuantityChange("dec")}
                     >
                       -
                     </Button>
                     <Typography variant="h5" sx={{ margin: "auto 0" }}>
-                      {data?.quantity}
+                      {productQuantity}
                     </Typography>
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleQuantityChange(data, false, "inc")}
+                      onClick={() => handleQuantityChange("inc")}
                     >
                       +
                     </Button>
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleQuantityChange(data, true, "")}
+                      onClick={() => handleQuantityChange("del")}
                     >
                       <DeleteIcon sx={{ color: '#fff' }} />
                     </Button>
                   </Stack>
                 </Stack>
               </Stack>
-            ))}
+            
           </Stack>
           <Stack flexDirection={"column"} className={styles.checkoutbox}>
             <Typography variant="h2" textAlign={"center"}>Price details</Typography>
             <Stack flexDirection={"row"} justifyContent={"space-between"}>
               <Typography className={styles.title}>
-                Price ({user?.cart?.length} item)
+                Price ({productQuantity} item)
               </Typography>
               <Typography className={styles.subtitle}>
-                Rs {user?.cartTotalPrice}
+                Rs {parseInt(productDetail?.attributes?.price)*productQuantity}
               </Typography>
             </Stack>
             <Stack flexDirection={"row"} justifyContent={"space-between"}>
@@ -137,14 +173,14 @@ export const Cart = () => {
                 className={styles.subtitle}
                 sx={{ color: "#198b1e !important" }}
               >
-                -Rs {user?.discountPrice}
+                -Rs {productQuantity*(parseInt(productDetail?.attributes?.price) - parseInt(productDetail?.attributes?.discountedPrice))}
               </Typography>
             </Stack>
             <Divider />
             <Stack flexDirection={"row"} justifyContent={"space-between"}>
               <Typography className={styles.title}>Total amount</Typography>
               <Typography className={styles.subtitle}>
-                Rs {user?.cartActualPrice}
+                Rs {productQuantity*parseInt(productDetail?.attributes?.discountedPrice)}
               </Typography>
             </Stack>
             <Divider />
@@ -154,7 +190,7 @@ export const Cart = () => {
               className={styles.savingtext}
             >
               <Typography>Total savings</Typography>
-              <Typography>Rs {user?.discountPrice}</Typography>
+              <Typography>Rs {productQuantity*(parseInt(productDetail?.attributes?.price) - parseInt(productDetail?.attributes?.discountedPrice))}</Typography>
             </Stack>
             <Button onClick={handlePayment}>Checkout</Button>
           </Stack>
@@ -162,8 +198,8 @@ export const Cart = () => {
         </>
       ) : (
         <>
-         <Navbar path="cart" productTitle={''} changeTopPosition={"40px"} />
-         <Stack alignItems={"center"}>
+        <Navbar path="buynow" productTitle={''} changeTopPosition={"40px"} />
+        <Stack alignItems={"center"}>
          <img src={emptycart} className="imagecart" width={"45%"} height={"45%"}/>
          </Stack>
         </>

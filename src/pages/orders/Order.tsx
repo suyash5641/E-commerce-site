@@ -2,6 +2,7 @@ import { useOrder } from "../../sdk/hooks/orders/useOrder";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 import styles from "./order.module.scss";
+import { Navbar } from "../../components/Navbar";
 export const Order = () => {
   const { getOrder, orderList, loading } = useOrder();
 
@@ -15,7 +16,10 @@ export const Order = () => {
       {loading ? (
         <></>
       ) : (
+        <Stack>
+          <Navbar path="order" productTitle="" changeTopPosition={"0px"}  />
         <Stack direction={"column"} className={styles.container} gap={"24px"}>
+            
             {orderList?.map((data, index) => (
               <Stack key={index} direction={"column"} gap={"24px"}>
                 <Typography textAlign={"center"}>Order placed on {String(new Date(data?.attributes?.createdAt).getUTCDate()).padStart(2, '0')}/{String(new Date(data?.attributes?.createdAt).getUTCMonth() + 1).padStart(2, '0')}/{new Date(data?.attributes?.createdAt).getUTCFullYear()}</Typography>
@@ -25,6 +29,7 @@ export const Order = () => {
                       src={`http://localhost:1337${val?.attributes?.imageurl?.data?.attributes?.url}`}
                       alt="product"
                       className={styles.productimage}
+                      width={"240px"}
                     />
                     <Stack className={styles.boxcontainer}>
                     <Typography className={styles.productname}>{val?.attributes?.name}</Typography>
@@ -35,6 +40,7 @@ export const Order = () => {
                 ))}
               </Stack>
             ))}
+        </Stack>
         </Stack>
       )}
     </>

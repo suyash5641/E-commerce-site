@@ -24,7 +24,7 @@ export const FilterList = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const sort = searchParams.get('sort');
     const brandName = searchParams.get('brand');
-    const categoryid = searchParams.get('categoryid'); 
+    const categoryid = searchParams.get('categoryid') ?? ""; 
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
     let filterArray: filterArray[] = [];
@@ -33,7 +33,7 @@ export const FilterList = () => {
     }
     if (categoryid) {
        const res = categoryList?.find(item => item.id === parseInt(categoryid) );
-       filterArray.push({ value: `Category : ${res?.attributes?.categorytype}`, key: 'categoryid' });
+       filterArray.push({ value: `Category : ${res?.attributes?.categorytype ?? " "} ` , key: 'categoryid' });
     }
     if(minPrice && maxPrice){
         filterArray.push({ value: `Budget : ${minPrice} - ${maxPrice}`, key: 'price' });
@@ -85,7 +85,7 @@ export const FilterList = () => {
         <Stack direction="row" gap={"8px" } className={styles.box}>
             {filterData?.map((data, index) => (
               <Stack direction="row" key={index} className={styles.filter}>
-                <Typography variant="h6" className={styles.filtertext}>{data?.value}</Typography>
+                <Typography variant="h6" className={styles.filtertext}>{data?.value ?? ""}</Typography>
                 <IconButton sx={{height:'20px',padding:'0px 4px 0px 4px',borderRadius:'0px',marginLeft:'4px'}} onClick={()=>handleRemoveFilters(data?.key)}>
                     <CloseIcon sx={{fontSize:'16px'}}/>
                 </IconButton>

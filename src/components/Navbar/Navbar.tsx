@@ -4,7 +4,7 @@ import styles from "./navbar.module.scss";
 interface IProps {
   path: string;
   productTitle: string;
-  changeTopPosition?: boolean;
+  changeTopPosition?: string;
 }
 
 interface ContentItem {
@@ -12,7 +12,7 @@ interface ContentItem {
   path: string;
 }
 
-export const Navbar = ({ path, productTitle,changeTopPosition = false}: IProps) => {
+export const Navbar = ({ path, productTitle,changeTopPosition = "100.39px"}: IProps) => {
   let contentItems: ContentItem[] = [];
   switch (path) {
     case "productlist":
@@ -42,17 +42,23 @@ export const Navbar = ({ path, productTitle,changeTopPosition = false}: IProps) 
         { label: "Orders", path: "" },
       ];
       break;
+      case "buynow":
+        contentItems = [
+          { label: "Home /", path: "/" },
+          { label: "Product ", path: "/productlist" },
+        ];
+        break;
     default:
       break;
   }
-  console.log(contentItems, "item", path);
+  
 
   return (
     <Stack
       direction={"row"}
       className={styles.navbar}
       justifyContent={"flex-start"}
-      sx={{top:changeTopPosition?"40px":"100.39px"}}
+      sx={{top:changeTopPosition,width:"100%"}}
     >
       {contentItems.map((item, idx) => (
         <Box key={idx}>

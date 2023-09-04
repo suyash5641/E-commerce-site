@@ -9,20 +9,12 @@ import { IAttributes, Cart } from "../../shared/interfaces/interface";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import { useOrder } from "../../sdk/hooks/orders/useOrder";
 import { sucess,failure } from "../../assets";
-// interface Cart {
-//     id: number;
-//     attributes: IAttributes;
-//   }
 
 export const PaymentConfirmation = () => {
   const [paymentSuccessful, setPaymentSucessfull] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-//   const [secret, setSecret] = useState("32#@JWuytyykeyPROD##D");
-//   const [cipher, setCipher] = useState("");
-//   const [decrypted, setDecrypted] = useState("");
-  //   const { getProduct} = useProduct();
   const { emptyCart } = useCart();
 //   const { fetchLoggedInUser} = useAuth();
   const { updateOrderPaymentStatus } = useOrder();
@@ -62,14 +54,20 @@ export const PaymentConfirmation = () => {
            {paymentSuccessful ? (
             <>
             <img src={sucess} alt="success" className={styles.image}/>
-            <Typography variant="h1" textAlign={"center"}>Payment Sucess</Typography>
-            <Button variant="contained" color="primary">Go to orders</Button>
+            <Typography variant="h1" textAlign={"center"}>Payment Sucessful</Typography>
+            <Stack direction={"row"} gap="24px">
+            <Button variant="contained" color="primary" onClick={()=>navigate('/orders',{ replace: true })}>Go to orders</Button>
+            <Button variant="contained" color="primary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
+            </Stack>
             </>
           ) : (
             <>
              <img src={failure} alt="failure" className={styles.image}/>
             <Typography variant="h1" textAlign={"center"}>Payment Failed</Typography>
-            <Button variant="contained" color="primary" onClick={()=>navigate('/cart')}>Go to cart</Button>
+            <Stack direction={"row"} gap="24px">
+            <Button variant="contained" color="primary" onClick={()=>navigate('/cart',{ replace: true })}>Go to cart</Button>
+            <Button variant="contained" color="primary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
+            </Stack>
             </>
           )} 
           </Box>

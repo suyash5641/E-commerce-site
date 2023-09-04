@@ -11,6 +11,7 @@ import { LandingPage } from "./pages/landingpage";
 import { ResetPassword } from "./pages/ResetPassword";
 import { PaymentConfirmation } from "./pages/paymentconfirmation";
 import { Order } from "./pages/orders";
+import { BuyProductCart } from "./pages/buyproductcart";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/productlist" element={<Home />} />
           <Route path="/product" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/buyproduct" element={<BuyProductCart />} />
           
           {/* <Route path="/reset-password" element={<ResetPassword/>}/> */}
         </Route>

@@ -18,6 +18,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
+import CloseIcon from "@mui/icons-material/Close";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
   // username: string;
@@ -78,11 +79,11 @@ export const LoginModal = () => {
     event.preventDefault();
   };
 
-  const handleModalOpen = ()=>{
-        searchParams.delete("login");
-        searchParams.set("signup","true");
-        navigate({ search: `?${searchParams.toString()}` });
-  }
+  const handleModalOpen = () => {
+    searchParams.delete("login");
+    searchParams.set("signup", "true");
+    navigate({ search: `?${searchParams.toString()}` });
+  };
 
   const formik: any = useFormik<FormValues>({
     initialValues: {
@@ -153,12 +154,22 @@ export const LoginModal = () => {
             </Alert>
           </Stack>
         )}
+        <Stack flexDirection={"row"} justifyContent={"end"}>
+          <IconButton  onClick={handleClose}>
+            <CloseIcon sx={{color:"blue"}} />
+          </IconButton>
+        </Stack>
         <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <Stack sx={{ width:"86%"}} alignItems={"center"} flexDirection={"row"} justifyContent={"space-between"}>
+          <Stack
+            sx={{ width: "86%" }}
+            alignItems={"center"}
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+          >
             <Typography>Login Form</Typography>
             <Button variant="outlined" onClick={handleModalOpen}>
-            <Typography textTransform={"capitalize"}>SignUp</Typography>
-            </Button> 
+              <Typography textTransform={"capitalize"}>SignUp</Typography>
+            </Button>
           </Stack>
           <Stack
             flexDirection={"column"}

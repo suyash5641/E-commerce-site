@@ -2,8 +2,10 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import { useState } from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export const UserProfile = () => {
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<EventTarget & HTMLElement | null>(null);
 
     const {signOut}= useAuth();
@@ -19,6 +21,10 @@ export const UserProfile = () => {
     const handleLogout = async() => {
      await signOut();
     };
+
+    const goToOrder =()=>{
+      navigate('/orders');
+    }
   
     return (
       <div>
@@ -48,6 +54,7 @@ export const UserProfile = () => {
         >
           {/* Add any other user profile related options here */}
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={goToOrder}>Orders</MenuItem>
         </Menu>
       </div>
     );

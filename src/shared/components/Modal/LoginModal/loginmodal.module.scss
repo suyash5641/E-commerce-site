@@ -1,11 +1,11 @@
 .modalcontainer {
   .loginmodal {
     padding: 12px;
-    width: 674px;
+    width: 600px;
     border-radius: 32px;
     height: calc(100vh - 160px);
     display: flex;
-    justify-content: center;
+    // justify-content: center;
     background: #fff;
     margin: 32px auto 32px auto;
     .form {

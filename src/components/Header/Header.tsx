@@ -104,7 +104,7 @@ export const Header = () => {
         >
           {isLogin ? (
             <>
-              <p>Header</p>
+              <Button onClick={()=>navigate("/productlist")} sx={{textTransform:"capitalize",color:"#fff"}}>Shop Now</Button>
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
               {location.pathname != "/cart" && <AddShoppingCartIcon onClick={handleProductCartOpen} />}
               <UserProfile />
@@ -112,7 +112,8 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <p>Header</p>
+              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={()=>navigate("/productlist")}>
+                Shop Now</Button>
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
               <p onClick={() => handleModalOpen("login")}>Login</p>
               <p onClick={() => handleModalOpen("signup")}>Signup</p>

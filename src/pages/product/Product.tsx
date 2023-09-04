@@ -58,6 +58,15 @@ export const Product = () => {
     }
   }, [isLogin, searchParams, updateCart, idParam,cartButtonLabel]);
 
+  const handleBuyButtonClick = useCallback(async () => {
+   
+      if (searchParams.has("id") && idParam != null && isLogin) {
+        navigate(`/buyproduct?id=${idParam}`);
+      } else {
+        addQueryParam("login", "true");
+      }
+  }, [isLogin, searchParams, idParam]);
+
 
   useEffect(() => {
     if (loading) return;
@@ -103,7 +112,7 @@ export const Product = () => {
         <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
       ) : (
         <>
-        <Navbar path="product" productTitle={productDetail?.attributes?.name ?? ''} changeTopPosition={true} />
+        <Navbar path="product" productTitle={productDetail?.attributes?.name ?? ''} changeTopPosition={"40px"} />
         <Stack direction="column">
           <Stack className={styles.productcontainer}>
             <Stack className={styles.productimage}>
@@ -129,6 +138,24 @@ export const Product = () => {
                   {" off"}
                 </Typography>
               </Stack>
+              <Stack  gap={"8px"} sx={{margin:"12px 0px"}}>
+                <Typography variant="h3" >
+                  About Item
+                </Typography>
+                <Typography variant="h5" >
+                  {productDetail?.attributes?.description}
+                 
+                </Typography>
+              </Stack>
+              <Stack direction={"row"} gap={"32px"}>
+              <Button
+                  sx={{ width: "fit-content" }}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleBuyButtonClick}
+                >
+                  Buy now
+                </Button>
               {
                 <Button
                   disabled={cartButtonLabel.length === 0}
@@ -140,6 +167,7 @@ export const Product = () => {
                   {cartButtonLabel}
                 </Button>
               }
+              </Stack>
             </Stack>
           </Stack>
         </Stack>

@@ -78,3 +78,10 @@ a {
         font-weight: 700 !important;
     }
 }
+
+@media screen and (max-width:800px){
+    .imagecart{
+        width: 95%;
+        height: 95%;
+    }
+}

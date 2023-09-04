@@ -18,6 +18,7 @@ import { useFormik } from "formik";
 import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import CloseIcon from "@mui/icons-material/Close";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
   username: string;
@@ -141,6 +142,11 @@ export const SignUpModal = () => {
               </Alert>
             </Stack>
           )}
+           <Stack flexDirection={"row"} justifyContent={"end"}>
+          <IconButton onClick={handleClose}>
+            <CloseIcon sx={{color:"blue"}} />
+          </IconButton>
+        </Stack>
           <form onSubmit={formik.handleSubmit} className={styles.form}>
             <Stack sx={{ width:"86%"}} alignItems={"center"} flexDirection={"row"} justifyContent={"space-between"}>
             <Typography>Create a new account</Typography>
