@@ -98,6 +98,9 @@ const AuthContextProvider = ({ children }: any) => {
 
   const token = localStorage.getItem("authToken");
 
+  const protectedRoutes=["/cart","/orders","/buyproduct","/payment"];
+  const routes=["/cart","/orders","/productlist","/product","/buyproduct","/payment"]
+
   useEffect(() => {
     try {
       if (token) {
@@ -123,24 +126,12 @@ const AuthContextProvider = ({ children }: any) => {
     }
     switch (authState.authToken) {
       case null:
-        if (location.pathname === "/cart") {
+        if (protectedRoutes.includes(location.pathname)) {
           navigate("/");
         }
         break;
       default:
-        // if (
-        //     location.pathname === "/signin" ||
-        //     location.pathname === "/signup" || location.pathname === "/"
-        // ) {
-        //     navigate("/dashboard");
-        // }
-        // const searchParams = new URLSearchParams(window.location.search);
-        // if (searchParams.has("login")) {
-        //   searchParams.delete("login");
-        // } else if (searchParams.has("signup")) {
-        //   searchParams.delete("signup");
-        // }
-        // navigate({ search: `?${searchParams.toString()}` });
+       
         break;
     }
   }, [location, authState.authToken]);

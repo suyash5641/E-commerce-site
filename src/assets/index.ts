@@ -10,6 +10,7 @@ import smartwatch from './smartwatch.jpg'
 import sucess from './success.svg'
 import failure from './failure.png'
 import emptycart from './emptycart.png'
+import pagenotfound from './404.png'
 
 export {
     sony,
@@ -23,5 +24,6 @@ export {
     smartwatch,
     sucess,
     failure,
-    emptycart
+    emptycart,
+    pagenotfound
 }

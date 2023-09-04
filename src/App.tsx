@@ -12,6 +12,7 @@ import { ResetPassword } from "./pages/ResetPassword";
 import { PaymentConfirmation } from "./pages/paymentconfirmation";
 import { Order } from "./pages/orders";
 import { BuyProductCart } from "./pages/buyproductcart";
+import { PageNotFound } from "./shared/components/PageNotFound";
 
 function App() {
   return (
@@ -26,8 +27,9 @@ function App() {
           
           {/* <Route path="/reset-password" element={<ResetPassword/>}/> */}
         </Route>
-        <Route path="/payment" element={<PaymentConfirmation/>} />
+        <Route path="\" element={<PaymentConfirmation/>} />
         <Route path="/orders" element={<Order/>} />
+        <Route path="*" element={<PageNotFound />} />
         {/* <Route path="/product" element={<Product/> } />  */}
       </Routes>
     </div>
