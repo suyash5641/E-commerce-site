@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
+import { BASE_URL } from "../../../utils/constant/constant";
 export const useStripe = () => {
   const token = localStorage.getItem("authToken");
   const { user } = useAuth();
@@ -22,7 +23,7 @@ export const useStripe = () => {
         }),
       };
       const res = await fetch(
-        `http://localhost:1337/api/orders`,
+        `${BASE_URL}/orders`,
         requestOptions
       );
       const data = await res.json();

@@ -12,7 +12,7 @@ import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { loadStripe } from "@stripe/stripe-js";
-import { stripe_key } from "../../utils/constant/constant";
+import { BASE_URL, stripe_key } from "../../utils/constant/constant";
 import { Navbar } from "../../components/Navbar";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -69,7 +69,7 @@ export const BuyProductCart = () => {
         }),
       };
       const res = await fetch(
-        `http://localhost:1337/api/orders`,
+        `${BASE_URL}/orders`,
         requestOptions
       );
       const data = await res.json();

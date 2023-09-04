@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IProductLists, ICategory } from "../../../shared/interfaces/interface";
+import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useProduct = () => {
   const [productList, setProductList] = useState<IProductLists[]>();
@@ -12,7 +13,7 @@ export const useProduct = () => {
       const queryParams = new URLSearchParams(filters);
       setLoading(true);
       const res = await fetch(
-        `http://localhost:1337/api/products?${queryParams}`
+        `${BASE_URL}/products?${queryParams}`
       );
       if (res.status === 200) {
         const response = await res.json();
@@ -29,7 +30,7 @@ export const useProduct = () => {
 
   const getCategories = useCallback(async () => {
     try {
-      const res = await fetch(`http://localhost:1337/api/categories`);
+      const res = await fetch(`${BASE_URL}/categories`);
       if (res.status === 200) {
         const response = await res.json();
         setCategoryList(response?.data);
@@ -41,7 +42,7 @@ export const useProduct = () => {
     try {
       // setLoading(true);
       const res = await fetch(
-        `http://localhost:1337/api/products/${id}?populate=*`
+        `${BASE_URL}/products/${id}?populate=*`
       );
       if (res.status === 200) {
         const response = await res.json();

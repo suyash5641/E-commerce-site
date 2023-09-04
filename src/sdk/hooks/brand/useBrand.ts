@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IBrand } from "../../../shared/interfaces/interface";
+import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useBrand = () => {
   const [brandList, setBrandList] = useState<IBrand[]>();
@@ -12,7 +13,7 @@ export const useBrand = () => {
         const queryParams = new URLSearchParams(filters);
         setLoading(true);
         const res = await fetch(
-          `http://localhost:1337/api/brands?${queryParams}`
+          `${BASE_URL}/brands?${queryParams}`
         );
         if (res.status === 200) {
           const response = await res.json();

@@ -8,6 +8,7 @@ import {
 import { useProduct } from "../products/useProduct";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
 import { ProductCard } from "../../../shared/components/ProductCard";
+import { BASE_URL } from "../../../utils/constant/constant";
 // interface updateCart {
 //   productid: number,removeProduct:boolean,productQuantity?:number
 // }
@@ -137,7 +138,7 @@ export const useBuyCart = () => {
   const getProductDetail = useCallback(async (id: number) => {
     try {
       const res = await fetch(
-        `http://localhost:1337/api/products/${id}?populate=*`
+        `${BASE_URL}/products/${id}?populate=*`
       );
       if (res.status === 200) {
         const response = await res.json();
@@ -168,7 +169,7 @@ export const useBuyCart = () => {
               body: JSON.stringify(result),
             };
             const res = await fetch(
-              `http://localhost:1337/api/users/${user?.id}`,
+              `${BASE_URL}/users/${user?.id}`,
               requestOptions
             );
             if (res.status === 200) {
@@ -206,7 +207,7 @@ export const useBuyCart = () => {
             body: JSON.stringify(result),
           };
           const res = await fetch(
-            `http://localhost:1337/api/users/${user?.id}`,
+            `${BASE_URL}/users/${user?.id}`,
             requestOptions
           );
           if (res.status === 200) {
@@ -250,7 +251,7 @@ export const useBuyCart = () => {
           body: JSON.stringify(payload),
         };
         const res = await fetch(
-          `http://localhost:1337/api/users/${userid}`,
+          `${BASE_URL}/users/${userid}`,
           requestOptions
         );
         // if (res.status === 200) {

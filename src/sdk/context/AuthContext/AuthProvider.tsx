@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IUser } from "../../../shared/interfaces/interface";
+import { BASE_URL } from "../../../utils/constant/constant";
 
 const BaseUrl = "";
 
@@ -138,7 +139,7 @@ const AuthContextProvider = ({ children }: any) => {
 
   const signIn = useCallback(async (payload: ISignInProps) => {
     setIsLoading(true);
-    const response = await fetch(`http://localhost:1337/api/auth/local`, {
+    const response = await fetch(`${BASE_URL}/auth/local`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -165,7 +166,7 @@ const AuthContextProvider = ({ children }: any) => {
   const register = useCallback(async (payload: IProps) => {
     setIsLoading(true);
     const response = await fetch(
-      `http://localhost:1337/api/auth/local/register`,
+      `${BASE_URL}/auth/local/register`,
       {
         method: "POST",
         headers: {
@@ -195,7 +196,7 @@ const AuthContextProvider = ({ children }: any) => {
     async (token: string) => {
       // setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:1337/api/users/me`, {
+        const response = await fetch(`${BASE_URL}/users/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const res = await response.json();
@@ -229,13 +230,13 @@ const AuthContextProvider = ({ children }: any) => {
       setIsLoading(true);
 
       const response = await fetch(
-        `http://localhost:1337/api/users?filters[$and][0][email][$eq]=${payload?.email}`
+        `${BASE_URL}/users?filters[$and][0][email][$eq]=${payload?.email}`
       );
 
       const data = await response.json();
       if (data.length > 0) {
         const apiResponse = await fetch(
-          `http://localhost:1337/api/auth/forgot-password`,
+          `${BASE_URL}/auth/forgot-password`,
           {
             method: "POST",
             headers: {
@@ -263,7 +264,7 @@ const AuthContextProvider = ({ children }: any) => {
     async (payload: IResetPassword) => {
       setIsLoading(true);
       const apiResponse = await fetch(
-        `http://localhost:1337/api/auth/reset-password`,
+        `${BASE_URL}/auth/reset-password`,
         {
           method: "POST",
           headers: {

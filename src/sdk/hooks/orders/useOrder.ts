@@ -4,6 +4,7 @@ import {
   ICategory,
   IOrder,
 } from "../../../shared/interfaces/interface";
+import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useOrder = () => {
   const [orderList, setOrderList] = useState<IOrder[]>();
@@ -25,7 +26,7 @@ export const useOrder = () => {
           },
         };
         const res = await fetch(
-          `http://localhost:1337/api/orders?${queryParams}`,
+          `${BASE_URL}/orders?${queryParams}`,
           requestOptions
         );
         if (res.status === 200) {
@@ -58,7 +59,7 @@ export const useOrder = () => {
       };
       console.log("api hittt");
       const res = await fetch(
-        `http://localhost:1337/api/orders/${result[0]?.id}`,
+        `${BASE_URL}/orders/${result[0]?.id}`,
         requestOptions
       );
     },
@@ -77,7 +78,7 @@ export const useOrder = () => {
           },
         };
         const res = await fetch(
-          `http://localhost:1337/api/orders/${id}?populate=*`,
+          `${BASE_URL}/orders/${id}?populate=*`,
           requestOptions
         );
         if (res.status === 200) {
