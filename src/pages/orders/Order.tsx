@@ -26,7 +26,7 @@ export const Order = () => {
                 {data?.attributes.products.map((val, pos) => (
                   <Stack direction={"row"} key={pos} gap={"24px"} alignItems={"center"}  className={styles.box}>
                     <img       
-                      src={`http://localhost:1337${val?.attributes?.imageurl?.data?.attributes?.url}`}
+                      src={`${val?.attributes?.imageurl?.data?.attributes?.url}`}
                       alt="product"
                       className={styles.productimage}
                       width={"240px"}

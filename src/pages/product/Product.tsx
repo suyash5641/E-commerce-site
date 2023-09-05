@@ -117,7 +117,7 @@ export const Product = () => {
           <Stack className={styles.productcontainer}>
             <Stack className={styles.productimage}>
               <img
-                src={`http://localhost:1337${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
+                src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
                 alt="product"
               />
             </Stack>

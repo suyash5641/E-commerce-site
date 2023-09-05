@@ -102,7 +102,7 @@ export const BuyProductCart = () => {
                 <Stack className={styles.productimage}>
                   <img
                     width={"180px"}
-                    src={`http://localhost:1337${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
+                    src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
                     alt="product"
                   />
                 </Stack>
