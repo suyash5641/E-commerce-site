@@ -5,6 +5,8 @@ import { useState ,useEffect, useCallback, useRef} from "react";
 import { useDebounce } from "../../../sdk/hooks/useDebounce/useDebounce";
 import styles from './searchbar.module.scss'
 import { useProduct } from "../../../sdk/hooks/products/useProduct";
+import { useNavigate } from "react-router-dom";
+import { norecordfound } from "../../../assets";
 
 export const SearchBar = () => {
   const [searchText, setSearchText] = useState("");
@@ -16,6 +18,7 @@ export const SearchBar = () => {
   const id = open ? "simple-popover" : undefined;
   const [isOpen, setIsOpen] = useState(false);
   const divRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
 
   const handleSearchChange = useCallback((event: any) => {
     setSearchText(event.target.value);
@@ -30,6 +33,10 @@ export const SearchBar = () => {
     setProductList([]);
     setPopoverOpen(false);
   },[setSearchText,setProductList,setPopoverOpen]);
+
+  const showProduct = useCallback((id:number)=>{
+      navigate(`/product?id=${id}`)
+  },[navigate])
 
   useEffect(() => {
     if(debouncedValue){
@@ -65,7 +72,7 @@ export const SearchBar = () => {
     };
   }, [divRef,setIsOpen]);
 
-
+  // console.log(!isOpen ,"test", productList?.length == 0,debouncedValue)
 
   return (
     <Stack>
@@ -100,11 +107,17 @@ export const SearchBar = () => {
       />
     {isOpen && debouncedValue && productList && <Stack className={styles.box} ref={divRef}
       >
-        {productList?.map((data, index) => (
-          <Stack key={index} direction={"row"} gap="12px" sx={{ padding: "8px 20px", cursor: "pointer", color: "#67718B" }}>
+        {productList.length > 0 ? productList?.map((data, index) => (
+          <Stack key={index} direction={"row"} alignItems={"center"} gap="12px" className={styles.searchitem} onClick={()=>showProduct(data?.id)}>
+            <img width="60px" src={data?.attributes?.imageurl?.data?.attributes?.url}/>
             <Typography>{data?.attributes?.title}</Typography>
           </Stack>
-        ))}
+        ))
+        :
+        <Stack className={styles.emptysearchresult}>
+          <img src={norecordfound} width={"200px"} height={"200px"} />
+        </Stack>
+      }
       </Stack>}
     </Stack>
   );

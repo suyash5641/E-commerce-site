@@ -11,6 +11,7 @@ import sucess from './success.svg'
 import failure from './failure.png'
 import emptycart from './emptycart.png'
 import pagenotfound from './404.png'
+import norecordfound from './norecordfound.png'
 
 export {
     sony,
@@ -25,5 +26,6 @@ export {
     sucess,
     failure,
     emptycart,
-    pagenotfound
+    pagenotfound,
+    norecordfound
 }

@@ -109,11 +109,11 @@ export const Product = () => {
                 {productDetail?.attributes?.title}
               </Typography>
               <Typography variant="h2" className={styles.discountedPrice}>
-                {productDetail?.attributes?.discountedPrice}
+                Rs {productDetail?.attributes?.discountedPrice}
               </Typography>
               <Stack direction={"row"} gap={"24px"}>
                 <Typography variant="h5" className={styles.price}>
-                  {productDetail?.attributes?.price}
+                  Rs {productDetail?.attributes?.price}
                 </Typography>
                 <Typography variant="h5" className={styles.discountPercent}>
                   {productDetail?.attributes?.discountPercent}
