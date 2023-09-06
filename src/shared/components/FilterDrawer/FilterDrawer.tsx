@@ -99,13 +99,15 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   //   ));
   // };
 
-  const handleChange = (event: SelectChangeEvent) => {
+  const handleChange = useCallback((event: SelectChangeEvent) => {
     setCategory(event.target.value);
-  };
+    getBrand({populate:"*", "filters[categoryid][$eq]":event.target.value})
+    setBrand("");
+  },[setCategory,getBrand,setBrand]);
 
-  const handleBrandChange = (event: SelectChangeEvent) => {
+  const handleBrandChange = useCallback((event: SelectChangeEvent) => {
     setBrand(event.target.value);
-  };
+  },[setBrand]);
 
   const valueText = (value: number) => `${value} USD`;
 
@@ -161,15 +163,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       setBrand('');
     }
     setPrice([minPrice, maxPrice]);
-  }, [setBrand,setCategory,setPrice,searchParams]);
+  }, [setBrand,setCategory,setPrice,searchParams,drawerOpen]);
 
-  useEffect(() => {
-   if(category ){
-    getBrand({populate:"*", "filters[categoryid][$eq]":category})
-    setBrand("");
-   }
-  }, [category,getBrand,setBrand]);
-
+  console.log(price,category,brand)
 
   const drawer = (
     <Box
