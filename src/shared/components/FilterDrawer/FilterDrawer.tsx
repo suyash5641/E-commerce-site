@@ -141,10 +141,13 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   }, [setSearchParams,price,category,brand,searchParams]);
 
   useEffect(() => {
+
     const category = searchParams.get("categoryid");
     const brandName = searchParams.get("brand");
     const minPrice = parseInt(searchParams.get("minPrice") ?? "500");
     const maxPrice = parseInt(searchParams.get("maxPrice") ?? "30000");
+    if(!drawerOpen)
+    return
     if (category) {
       setCategory(category);
     }
@@ -161,11 +164,12 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   }, [setBrand,setCategory,setPrice,searchParams]);
 
   useEffect(() => {
-   if(category){
+   if(category ){
     getBrand({populate:"*", "filters[categoryid][$eq]":category})
     setBrand("");
    }
   }, [category,getBrand,setBrand]);
+
 
   const drawer = (
     <Box
