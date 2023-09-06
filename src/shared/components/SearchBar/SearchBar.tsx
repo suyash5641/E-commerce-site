@@ -12,7 +12,7 @@ export const SearchBar = () => {
   const [searchText, setSearchText] = useState("");
   const {getProduct,productList,setProductList}= useProduct();
   const popoverRef = useRef<HTMLDivElement | null>(null);
-  const debouncedValue = useDebounce<string>(searchText, 800)
+  const debouncedValue = useDebounce<string>(searchText, 1000)
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [open, setPopoverOpen] = useState<boolean>(false);
   const id = open ? "simple-popover" : undefined;
