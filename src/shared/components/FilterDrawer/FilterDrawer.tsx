@@ -163,9 +163,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   useEffect(() => {
    if(category){
     getBrand({populate:"*", "filters[categoryid][$eq]":category})
+    setBrand("");
    }
-  }, [category,getBrand]);
-
+  }, [category,getBrand,setBrand]);
 
   const drawer = (
     <Box

@@ -53,10 +53,8 @@ export const useProduct = () => {
   }, [setLoading,setProductDetail]);
 
   useEffect(() => {
-    if(searchParams.has('categoryid')){
       getCategories();
-    }
-  }, [searchParams]);
+  }, []);
   
   
 
