@@ -50,7 +50,7 @@ const createTypography: Func = () => ({
   },
   h4: {
     fontSize: '16px',
-    fontWeight: 400,
+    fontWeight: 700,
     color: colors.primaryHeadingText,
     fontFamily: "Graphik Webfont",
   },

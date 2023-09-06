@@ -57,7 +57,6 @@ export const useOrder = () => {
         },
         body: JSON.stringify({ data: { paymentSucessful: status } }),
       };
-      console.log("api hittt");
       const res = await fetch(
         `${BASE_URL}/orders/${result[0]?.id}`,
         requestOptions

@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { IProductLists, ICategory } from "../../../shared/interfaces/interface";
 import { BASE_URL } from "../../../utils/constant/constant";
+import { useSearchParams } from "react-router-dom";
+import { categoryListData } from "../../../utils/data";
 
 export const useProduct = () => {
   const [productList, setProductList] = useState<IProductLists[]>();
   const [categoryList, setCategoryList] = useState<ICategory[]>();
   const [loading, setLoading] = useState<Boolean>(true);
   const [productDetail, setProductDetail] = useState<IProductLists>();
+  const [searchParams,setSearchParams] = useSearchParams();
 
   const getProduct = useCallback(async (filters: any) => {
     try {
@@ -26,16 +29,10 @@ export const useProduct = () => {
     } finally {
       setLoading(false);
     }
-  }, [setLoading,setProductList]);
+  }, [setLoading,setProductList]); 
 
-  const getCategories = useCallback(async () => {
-    try {
-      const res = await fetch(`${BASE_URL}/categories`);
-      if (res.status === 200) {
-        const response = await res.json();
-        setCategoryList(response?.data);
-      }
-    } catch (err) {}
+  const getCategories = useCallback( () => {
+    setCategoryList(categoryListData);
   }, [setCategoryList]);
 
   const getProductDetail = useCallback(async (id:number) => {
@@ -56,8 +53,12 @@ export const useProduct = () => {
   }, [setLoading,setProductDetail]);
 
   useEffect(() => {
-    getCategories();
-  }, []);
+    if(searchParams.has('categoryid')){
+      getCategories();
+    }
+  }, [searchParams]);
+  
+  
 
   return useMemo(
     () => ({

@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
-import { Stack, Grid, Skeleton } from "@mui/material";
+import { Stack, Grid, Skeleton ,CircularProgress} from "@mui/material";
 import { ProductCard } from "../../shared/components/ProductCard";
 import styles from "./product-list.module.scss"
 import { useSearchParams } from "react-router-dom";
@@ -47,7 +47,9 @@ export const ProductList = () => {
 
   return (
     <>
-    {loading ? <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />:
+    {loading ? <Stack className="loader">
+      <CircularProgress />
+    </Stack> :
     <Stack className={styles.productlist}>
       <Grid container spacing={1}>
         {productList?.map((data,index) => (

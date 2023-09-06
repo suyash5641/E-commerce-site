@@ -319,7 +319,6 @@ const AuthContextProvider = ({ children }: any) => {
     ]
   );
 
-  // console.log(authState?.user,"tes-buggg")
   return (
     <>
       <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

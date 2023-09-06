@@ -12,7 +12,7 @@ interface ContentItem {
   path: string;
 }
 
-export const Navbar = ({ path, productTitle,changeTopPosition = "100.39px"}: IProps) => {
+export const Navbar = ({ path, productTitle,changeTopPosition = "100px"}: IProps) => {
   let contentItems: ContentItem[] = [];
   switch (path) {
     case "productlist":

@@ -66,7 +66,6 @@ export const SearchBar = () => {
   }, [divRef,setIsOpen]);
 
 
-  // console.log(debouncedValue,open,productList,isOpen)
 
   return (
     <Stack>

@@ -27,7 +27,7 @@ function App() {
           
           {/* <Route path="/reset-password" element={<ResetPassword/>}/> */}
         </Route>
-        <Route path="\" element={<PaymentConfirmation/>} />
+        <Route path="/payment" element={<PaymentConfirmation/>} />
         <Route path="/orders" element={<Order/>} />
         <Route path="*" element={<PageNotFound />} />
         {/* <Route path="/product" element={<Product/> } />  */}

@@ -31,7 +31,7 @@ export const FilterList = () => {
     if (sort) {
         filterArray.push({ value: sort ==='price:desc' ?"Price : High to Low":"Price: Low to High", key: 'sort' });
     }
-    if (categoryid) {
+    if (categoryid && categoryList) {
        const res = categoryList?.find(item => item.id === parseInt(categoryid) );
        filterArray.push({ value: `Category : ${res?.attributes?.categorytype ?? " "} ` , key: 'categoryid' });
     }
@@ -44,7 +44,7 @@ export const FilterList = () => {
     showFilters(filterArray.length >0);
     setFilterData(filterArray);
 
-  }, [window.location.search,categoryList]);
+  }, [window.location.search,showFilters,setFilterData,categoryList]);
 
 
   const handleRemoveFilters = useCallback((key:string)=>{

@@ -70,7 +70,7 @@ export const Filter = () => {
       justifyContent={"space-between"}
       className={styles.container}
     >
-      <Stack direction={"row"} gap="24px">
+      <Stack direction={"row"} gap="24px" className={styles.filterbox}>
         <Button className={styles.filter} onClick={() => setDrawerOpen(true)}>
           <Typography variant="h6">Filters</Typography>
         </Button>

@@ -3,7 +3,7 @@
   // max-width: 1400px;
   margin: 0 auto;
   position: sticky;
-  top: 148.39px;
+  top: 148px;
   background: #fff;
   .content {
     font-weight: 700;
@@ -49,7 +49,7 @@
 @media screen and (max-width: 640px) {
   .container {
     padding: 20px 16px;
-    max-width: fit-content;
+    max-width: 100%;
     margin: 0 auto;
     .contentbox {
       padding: 0px 4px;

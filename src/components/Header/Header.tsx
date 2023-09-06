@@ -20,19 +20,10 @@ export const Header = () => {
   let searchParams = new URLSearchParams(url.search);
   const addQueryParam = useCallback((key: string, value: string) => {
 
-    // searchParams.append(key, value);
-    // const updatedSearchString = `?${searchParams.toString()}`;
-    // console.log(updatedSearchString,searchParams,"test",window.location.href,window.location.pathname)
-    // navigate({
-    //   pathname: window.location.pathname,
-    //   search: `?${searchParams.toString()}`,
-    // });
-    // navigate({ search: `?${searchParams.toString()}` });
     const currentURL = window.location.href;
     const urlParams = new URLSearchParams(window.location.search); 
     urlParams.set(key, value);
-    // const updatedURL = `${currentURL.split('?')[0]}?${urlParams.toString()}`;
-    // console.log(updatedURL,"up",`?${urlParams.toString()}`)
+
     navigate({
       pathname: window.location.pathname,
       search: `?${urlParams.toString()}`,
@@ -56,7 +47,6 @@ export const Header = () => {
   }, []);
 
   const handleProductCartOpen = useCallback(() => {
-    // console.log(isLogin,"cartttt")
     if (isLogin) {
       navigate('/cart');
     } else {
@@ -66,7 +56,6 @@ export const Header = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      // console.log(token);
       if (token) {
         try {
           const res = await fetchLoggedInUser(token);
@@ -88,7 +77,6 @@ export const Header = () => {
     fetchUser();
   }, [token]);
 
-   console.log(isLogin,"test");
   return (
     <>
       {!show ? (

@@ -86,26 +86,6 @@ export const Product = () => {
     }
   }, [user, productDetail, setCartButtonLabel, token, loading]);
 
-  // useEffect(() => {
-  //   console.log(user,"testttt")
-  //   if(user){
-  //     const findItem = user?.cart?.find((item) => item.id === productDetail?.id)
-  //     if(findItem){
-  //       setCartButtonLabel(true)
-  //     }
-  //     else{
-  //       setCartButtonLabel(false)
-  //     }
-  //     setIsLogin(true);
-  //   }
-  //   else{
-  //     setIsLogin(false);
-  //     setCartButtonLabel(false);
-  //   }
-  // }, [user,setCartButtonLabel,setIsLogin,productDetail]);
-
-  // console.log("getpro", isCartButtonLabel!=null,  !isCartButtonLabel,isCartButtonLabel,user ,isLogin )
-  //  console.log(cartButtonLabel,"label",user,loading)
   return (
     <>
       {loading ? (
@@ -118,6 +98,8 @@ export const Product = () => {
             <Stack className={styles.productimage}>
               <img
                 src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
+                height={"95%"}
+                width={"95%"}
                 alt="product"
               />
             </Stack>

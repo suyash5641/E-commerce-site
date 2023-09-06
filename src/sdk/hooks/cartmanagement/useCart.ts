@@ -24,7 +24,6 @@ export const useCart = () => {
   const getPayload = useCallback(
     (productObject: any) => {
       if (user?.cart === null) {
-        // console.log(productObject,"po")
         const payload = {
           discountPrice:
             parseInt(productObject?.attributes?.price) -
@@ -98,7 +97,6 @@ export const useCart = () => {
           filterCart[cartIndexToUpdate].quantity =
             operationType === "inc" ? data?.quantity + 1 : data?.quantity - 1;
         }
-        // console.log(data,user?.discountPrice?.toString() || "0",parseInt(data?.attributes?.price),parseInt(data?.attributes?.discountedPrice),"bug")
         if (operationType === "inc") {
           const payload = {
             discountPrice:
@@ -152,14 +150,12 @@ export const useCart = () => {
 
   const updateCart = useCallback(
     async (productid: number) => {
-      // console.log(user, "cc");
       if (user != null) {
         const productObject = await getProductDetail(productid);
         if (Object.keys(productObject).length > 0) {
           try {
             productObject.quantity = 1;
             const result = getPayload(productObject);
-            console.log(result, "result");
             const requestOptions = {
               method: "PUT",
               headers: {
@@ -189,7 +185,6 @@ export const useCart = () => {
   const updateProductCart = useCallback(
     async (data: Cart, removeProduct: boolean, operationType: string) => {
       setCartDetailLoading(true);
-      // const result = getUpdateCartPayload(productid,removeProduct,productQuantity);
       if (user != null) {
         try {
           const result = getUpdateCartPayload(
@@ -197,7 +192,6 @@ export const useCart = () => {
             removeProduct,
             operationType
           );
-          console.log("result", result);
           const requestOptions = {
             method: "PUT",
             headers: {

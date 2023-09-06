@@ -126,7 +126,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   };
 
   const handleFilterChange = useCallback(() => {
-    const searchParams = new URLSearchParams(window.location.search);
+    // const searchParams = new URLSearchParams(window.location.search);
 
     if (category) {
       searchParams.set("categoryid", category);
@@ -138,7 +138,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     searchParams.set("maxPrice", price[1].toString());
     setSearchParams(searchParams);
     setDrawerOpen(false);
-  }, [setSearchParams,price,category,brand]);
+  }, [setSearchParams,price,category,brand,searchParams]);
 
   useEffect(() => {
     const category = searchParams.get("categoryid");
@@ -158,7 +158,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       setBrand('');
     }
     setPrice([minPrice, maxPrice]);
-  }, [searchParams,setBrand,setCategory,setPrice]);
+  }, [setBrand,setCategory,setPrice,searchParams]);
 
   useEffect(() => {
    if(category){
@@ -166,7 +166,6 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
    }
   }, [category,getBrand]);
 
-  
 
   const drawer = (
     <Box

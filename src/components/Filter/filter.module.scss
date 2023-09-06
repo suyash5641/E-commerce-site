@@ -7,6 +7,8 @@
   position: sticky;
   top: 40px;
   z-index: 100;
+  .filterbox{
+    height: 36px;
   .filter {
     h6 {
       font-weight: 700;
@@ -28,6 +30,7 @@
     // border-radius: 20px;
     // border: 1px solid #d4d5d9;
     // padding: 5px 10px;
+  }
   }
   
 }

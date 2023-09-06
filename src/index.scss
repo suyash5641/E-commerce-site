@@ -72,6 +72,19 @@ a {
     font-weight: 700 !important;
 }
 
+.loader{
+    height: 40vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.product_title{
+    overflow: hidden ;
+    text-overflow: ellipsis ;
+    white-space: nowrap ;
+    min-width: 0 ;
+}
+
 @media screen and (max-width:640px){
     .title{
         font-size: 32px !important;

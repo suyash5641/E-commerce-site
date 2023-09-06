@@ -8,8 +8,8 @@ export const ProductCard=({
     return(
        <Stack direction="column">
          <Typography variant="h3">{data?.attributes?.brandName}</Typography>
-         <Typography variant="h5">{data?.attributes?.title}</Typography>
-         <Typography variant="h5">{data?.attributes?.price}</Typography>
+         <Typography variant="h5" className="product_title">{data?.attributes?.title}</Typography>
+         <Typography variant="h4">Rs {data?.attributes?.discountedPrice}</Typography>
          <img height={"100%"} width={"100%"}  src={`${data?.attributes?.imageurl?.data?.attributes?.url}`} alt="product"/>
        </Stack>
     )
