@@ -44,7 +44,7 @@ export const FilterList = () => {
     showFilters(filterArray.length >0);
     setFilterData(filterArray);
 
-  }, [searchParams]);
+  }, [searchParams,categoryList]);
 
 
   const handleRemoveFilters = useCallback((key:string)=>{
