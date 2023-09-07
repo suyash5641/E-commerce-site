@@ -18,10 +18,8 @@ export const Order = () => {
   },[token,getOrder,fetchLoggedInUser])
 
   useEffect(() => {
-    if(user?.id)
-    return
     getOrders();  
-  }, [user,getOrders]);
+  }, [getOrders]);
 
   
   return (
