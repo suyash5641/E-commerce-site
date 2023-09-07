@@ -10,6 +10,7 @@ img {
 
 .productcard{
   cursor: pointer;
+  padding: 0px 10px;
 }
 
 @media only screen and (min-width: 900px) {
@@ -45,6 +46,7 @@ img {
     flex-grow: 1 !important;
     flex-basis: 50% !important;
     max-width: 50% !important;
+    padding: 0px 6px;
   }
 
   img {

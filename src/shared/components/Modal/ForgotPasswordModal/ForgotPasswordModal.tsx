@@ -139,7 +139,7 @@ import {
             {loading ? (
               <CircularProgress />
             ) : (
-              <Button variant="contained" color="primary" type="submit">
+              <Button variant="contained" color="secondary" type="submit">
                 Submit
               </Button>
             )}

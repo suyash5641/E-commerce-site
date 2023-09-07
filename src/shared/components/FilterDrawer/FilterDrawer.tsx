@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormGroup,
   Button,
+  Stack,
 } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./filterdrawer.module.scss";
@@ -39,7 +40,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   const {brandList,getBrand} = useBrand();
   const handleDrawerToggle = useCallback(() => {
     setDrawerOpen(!drawerOpen);
-  },[setDrawerOpen]);
+  },[setDrawerOpen,drawerOpen]);
 
   const minDistance = 2500;
 
@@ -169,9 +170,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   const drawer = (
     <Box
       className={styles.filter}
-      sx={{ width: "70%", paddingTop: "40px", margin: "0 auto" }}
+      sx={{ width: "82%", paddingTop: "40px", margin: "0 auto" }}
     >
-      <Typography variant="h3" sx={{marginBottom:'36px'}}>Price range</Typography>
+      <Typography variant="h3" sx={{marginBottom:'36px'}}>Price Range</Typography>
       <Slider
         value={price}
         onChange={handlePriceChange}
@@ -180,7 +181,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
         max={30000}
         marks={priceArray}
         step={100}
-        getAriaValueText={valueText}        
+        getAriaValueText={valueText}       
       />
       <Box className={styles.category}>
         <Typography variant="h3">Category</Typography>
@@ -222,9 +223,14 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           </Select>
         </FormControl>
       </Box>}
-      <Button className={styles.categorybutton} variant="contained" color="primary" onClick={handleFilterChange}>
+      <Stack direction={"row"} justifyContent={"space-between"} sx={{width:"100%"}}>
+      <Button className={styles.categorybutton} variant="contained" color="secondary" onClick={handleFilterChange}>
         Apply filter
       </Button>
+      <Button className={styles.categorybutton} variant="contained" color="secondary" onClick={handleDrawerToggle}>
+        Cancel filter
+      </Button>
+      </Stack>
     </Box>
   );
 
@@ -244,7 +250,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           display: { xs: "block", md: "block", lg: "block", xl: "block" },
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
-            width: { xs: 300, md: 360, lg: 360, xl: 360 },
+            width: { xs: 340, md: 360, lg: 360, xl: 360 },
           },
         }}
       >

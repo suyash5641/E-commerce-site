@@ -56,8 +56,8 @@ export const PaymentConfirmation = () => {
             <img src={sucess} alt="success" className={styles.image}/>
             <Typography variant="h1" textAlign={"center"}>Payment Sucessful</Typography>
             <Stack direction={"row"} gap="24px">
-            <Button variant="contained" color="primary" onClick={()=>navigate('/orders',{ replace: true })}>Go to orders</Button>
-            <Button variant="contained" color="primary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
+            <Button variant="contained" color="secondary" onClick={()=>navigate('/orders',{ replace: true })}>Go to orders</Button>
+            <Button variant="contained" color="secondary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
             </Stack>
             </>
           ) : (
@@ -65,8 +65,8 @@ export const PaymentConfirmation = () => {
              <img src={failure} alt="failure" className={styles.image}/>
             <Typography variant="h1" textAlign={"center"}>Payment Failed</Typography>
             <Stack direction={"row"} gap="24px">
-            <Button variant="contained" color="primary" onClick={()=>navigate('/cart',{ replace: true })}>Go to cart</Button>
-            <Button variant="contained" color="primary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
+            <Button variant="contained" color="secondary" onClick={()=>navigate('/cart',{ replace: true })}>Go to cart</Button>
+            <Button variant="contained" color="secondary" onClick={()=>navigate('/',{ replace: true })}>Go to home</Button>
             </Stack>
             </>
           )} 

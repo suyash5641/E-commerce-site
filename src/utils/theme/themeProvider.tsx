@@ -6,6 +6,7 @@ import {
 import * as React from 'react'
 import { createPalette } from './palette'
 import { createTypography } from './typography'
+import { overrides } from './overrides'
 type ThemeProviderProps = {
   children: React.ReactNode
 }
@@ -13,6 +14,7 @@ function createTheme(mode: PaletteMode): Theme {
   return createMuiTheme({
     palette: createPalette(mode),
     typography: createTypography(),
+    components: overrides(),
   })
 }
 const ToggleThemeContext = React.createContext(() => {})

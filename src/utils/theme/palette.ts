@@ -15,6 +15,8 @@ export const colors = {
     primaryInactive: '#828282',
     primaryButton:'#808080',
     primaryButtonText:'#000',
+    secondaryButton:'#ff7043',
+    secondaryButtonText:'#fff',
     secondaryError: '#F3C6C6',
     secondarySuccess: '#C6F3D2',
     secondaryInactive: '#E3E3E3',
@@ -35,8 +37,8 @@ export const createPalette = (mode: PaletteMode): PaletteOptions => ({
       black: colors.primaryBlack
     },
     secondary: {
-      main: colors.shadow,
-      light: colors.secondaryBackground,
+      main: colors.secondaryButton,
+      contrastText: colors.secondaryButtonText,
     },
     error: {
       main: colors.primaryError,

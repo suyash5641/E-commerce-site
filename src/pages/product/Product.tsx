@@ -124,16 +124,19 @@ export const Product = () => {
                 <Typography variant="h3" >
                   About Item
                 </Typography>
-                <Typography variant="h5" >
+                {/* <Typography variant="h5" >
                   {productDetail?.attributes?.description}
                  
-                </Typography>
+                </Typography> */}
+                {productDetail?.attributes?.description.split("##").map((data,index)=>(
+                  <li key={index}>{data}</li>
+                ))}
               </Stack>
               <Stack direction={"row"} gap={"32px"}>
               <Button
                   sx={{ width: "fit-content" }}
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={handleBuyButtonClick}
                 >
                   Buy now
@@ -143,7 +146,7 @@ export const Product = () => {
                   disabled={cartButtonLabel.length === 0}
                   sx={{ width: "fit-content" }}
                   variant="contained"
-                  color="primary"
+                  color="secondary"
                   onClick={handleCartButtonClick}
                 >
                   {cartButtonLabel}

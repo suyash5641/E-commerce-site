@@ -190,7 +190,7 @@ export const BuyProductCart = () => {
               <Typography>Total savings</Typography>
               <Typography>Rs {productQuantity*(parseInt(productDetail?.attributes?.price) - parseInt(productDetail?.attributes?.discountedPrice))}</Typography>
             </Stack>
-            <Button onClick={handlePayment}>Checkout</Button>
+            <Button variant="contained" color="secondary" onClick={handlePayment}>Checkout</Button>
           </Stack>
         </Stack>
         </>

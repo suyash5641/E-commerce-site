@@ -8,7 +8,7 @@ export const PageNotFound=()=>{
     <Stack alignItems={"center"} gap={"18px"}>
      <img src={pagenotfound} className="pagenotfound"/>
      <Typography>Page Not found</Typography>
-     <Button onClick={()=>{navigate('/')}} variant="contained" color="primary">Go to Home</Button>
+     <Button onClick={()=>{navigate('/')}} variant="contained" color="secondary">Go to Home</Button>
     </Stack>
     </>
 }
