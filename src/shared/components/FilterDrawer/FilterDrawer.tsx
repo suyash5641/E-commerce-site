@@ -37,9 +37,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   const { categoryList } = useProduct();
   const {brandList,getBrand} = useBrand();
-  const handleDrawerToggle = () => {
+  const handleDrawerToggle = useCallback(() => {
     setDrawerOpen(!drawerOpen);
-  };
+  },[setDrawerOpen]);
 
   const minDistance = 2500;
 
@@ -165,7 +165,6 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     setPrice([minPrice, maxPrice]);
   }, [setBrand,setCategory,setPrice,searchParams,drawerOpen]);
 
-  console.log(price,category,brand)
 
   const drawer = (
     <Box

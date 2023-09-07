@@ -2,15 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
-import { BASE_URL } from "../../../utils/constant/constant";
+import { BASE_URL, stripe_key } from "../../../utils/constant/constant";
 export const useStripe = () => {
   const token = localStorage.getItem("authToken");
   const { user } = useAuth();
   const handlePayment = useCallback(async () => {
     try {
-      const stripePromise = loadStripe(
-        "pk_test_51NZCukSEFvyokD6c4VjZ43S6AOQuCKGdHtQBwVZrg6fbCbstRL3LxuspjkhqwgYS9dBmA6p0FmDJshWnzsMAjkVs00k7Ic4tCK"
-      );
+      const stripePromise = loadStripe(stripe_key);
       const stripe = await stripePromise;
       const requestOptions = {
         method: "POST",
