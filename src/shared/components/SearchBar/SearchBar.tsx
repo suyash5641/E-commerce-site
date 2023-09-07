@@ -47,14 +47,8 @@ export const SearchBar = () => {
      getProduct(query);
      setIsOpen(true);
     }
-    //  if(debouncedValue){
-    //     setPopoverOpen(true);
-    //  }
-    //  else{
-    //     setPopoverOpen(false);
-    //  }
      
-  }, [debouncedValue,setIsOpen])
+  }, [debouncedValue])
 
  
 
@@ -70,9 +64,7 @@ export const SearchBar = () => {
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
-  }, [divRef,setIsOpen]);
-
-  // console.log(!isOpen ,"test", productList?.length == 0,debouncedValue)
+  }, [divRef]);
 
   return (
     <Stack>

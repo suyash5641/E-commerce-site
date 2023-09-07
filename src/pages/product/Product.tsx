@@ -30,7 +30,7 @@ export const Product = () => {
     if (searchParams.has("id") && idParam != null) {
       getProductDetail(parseInt(idParam));
     }
-  }, [searchParams, getProductDetail]);
+  }, [searchParams,idParam]);
 
   const addQueryParam = useCallback(
     (key: string, value: string) => {
@@ -89,7 +89,7 @@ export const Product = () => {
   return (
     <>
       {loading ? (
-        <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
+        <Skeleton variant="rectangular" width={"100%"} height={"99vh"} />
       ) : (
         <>
         <Navbar path="product" productTitle={productDetail?.attributes?.name ?? ''} changeTopPosition={"40px"} />

@@ -2,7 +2,7 @@ import { Box, IconButton, Stack, Typography,Button } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
 import CloseIcon from '@mui/icons-material/Close';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from './filterlist.module.scss'
 interface filterArray {
     value: string,
@@ -18,10 +18,10 @@ export const FilterList = () => {
   const { categoryList } = useProduct();
   const [filters, showFilters] = useState<boolean>(false);
   const [filterData, setFilterData] = useState<Array<filterArray>>([]);
+  const [searchParams,setSearchParams]=useSearchParams();
   
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
     const sort = searchParams.get('sort');
     const brandName = searchParams.get('brand');
     const categoryid = searchParams.get('categoryid') ?? ""; 
@@ -44,7 +44,7 @@ export const FilterList = () => {
     showFilters(filterArray.length >0);
     setFilterData(filterArray);
 
-  }, [window.location.search,showFilters,setFilterData,categoryList]);
+  }, [searchParams]);
 
 
   const handleRemoveFilters = useCallback((key:string)=>{

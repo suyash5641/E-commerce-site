@@ -12,6 +12,7 @@ import failure from './failure.png'
 import emptycart from './emptycart.png'
 import pagenotfound from './404.png'
 import norecordfound from './norecordfound.png'
+import nodatafound from './nodata.png'
 
 export {
     sony,
@@ -27,5 +28,6 @@ export {
     failure,
     emptycart,
     pagenotfound,
-    norecordfound
+    norecordfound,
+    nodatafound
 }

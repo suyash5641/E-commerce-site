@@ -164,7 +164,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       setBrand('');
     }
     setPrice([minPrice, maxPrice]);
-  }, [setBrand,setCategory,setPrice,searchParams,drawerOpen]);
+  }, [searchParams,drawerOpen]);
 
 
   const drawer = (

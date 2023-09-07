@@ -86,7 +86,7 @@ import {
       } else {
         setModalOpen(false);
       }
-    }, [searchParams, localStorage, setModalOpen]);
+    }, [searchParams]);
   
     useEffect(() => {
       if (isModalOpen) {

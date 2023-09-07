@@ -86,7 +86,7 @@ export const SignUpModal = () => {
     else {
       setModalOpen(false);
     }
-  }, [searchParams,setModalOpen]);
+  }, [searchParams]);
 
   const handleClose = () => {
     setModalOpen(false);

@@ -1,4 +1,4 @@
-import { Box, Button, Skeleton, Stack } from "@mui/material";
+import { Box, Button, IconButton, Skeleton, Stack } from "@mui/material";
 import styles from "./header.module.scss";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
@@ -94,7 +94,9 @@ export const Header = () => {
             <>
               <Button onClick={()=>navigate("/productlist")} sx={{textTransform:"capitalize",color:"#fff"}}>Shop Now</Button>
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
-              {location.pathname != "/cart" && <AddShoppingCartIcon onClick={handleProductCartOpen} />}
+              {location.pathname != "/cart" && <IconButton onClick={handleProductCartOpen} sx={{color:"#fff"}}>
+              <AddShoppingCartIcon  />
+              </IconButton> }
               <UserProfile />
               </Stack>
             </>
@@ -103,9 +105,11 @@ export const Header = () => {
               <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={()=>navigate("/productlist")}>
                 Shop Now</Button>
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
-              <p onClick={() => handleModalOpen("login")}>Login</p>
-              <p onClick={() => handleModalOpen("signup")}>Signup</p>
-              <AddShoppingCartIcon onClick={handleProductCartOpen} />
+              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={() => handleModalOpen("login")}>Login</Button>
+              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={() => handleModalOpen("signup")}>Signup</Button>
+              <IconButton onClick={handleProductCartOpen} sx={{color:"#fff"}}>
+              <AddShoppingCartIcon  />
+              </IconButton>          
               </Stack>
             </>
           )}

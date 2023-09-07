@@ -45,10 +45,6 @@ export const Carousal=()=>{
 
     const [index, setIndex] = React.useState(0);
 
-    // const handleChange = (cur: number, prev: number) => {
-    //   setIndex(cur);
-    //   console.log(cur, prev);
-    // };
 
     const Item=({ item }: { item: { imagePath: string } })=> {
         return (

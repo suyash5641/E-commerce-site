@@ -1,10 +1,11 @@
 import { useCallback, useEffect } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
-import { Stack, Grid, Skeleton ,CircularProgress} from "@mui/material";
+import { Stack, Grid, Skeleton ,CircularProgress, Typography} from "@mui/material";
 import { ProductCard } from "../../shared/components/ProductCard";
 import styles from "./product-list.module.scss"
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { nodatafound } from "../../assets";
 
 export const ProductList = () => {
   const { getProduct, productList, loading } = useProduct();
@@ -36,7 +37,7 @@ export const ProductList = () => {
     };
     
     getProductList(query);
-  },[searchParams,getProductList])
+  },[searchParams])
 
   const handleProductCardClick=(id:number)=>{
     navigate({
@@ -45,6 +46,7 @@ export const ProductList = () => {
     });
   }
 
+  console.log(productList)
   return (
     <>
     {loading ? <Stack className="loader">
@@ -52,11 +54,15 @@ export const ProductList = () => {
     </Stack> :
     <Stack className={styles.productlist}>
       <Grid container spacing={1}>
-        {productList?.map((data,index) => (
+        {productList && productList?.length >0  ? productList?.map((data,index) => (
           <Grid item xs={4} key={index} className={styles.productcard} onClick={()=>handleProductCardClick(data?.id)}>
              <ProductCard data={data} />
           </Grid>
-        ))}
+        )):
+        <Stack alignItems="center" sx={{width:"100%"}}>
+          <img width="240px" src={nodatafound} />
+        </Stack>
+      }
       </Grid>
     </Stack>}
     </>

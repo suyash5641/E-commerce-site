@@ -85,7 +85,7 @@ export const BuyProductCart = () => {
     if (searchParams.has("id") && idParam != null) {
       getProductDetail(parseInt(idParam));
     }
-  }, [searchParams, getProductDetail]);
+  }, [searchParams,idParam ]);
 
   return (
     <>

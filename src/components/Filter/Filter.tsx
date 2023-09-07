@@ -62,7 +62,7 @@ export const Filter = () => {
     else{
       setSortValue("");
     }
-  },[searchParams,setSortValue])
+  },[searchParams])
 
   return (
     <Stack

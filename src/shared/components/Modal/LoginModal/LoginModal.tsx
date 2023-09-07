@@ -118,7 +118,7 @@ export const LoginModal = () => {
     } else {
       setModalOpen(false);
     }
-  }, [searchParams, localStorage, setModalOpen]);
+  }, [searchParams]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -166,7 +166,7 @@ export const LoginModal = () => {
             flexDirection={"row"}
             justifyContent={"space-between"}
           >
-            <Typography>Login Form</Typography>
+            <Typography>Login</Typography>
             <Button variant="outlined" onClick={handleModalOpen}>
               <Typography textTransform={"capitalize"}>SignUp</Typography>
             </Button>
