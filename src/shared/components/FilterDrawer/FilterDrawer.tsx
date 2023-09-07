@@ -144,28 +144,12 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   }, [setSearchParams,price,category,brand,searchParams]);
 
   useEffect(() => {
-
-    const category = searchParams.get("categoryid");
-    const brandName = searchParams.get("brand");
-    const minPrice = parseInt(searchParams.get("minPrice") ?? "500");
-    const maxPrice = parseInt(searchParams.get("maxPrice") ?? "30000");
-    if(!drawerOpen)
-    return
-    if (category) {
-      setCategory(category);
+    const categoryid = searchParams.get("categoryid");
+    if (categoryid) {
+      setCategory(categoryid);
+      getBrand({populate:"*", "filters[categoryid][$eq]":categoryid})  
     }
-    else{
-      setCategory('');
-    }
-    if(brandName){
-      setBrand(brandName);
-    }
-    else{
-      setBrand('');
-    }
-    setPrice([minPrice, maxPrice]);
-  }, [searchParams,drawerOpen]);
-
+  }, []);
 
   const drawer = (
     <Box
@@ -205,7 +189,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           <FormGroup>{renderColorCheckboxes()}</FormGroup>
         </FormControl> */}
       </Box> 
-      {brandList && category && <Box className={styles.category}>
+      {brandList && brandList.length >0 && <Box className={styles.category}>
         <Typography variant="h3">Select Brand</Typography>
         <FormControl className={styles.formlabel}>
           <Select
