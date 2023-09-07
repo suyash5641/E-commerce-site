@@ -3,12 +3,25 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 import styles from "./order.module.scss";
 import { Navbar } from "../../components/Navbar";
+import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 export const Order = () => {
   const { getOrder, orderList, loading } = useOrder();
+  const token = localStorage.getItem("authToken");
+  const {fetchLoggedInUser,user} = useAuth();
+
+  const getOrders = useCallback(async ()=>{
+    if(token)
+    {
+      const userid = await fetchLoggedInUser(token);
+      getOrder({ populate: "*", "filters[paymentSucessful][$eq]": true,"filters[userId][$eq]":userid});
+    }
+  },[token,getOrder,fetchLoggedInUser])
 
   useEffect(() => {
-    getOrder({ populate: "*", "filters[paymentSucessful][$eq]": true });
-  }, []);
+    if(user?.id)
+    return
+    getOrders();  
+  }, [user,getOrders]);
 
   
   return (
