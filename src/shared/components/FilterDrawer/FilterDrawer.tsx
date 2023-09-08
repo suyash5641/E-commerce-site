@@ -14,6 +14,7 @@ import {
   FormGroup,
   Button,
   Stack,
+  Alert,
 } from "@mui/material";
 import { useEffect, useState, useCallback } from "react";
 import styles from "./filterdrawer.module.scss";
@@ -37,7 +38,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { categoryList } = useProduct();
-  const {brandList,getBrand} = useBrand();
+  const {brandList,getBrand,errorMessage,setErrorMessage} = useBrand();
   const handleDrawerToggle = useCallback(() => {
     setDrawerOpen(!drawerOpen);
   },[setDrawerOpen,drawerOpen]);
@@ -156,7 +157,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       className={styles.filter}
       sx={{ width: "82%", paddingTop: "40px", margin: "0 auto" }}
     >
-      <Typography variant="h3" sx={{marginBottom:'36px'}}>Price Range</Typography>
+      <Typography variant="h3" textAlign={"center"} sx={{marginBottom:'36px'}}>Price Range</Typography>
       <Slider
         value={price}
         onChange={handlePriceChange}
@@ -190,7 +191,18 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           <FormGroup>{renderColorCheckboxes()}</FormGroup>
         </FormControl> */}
       </Box> 
-      {brandList && brandList.length >0 && <Box className={styles.category}>
+      {errorMessage && errorMessage.length >0 ?<Stack alignItems="center" sx={{ width: "100%",margin:"12px 0px" }} spacing={2}>
+      <Alert
+        className="errornotification"
+        severity={"error"}
+        // onClose={() => {
+        //  setErrorMessage("")
+        // }}
+      >
+        {errorMessage}
+      </Alert>
+      </Stack>:
+      <Box className={styles.category}>
         <Typography variant="h3">Select Brand</Typography>
         <FormControl className={styles.formlabel}>
           <Select
@@ -213,7 +225,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
         Apply filter
       </Button>
       <Button className={styles.categorybutton} variant="contained" color="secondary" onClick={handleDrawerToggle}>
-        Cancel filter
+        Close 
       </Button>
       </Stack>
     </Box>

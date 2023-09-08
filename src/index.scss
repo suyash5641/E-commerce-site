@@ -85,6 +85,10 @@ a {
     min-width: 0 ;
 }
 
+.errornotification{
+    width: fit-content;
+}
+
 @media screen and (max-width:640px){
     .title{
         font-size: 32px !important;

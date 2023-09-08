@@ -8,7 +8,8 @@ import {
 import { useProduct } from "../products/useProduct";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
 import { ProductCard } from "../../../shared/components/ProductCard";
-import { BASE_URL } from "../../../utils/constant/constant";
+import { BASE_URL,stripe_key } from "../../../utils/constant/constant";
+import { loadStripe } from "@stripe/stripe-js";
 // interface updateCart {
 //   productid: number,removeProduct:boolean,productQuantity?:number
 // }
@@ -20,6 +21,7 @@ export const useCart = () => {
   const token = localStorage.getItem("authToken");
   const [productDetail, setProductDetail] = useState<IProductLists>();
   const { user, fetchLoggedInUser } = useAuth();
+  const [errorMessage,setErrorMessage]= useState<string>("");
 
   const getPayload = useCallback(
     (productObject: any) => {
@@ -152,7 +154,7 @@ export const useCart = () => {
     async (productid: number) => {
       if (user != null) {
         const productObject = await getProductDetail(productid);
-        if (Object.keys(productObject).length > 0) {
+        if (Object.keys(productObject).length > 0 && token) {
           try {
             productObject.quantity = 1;
             const result = getPayload(productObject);
@@ -172,14 +174,20 @@ export const useCart = () => {
               const response = await res.json();
               if (token) await fetchLoggedInUser(token);
             }
+            else if (res.status === 401 || res.status === 403) {
+              setErrorMessage("Error Occured while adding product to cart");
+            } else if (res.status === 500) {
+              setErrorMessage("Error Occured while adding product to cart");
+            }
           } catch (err) {
+            setErrorMessage("Error Occured while adding product to cart");
           } finally {
             setLoading(false);
           }
         }
       }
     },
-    [user, fetchLoggedInUser, getProductDetail, getPayload]
+    [user, fetchLoggedInUser, getProductDetail, getPayload,setLoading,setErrorMessage,token]
   );
 
   const updateProductCart = useCallback(
@@ -204,17 +212,22 @@ export const useCart = () => {
             `${BASE_URL}/users/${user?.id}`,
             requestOptions
           );
+          if (token) await fetchLoggedInUser(token);
           if (res.status === 200) {
-            // const response = await res.json();
-            if (token) await fetchLoggedInUser(token);
+          }
+          else if (res.status === 401 || res.status === 403) {
+            setErrorMessage("Error Occured while updating cart");
+          } else if (res.status === 500) {
+            setErrorMessage("Error Occured while updating cart");
           }
         } catch (err) {
+          setErrorMessage("Error Occured while updating cart");
         } finally {
           setCartDetailLoading(false);
         }
       }
     },
-    [user, fetchLoggedInUser, setCartDetailLoading, getUpdateCartPayload]
+    [user, fetchLoggedInUser, setCartDetailLoading, getUpdateCartPayload,setErrorMessage,token]
   );
 
   const handleQuantityChange = useCallback(
@@ -248,13 +261,54 @@ export const useCart = () => {
           `${BASE_URL}/users/${userid}`,
           requestOptions
         );
+        if (res.status === 401 || res.status === 403) {
+          setErrorMessage("Error Occured while updating cart");
+        } else if (res.status === 500) {
+          setErrorMessage("Error Occured while updating cart");
+        }
         // if (res.status === 200) {
         //   if (token) await fetchLoggedInUser(token);
         // }
       } catch (err) {
+        setErrorMessage("Error Occured while updating cart");
       } 
     }
-  }, [token,fetchLoggedInUser]);
+  }, [token,fetchLoggedInUser,setErrorMessage]);
+
+  const handleCheckout = useCallback(async () => {
+    try {
+      const stripePromise = loadStripe(stripe_key);
+      const stripe = await stripePromise;
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          products: user?.cart,
+        }),
+      };
+      const res = await fetch(
+        `${BASE_URL}/orders`,
+        requestOptions
+      );
+      if (res.status === 200) {
+        const data = await res.json();
+        await stripe?.redirectToCheckout({
+        sessionId: data?.stripeSession.id,
+      });
+      } else if (res.status === 401 || res.status === 403) {
+        setErrorMessage("Error Occured ,please try again");
+      } else if (res.status === 500) {
+        setErrorMessage("Error Occured ,please try again");
+      }    
+    } catch (err) {
+      setErrorMessage("Error Occured ,please try again");
+      console.log(err);
+    }
+  
+  },[setErrorMessage]);
 
   return useMemo(
     () => ({
@@ -263,7 +317,10 @@ export const useCart = () => {
       cartdetailloading,
       loading,
       emptyCart,
+      errorMessage,
+      setErrorMessage,
+      handleCheckout
     }),
-    [updateCart, handleQuantityChange, cartdetailloading, loading,emptyCart]
+    [updateCart, handleQuantityChange, cartdetailloading, loading,emptyCart,errorMessage,setErrorMessage,handleCheckout]
   );
 };

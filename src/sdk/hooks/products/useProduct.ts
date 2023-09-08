@@ -10,6 +10,7 @@ export const useProduct = () => {
   const [loading, setLoading] = useState<Boolean>(true);
   const [productDetail, setProductDetail] = useState<IProductLists>();
   const [searchParams,setSearchParams] = useSearchParams();
+  const [errorMessage,setErrorMessage]= useState<string>("");
 
   const getProduct = useCallback(async (filters: any) => {
     try {
@@ -24,12 +25,19 @@ export const useProduct = () => {
         setLoading(false);
         return response?.data;
       }
+      else if(res.status === 401){
+        setErrorMessage("Error Occured, try again");
+      }
+      else if(res.status === 500){
+        setErrorMessage("Error Occured, try again");
+      }
     } catch (err) {
+      setErrorMessage("Error Occured, try again");
       setLoading(false);
     } finally {
       setLoading(false);
     }
-  }, [setLoading,setProductList]); 
+  }, [setLoading,setProductList,setErrorMessage]); 
 
   const getCategories = useCallback( () => {
     setCategoryList(categoryListData);
@@ -45,12 +53,19 @@ export const useProduct = () => {
         const response = await res.json();
         setProductDetail(response?.data);
       }
+      else if(res.status === 401){
+        setErrorMessage("Error Occured, try again");
+      }
+      else if(res.status === 500){
+        setErrorMessage("Error Occured, try again");
+      }
     } catch (err) {
       setLoading(false);
+      setErrorMessage("Error Occured, try again");
     } finally {
       setLoading(false);
     }
-  }, [setLoading,setProductDetail]);
+  }, [setLoading,setProductDetail,setErrorMessage]);
 
   useEffect(() => {
       getCategories();
@@ -66,8 +81,10 @@ export const useProduct = () => {
       productList,
       categoryList,
       loading,
-      setProductList
+      setProductList,
+      errorMessage,
+      setErrorMessage,
     }),
-    [getProduct,  getProductDetail,productDetail,productList, categoryList, loading,setProductList]
+    [getProduct,  getProductDetail,productDetail,productList, categoryList, loading,setProductList,errorMessage,setErrorMessage]
   );
 };

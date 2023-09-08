@@ -6,6 +6,7 @@ import {
   Skeleton,
   Divider,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
@@ -19,36 +20,8 @@ import { emptycart } from "../../assets";
 export const Cart = () => {
   const token = localStorage.getItem("authToken");
   const { user } = useAuth();
-  const { handleQuantityChange, cartdetailloading } = useCart();
-  const handlePayment = async () => {
-    try {
-      const stripePromise = loadStripe(stripe_key);
-      const stripe = await stripePromise;
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          products: user?.cart,
-        }),
-      };
-      const res = await fetch(
-        `${BASE_URL}/orders`,
-        requestOptions
-      );
-      const data = await res.json();
-      await stripe?.redirectToCheckout({
-        sessionId: data?.stripeSession.id,
-      });
-    
-    } catch (err) {
-      console.log(err);
-    }
+  const { handleQuantityChange, cartdetailloading,errorMessage,setErrorMessage,handleCheckout } = useCart();
   
-  };
-
   return (
     <>
       {cartdetailloading || user === null ? (
@@ -56,6 +29,19 @@ export const Cart = () => {
       ) : user?.cart?.length > 0 ? (
         <>
          <Navbar path="cart" productTitle={''} changeTopPosition={"40px"} />
+         {errorMessage && errorMessage.length > 0 && (
+            <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
+              <Alert
+                className="errornotification"
+                severity={"error"}
+                onClose={() => {
+                  setErrorMessage("");
+                }}
+              >
+                {errorMessage}
+              </Alert>
+            </Stack>
+          )}
         <Stack className={styles.cart}>
           <Stack flexDirection={"column"} className={styles.product}>
             {user?.cart?.map((data, index) => (
@@ -153,7 +139,7 @@ export const Cart = () => {
               <Typography>Total savings</Typography>
               <Typography>Rs {user?.discountPrice}</Typography>
             </Stack>
-            <Button variant="contained" color="secondary" onClick={handlePayment}>Checkout</Button>
+            <Button variant="contained" color="secondary" onClick={handleCheckout}>Checkout</Button>
           </Stack>
         </Stack>
         </>

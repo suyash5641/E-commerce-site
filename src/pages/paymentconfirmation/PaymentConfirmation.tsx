@@ -18,6 +18,7 @@ export const PaymentConfirmation = () => {
   const { emptyCart } = useCart();
 //   const { fetchLoggedInUser} = useAuth();
   const { updateOrderPaymentStatus } = useOrder();
+  const sessionid = searchParams.get("session_id");
 
   const updateCart = useCallback(async ( sessionid: string) => {
     const paymentStatus = searchParams.get("success");
@@ -37,11 +38,11 @@ export const PaymentConfirmation = () => {
   }, [searchParams,updateOrderPaymentStatus,setLoading,emptyCart,setPaymentSucessfull]);
 
   useEffect(() => {
-    const sessionid = searchParams.get("session_id");
+    
     if (sessionid) {
       updateCart(sessionid);
     }
-  }, [searchParams]);
+  }, [sessionid]);
 
 
   return (

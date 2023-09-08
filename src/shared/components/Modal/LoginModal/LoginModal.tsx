@@ -43,6 +43,7 @@ export const LoginModal = () => {
   const [showPassword, setShowPassword] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
+  const isLoginModal = searchParams.get("login");
   const navigate = useNavigate();
   const { signIn, loading } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
@@ -118,7 +119,7 @@ export const LoginModal = () => {
     } else {
       setModalOpen(false);
     }
-  }, [searchParams]);
+  }, [isLoginModal]);
 
   useEffect(() => {
     if (isModalOpen) {

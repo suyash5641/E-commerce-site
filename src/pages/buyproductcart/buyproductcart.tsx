@@ -6,11 +6,11 @@ import {
   Skeleton,
   Divider,
   IconButton,
+  Alert,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import styles from "./cart.module.scss";
-import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { loadStripe } from "@stripe/stripe-js";
 import { BASE_URL, stripe_key } from "../../utils/constant/constant";
 import { Navbar } from "../../components/Navbar";
@@ -28,7 +28,7 @@ export const BuyProductCart = () => {
   const [productQuantity,setProductQuantity] = useState<number>(1);
   const [isLogin, setIsLogin] = useState(false);
   const idParam = searchParams.get("id");
-  const { user } = useAuth();
+  const [errorMessage,setErrorMessage]= useState<string>("");
   const handleQuantityChange = useCallback((key:string)=>{
     if(key === "inc"){
       setProductQuantity((prev)=>prev+1);
@@ -45,7 +45,7 @@ export const BuyProductCart = () => {
       });
     }
   },[setProductQuantity,navigate,location]);
-  // const { handleQuantityChange, cartdetailloading } = useCart();
+  
   
   const handlePayment = async () => {
     try {
@@ -70,12 +70,18 @@ export const BuyProductCart = () => {
         `${BASE_URL}/orders`,
         requestOptions
       );
-      const data = await res.json();
-      await stripe?.redirectToCheckout({
+      if (res.status === 200) {
+        const data = await res.json();
+        await stripe?.redirectToCheckout({
         sessionId: data?.stripeSession.id,
       });
-    
+      } else if (res.status === 401 || res.status === 403) {
+        setErrorMessage("Error Occured ,please try again");
+      } else if (res.status === 500) {
+        setErrorMessage("Error Occured ,please try again");
+      }    
     } catch (err) {
+      setErrorMessage("Error Occured ,please try again");
       console.log(err);
     }
   
@@ -94,6 +100,19 @@ export const BuyProductCart = () => {
       ) : searchParams.has("id") && productDetail? (
         <>
          <Navbar path="buynow" productTitle={''} changeTopPosition={"40px"} />
+         {errorMessage && errorMessage.length > 0 && (
+            <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
+              <Alert
+                className="errornotification"
+                severity={"error"}
+                onClose={() => {
+                  setErrorMessage("");
+                }}
+              >
+                {errorMessage}
+              </Alert>
+            </Stack>
+          )}
         <Stack className={styles.cart}>
           <Stack flexDirection={"column"} className={styles.product}>
               <Stack className={styles.productcontainer}>

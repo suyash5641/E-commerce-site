@@ -79,6 +79,8 @@ export const SignUpModal = () => {
     },
   });
 
+  const isSignUpModal = searchParams.get("signup");
+
   useEffect(() => {
     if (searchParams.has("signup") && localStorage.getItem("authToken")==null) {
       setModalOpen(true);
@@ -86,7 +88,7 @@ export const SignUpModal = () => {
     else {
       setModalOpen(false);
     }
-  }, [searchParams]);
+  }, [isSignUpModal]);
 
   const handleClose = () => {
     setModalOpen(false);

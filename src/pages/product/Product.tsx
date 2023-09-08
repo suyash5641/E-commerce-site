@@ -7,6 +7,7 @@ import {
   Typography,
   Skeleton,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import styles from "./product.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
@@ -15,7 +16,7 @@ import { Navbar } from "../../components/Navbar";
 
 export const Product = () => {
   const { getProductDetail, productDetail, loading } = useProduct();
-  const { updateCart } = useCart();
+  const { updateCart, errorMessage, setErrorMessage } = useCart();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   // const [isCartButtonLabel,setCartButtonLabel] = useState<boolean | null>(null);
@@ -30,7 +31,7 @@ export const Product = () => {
     if (searchParams.has("id") && idParam != null) {
       getProductDetail(parseInt(idParam));
     }
-  }, [searchParams,idParam]);
+  }, [idParam]);
 
   const addQueryParam = useCallback(
     (key: string, value: string) => {
@@ -42,7 +43,7 @@ export const Product = () => {
         search: `?${searchParams.toString()}`,
       });
     },
-    [window.location?.search, navigate]
+    [navigate]
   );
 
   const handleCartButtonClick = useCallback(async () => {
@@ -52,21 +53,26 @@ export const Product = () => {
       } else {
         addQueryParam("login", "true");
       }
+    } else {
+      navigate("/cart");
     }
-    else{
-         navigate("/cart");
-    }
-  }, [isLogin, searchParams, updateCart, idParam,cartButtonLabel]);
+  }, [
+    isLogin,
+    updateCart,
+    idParam,
+    cartButtonLabel,
+    addQueryParam,
+    navigate,
+    searchParams,
+  ]);
 
   const handleBuyButtonClick = useCallback(async () => {
-   
-      if (searchParams.has("id") && idParam != null && isLogin) {
-        navigate(`/buyproduct?id=${idParam}`);
-      } else {
-        addQueryParam("login", "true");
-      }
-  }, [isLogin, searchParams, idParam]);
-
+    if (searchParams.has("id") && idParam != null && isLogin) {
+      navigate(`/buyproduct?id=${idParam}`);
+    } else {
+      addQueryParam("login", "true");
+    }
+  }, [isLogin, addQueryParam, idParam, navigate, searchParams]);
 
   useEffect(() => {
     if (loading) return;
@@ -92,70 +98,87 @@ export const Product = () => {
         <Skeleton variant="rectangular" width={"100%"} height={"99vh"} />
       ) : (
         <>
-        <Navbar path="product" productTitle={productDetail?.attributes?.name ?? ''} changeTopPosition={"40px"} />
-        <Stack direction="column">
-          <Stack className={styles.productcontainer}>
-            <Stack className={styles.productimage}>
-              <img
-                src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
-                height={"95%"}
-                width={"95%"}
-                alt="product"
-              />
+          <Navbar
+            path="product"
+            productTitle={productDetail?.attributes?.name ?? ""}
+            changeTopPosition={"40px"}
+          />
+          {errorMessage && errorMessage.length > 0 && (
+            <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
+              <Alert
+                className="errornotification"
+                severity={"error"}
+                onClose={() => {
+                  setErrorMessage("");
+                }}
+              >
+                {errorMessage}
+              </Alert>
             </Stack>
-            <Stack className={styles.productinfo}>
-              {/* <Typography variant="h3">{productDetail?.attributes?.brandName}</Typography> */}
-              <Typography variant="h2">
-                {productDetail?.attributes?.title}
-              </Typography>
-              <Typography variant="h2" className={styles.discountedPrice}>
-                Rs {productDetail?.attributes?.discountedPrice}
-              </Typography>
-              <Stack direction={"row"} gap={"24px"}>
-                <Typography variant="h5" className={styles.price}>
-                  Rs {productDetail?.attributes?.price}
-                </Typography>
-                <Typography variant="h5" className={styles.discountPercent}>
-                  {productDetail?.attributes?.discountPercent}
-                  {" off"}
-                </Typography>
+          )}
+          <Stack direction="column">
+            <Stack className={styles.productcontainer}>
+              <Stack className={styles.productimage}>
+                <img
+                  src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
+                  height={"95%"}
+                  width={"95%"}
+                  alt="product"
+                />
               </Stack>
-              <Stack  gap={"8px"} sx={{margin:"12px 0px"}}>
-                <Typography variant="h3" >
-                  About Item
+              <Stack className={styles.productinfo}>
+                {/* <Typography variant="h3">{productDetail?.attributes?.brandName}</Typography> */}
+                <Typography variant="h2">
+                  {productDetail?.attributes?.title}
                 </Typography>
-                {/* <Typography variant="h5" >
+                <Typography variant="h2" className={styles.discountedPrice}>
+                  Rs {productDetail?.attributes?.discountedPrice}
+                </Typography>
+                <Stack direction={"row"} gap={"24px"}>
+                  <Typography variant="h5" className={styles.price}>
+                    Rs {productDetail?.attributes?.price}
+                  </Typography>
+                  <Typography variant="h5" className={styles.discountPercent}>
+                    {productDetail?.attributes?.discountPercent}
+                    {" off"}
+                  </Typography>
+                </Stack>
+                <Stack gap={"8px"} sx={{ margin: "12px 0px" }}>
+                  <Typography variant="h3">About Item</Typography>
+                  {/* <Typography variant="h5" >
                   {productDetail?.attributes?.description}
                  
                 </Typography> */}
-                {productDetail?.attributes?.description.split("##").map((data,index)=>(
-                  <li key={index}>{data}</li>
-                ))}
-              </Stack>
-              <Stack direction={"row"} gap={"32px"}>
-              <Button
-                  sx={{ width: "fit-content" }}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleBuyButtonClick}
-                >
-                  Buy now
-                </Button>
-              {
-                <Button
-                  disabled={cartButtonLabel.length === 0}
-                  sx={{ width: "fit-content" }}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleCartButtonClick}
-                >
-                  {cartButtonLabel}
-                </Button>
-              }
+                  {productDetail?.attributes?.description
+                    .split("##")
+                    .map((data, index) => (
+                      <li key={index}>{data}</li>
+                    ))}
+                </Stack>
+                <Stack direction={"row"} gap={"32px"}>
+                  <Button
+                    sx={{ width: "fit-content" }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={handleBuyButtonClick}
+                  >
+                    Buy now
+                  </Button>
+                  {
+                    <Button
+                      disabled={cartButtonLabel.length === 0}
+                      sx={{ width: "fit-content" }}
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleCartButtonClick}
+                    >
+                      {cartButtonLabel}
+                    </Button>
+                  }
+                </Stack>
               </Stack>
             </Stack>
           </Stack>
-        </Stack>
         </>
       )}
     </>
