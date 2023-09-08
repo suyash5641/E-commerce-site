@@ -10,6 +10,11 @@ import { nodatafound } from "../../assets";
 export const ProductList = () => {
   const { getProduct, productList, loading } = useProduct();
   const [searchParams, setSearchParams] = useSearchParams();
+  const categoryid = searchParams.get("categoryid");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const brand = searchParams.get("brand");
+  const sort = searchParams.get("sort");
   const navigate = useNavigate();
 
   const getProductList = useCallback(async(query:any)=>{
@@ -19,25 +24,23 @@ export const ProductList = () => {
   useEffect(()=>{
     const query = {
       populate: "*",
-      ...(searchParams.has("sort") && {
-        sort: searchParams.get("sort")
-      }),
+      ...(searchParams.has("sort") && { sort: sort}),
       ...(searchParams.has("categoryid") && {
-        "filters[categoryid][$contains]": searchParams.get("categoryid"),
-      }),
-      ...(searchParams.has("minPrice") && {
-        "filters[price][$gte]": searchParams.get("minPrice"),
-      }),
-      ...(searchParams.has("maxPrice") && {
-        "filters[price][$lte]": searchParams.get("maxPrice"),
-      }),
-      ...(searchParams.has("brand") && {
-        "filters[brandName][$eq]": searchParams.get("brand"),
-      }),
+              "filters[categoryid][$contains]": categoryid,
+            }),
+            ...(searchParams.has("minPrice") && {
+              "filters[price][$gte]": minPrice,
+            }),
+            ...(searchParams.has("maxPrice") && {
+              "filters[price][$lte]": maxPrice,
+            }),
+            ...(searchParams.has("brand") && {
+              "filters[brandName][$eq]": brand,
+            }),
     };
-    
+   
     getProductList(query);
-  },[searchParams])
+  },[categoryid,minPrice,maxPrice,brand,sort])
 
   const handleProductCardClick=(id:number)=>{
     navigate({

@@ -43,7 +43,7 @@ export const Filter = () => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set(
       "sort",
-      value === "Price: High to Low" ? "price:desc" : "price:asc"
+      value === "Price: High to Low" ? "discountedPrice:desc" : "discountedPrice:asc"
     );
     navigate({
       pathname: window.location.pathname,
