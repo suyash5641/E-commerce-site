@@ -64,6 +64,7 @@ export const BuyProductCart = () => {
        
         body: JSON.stringify({
           products: [payload],
+          cartflag:false
         }),
       };
       const res = await fetch(

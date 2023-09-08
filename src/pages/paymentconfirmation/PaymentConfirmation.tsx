@@ -22,12 +22,14 @@ export const PaymentConfirmation = () => {
 
   const updateCart = useCallback(async ( sessionid: string) => {
     const paymentStatus = searchParams.get("success");
+    const removeCartItem = searchParams.get("cartflag");
     // const bytes = AES.decrypt(id, secret);
     // const decryptedText = bytes.toString(enc.Utf8);
     // setDecrypted(decryptedText);
 
     if (paymentStatus === "true") {
       setPaymentSucessfull(true);
+      if(removeCartItem === "true")
       await emptyCart();
     } else {
       setPaymentSucessfull(false);

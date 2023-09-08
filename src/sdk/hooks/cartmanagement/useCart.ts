@@ -287,6 +287,7 @@ export const useCart = () => {
         },
         body: JSON.stringify({
           products: user?.cart,
+          cartflag:true
         }),
       };
       const res = await fetch(
