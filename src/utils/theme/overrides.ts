@@ -71,6 +71,10 @@ export const minor = () => {
         // },
         MuiSlider: {
             styleOverrides: {
+                root:{
+                  width:"85%",
+                  margin: "20px 16px 20px 17px",
+                },
                 thumb:{
                     color: "white",
                     },

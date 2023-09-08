@@ -56,6 +56,7 @@ export const Header = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      setIsShow(false);
       if (token) {
         try {
           const res = await fetchLoggedInUser(token);

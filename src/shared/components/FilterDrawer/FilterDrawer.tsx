@@ -42,7 +42,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     setDrawerOpen(!drawerOpen);
   },[setDrawerOpen,drawerOpen]);
 
-  const minDistance = 2500;
+  const minDistance = 3000;
 
   const priceArray = [
     {
@@ -165,7 +165,8 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
         max={30000}
         marks={priceArray}
         step={100}
-        getAriaValueText={valueText}       
+        getAriaValueText={valueText} 
+        valueLabelFormat={value => <div>{`Rs ${(value)}`}</div>}      
       />
       <Box className={styles.category}>
         <Typography variant="h3">Category</Typography>

@@ -46,7 +46,6 @@ export const ProductList = () => {
     });
   }
 
-  console.log(productList)
   return (
     <>
     {loading ? <Stack className="loader">

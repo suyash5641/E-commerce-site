@@ -84,7 +84,7 @@ export const Product = () => {
       setCartButtonLabel("Add to Cart"); // User is not logged in
       setIsLogin(false);
     }
-  }, [user, productDetail, setCartButtonLabel, token, loading]);
+  }, [user, token, loading]);
 
   return (
     <>
