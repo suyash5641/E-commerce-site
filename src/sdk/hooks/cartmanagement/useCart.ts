@@ -308,7 +308,7 @@ export const useCart = () => {
       console.log(err);
     }
   
-  },[setErrorMessage]);
+  },[user,setErrorMessage]);
 
   return useMemo(
     () => ({
