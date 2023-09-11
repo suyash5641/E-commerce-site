@@ -12,6 +12,8 @@
     flex-direction: column;
     .formlabel {
       margin-top: 12px;
+      display: flex;
+    justify-content: center;
       .selectdropdown {
         border: 1px solid #c3d1d4;
         background-color: #fff;

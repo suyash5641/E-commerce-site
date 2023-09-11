@@ -89,6 +89,23 @@ a {
     width: fit-content;
 }
 
+.price-filter{
+   margin: 32px;
+}
+
+.collapse{
+    display: flex;
+    justify-content: center;
+}
+
+.collapse_brand{
+    justify-content: flex-start;
+    margin-left: 80px !important;
+    display: flex;
+}
+
+
+
 @media screen and (max-width:640px){
     .title{
         font-size: 32px !important;
