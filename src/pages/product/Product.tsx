@@ -16,7 +16,7 @@ import { Navbar } from "../../components/Navbar";
 
 export const Product = () => {
   const { getProductDetail, productDetail, loading } = useProduct();
-  const { updateCart, errorMessage, setErrorMessage } = useCart();
+  const { updateCart, errorMessage, setErrorMessage,loadingCart } = useCart();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   // const [isCartButtonLabel,setCartButtonLabel] = useState<boolean | null>(null);
@@ -166,7 +166,7 @@ export const Product = () => {
                   </Button>
                   {
                     <Button
-                      disabled={cartButtonLabel.length === 0}
+                      disabled={ cartButtonLabel === "Go to Cart" ? false : loadingCart === false ? false : true}
                       sx={{ width: "fit-content" }}
                       variant="contained"
                       color="secondary"

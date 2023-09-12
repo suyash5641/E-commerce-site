@@ -15,7 +15,7 @@ import { loadStripe } from "@stripe/stripe-js";
 // }
 
 export const useCart = () => {
-  const [loading, setLoading] = useState<Boolean>(false);
+  const [loadingCart, setLoading] = useState<Boolean>(false);
   const [cartdetailloading, setCartDetailLoading] = useState<Boolean>(false);
   const [quantity, setQuantity] = useState(1);
   const token = localStorage.getItem("authToken");
@@ -153,6 +153,7 @@ export const useCart = () => {
   const updateCart = useCallback(
     async (productid: number) => {
       if (user != null) {
+        setLoading(true);
         const productObject = await getProductDetail(productid);
         if (Object.keys(productObject).length > 0 && token) {
           try {
@@ -176,13 +177,16 @@ export const useCart = () => {
             }
             else if (res.status === 401 || res.status === 403) {
               setErrorMessage("Error Occured while adding product to cart");
+              setLoading(false);
             } else if (res.status === 500) {
               setErrorMessage("Error Occured while adding product to cart");
+              setLoading(false);
             }
           } catch (err) {
             setErrorMessage("Error Occured while adding product to cart");
-          } finally {
             setLoading(false);
+          } finally {
+
           }
         }
       }
@@ -316,12 +320,12 @@ export const useCart = () => {
       updateCart,
       handleQuantityChange,
       cartdetailloading,
-      loading,
+      loadingCart ,
       emptyCart,
       errorMessage,
       setErrorMessage,
       handleCheckout
     }),
-    [updateCart, handleQuantityChange, cartdetailloading, loading,emptyCart,errorMessage,setErrorMessage,handleCheckout]
+    [updateCart, handleQuantityChange, cartdetailloading, loadingCart,emptyCart,errorMessage,setErrorMessage,handleCheckout]
   );
 };

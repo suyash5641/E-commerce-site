@@ -35,6 +35,9 @@ export const useOrder = () => {
           setLoading(false);
           return response?.data;
         }
+        else if(res.status === 401 || res.status === 500){
+           return ""
+        }
       } catch (err) {
         setLoading(false);
       } finally {
@@ -46,9 +49,14 @@ export const useOrder = () => {
 
   const updateOrderPaymentStatus = useCallback(
     async (status: boolean, filters: any) => {
-      const result = await getOrder(filters);
+      try 
+      {
+      let result = await getOrder(filters);
+      if(result.length === 0){
+        result = await getOrder(filters);
+      }
       if(result[0]?.attributes?.paymentSucessful === status)
-      return 
+      return
       const requestOptions = {
         method: "PUT",
         headers: {
@@ -61,8 +69,13 @@ export const useOrder = () => {
         `${BASE_URL}/orders/${result[0]?.id}`,
         requestOptions
       );
+      setLoading(false);
+      }
+      catch (err) {
+        setLoading(false);
+      }
     },
-    [getOrder]
+    [getOrder,setLoading]
   );
 
   const getOrderDetail = useCallback(
