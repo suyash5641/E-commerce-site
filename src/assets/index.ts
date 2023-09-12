@@ -13,6 +13,8 @@ import emptycart from './emptycart.png'
 import pagenotfound from './404.png'
 import norecordfound from './norecordfound.png'
 import nodatafound from './nodata.png'
+import formbackground from './form.jpg'
+
 
 export {
     sony,
@@ -29,5 +31,6 @@ export {
     emptycart,
     pagenotfound,
     norecordfound,
-    nodatafound
+    nodatafound,
+    formbackground
 }

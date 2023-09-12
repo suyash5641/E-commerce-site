@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
   IconButton,
   InputAdornment,
   Modal,
@@ -19,6 +20,7 @@ import { useFormik } from "formik";
 import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
 import CloseIcon from "@mui/icons-material/Close";
+import { formbackground } from "../../../../assets";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
   // username: string;
@@ -133,95 +135,110 @@ export const LoginModal = () => {
   }, [isModalOpen]);
 
   return (
-    <Modal
+    <Dialog
       open={isModalOpen}
       onClose={handleClose}
       className={styles.modalcontainer}
+      sx={{borderRadius:"16px"}}
     >
       <Stack className={styles.loginmodal} flexDirection={"column"}>
-        {isSnackBar?.isOpen && (
-          <Stack sx={{ width: "100%" }} spacing={2}>
-            <Alert
-              severity={isSnackBar.svg}
-              onClose={() => {
-                setIsSnackBar({
-                  isOpen: false,
-                  message: "",
-                  svg: "",
-                });
-              }}
-            >
-              {isSnackBar.message}
-            </Alert>
-          </Stack>
-        )}
-        <Stack flexDirection={"row"} justifyContent={"end"}>
+        <Stack className={styles.modalform}>
+          <img
+            src={formbackground}
+            alt="background"
+            width={"100%"}
+            height={"100%"}
+            style={{
+              objectFit: "cover",
+              borderRadius: "0px 0px 16px 16px",
+            }}
+          />
+          {/* <Stack flexDirection={"row"} justifyContent={"end"}>
           <IconButton  onClick={handleClose}>
             <CloseIcon sx={{color:"blue"}} />
           </IconButton>
+        </Stack> */}
+          <Stack className={styles.formcontainer}>
+            <form onSubmit={formik.handleSubmit} className={styles.form}>
+              {isSnackBar?.isOpen && (
+                <Stack sx={{ width: "100%" }} spacing={2}>
+                  <Alert
+                    severity={isSnackBar.svg}
+                    onClose={() => {
+                      setIsSnackBar({
+                        isOpen: false,
+                        message: "",
+                        svg: "",
+                      });
+                    }}
+                  >
+                    {isSnackBar.message}
+                  </Alert>
+                </Stack>
+              )}
+              <Stack
+                sx={{ width: "86%" }}
+                alignItems={"center"}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+              >
+                <Typography className="login-text">Login</Typography>
+                <Button variant="outlined" className="formbutton" onClick={handleModalOpen}>
+                  <Typography className="login-text-button" textTransform={"capitalize"}>SignUp</Typography>
+                </Button>
+              </Stack>
+              <Stack
+                flexDirection={"column"}
+                alignItems={"center"}
+                gap={"24px"}
+                width={"100%"}
+              >
+                <TextField
+                  label="Email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.touched.email && !!formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email}
+                  className={styles.formfield}
+                />
+                <TextField
+                  label="Password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  error={formik.touched.password && !!formik.errors.password}
+                  helperText={formik.touched.password && formik.errors.password}
+                  className={styles.formfield}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                {/* <Button onClick={handleForgotPasswordModal}>forgot password</Button> */}
+              </Stack>
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <Button variant="contained" color="secondary" type="submit">
+                  Submit
+                </Button>
+              )}
+            </form>
+          </Stack>
         </Stack>
-        <form onSubmit={formik.handleSubmit} className={styles.form}>
-          <Stack
-            sx={{ width: "86%" }}
-            alignItems={"center"}
-            flexDirection={"row"}
-            justifyContent={"space-between"}
-          >
-            <Typography>Login</Typography>
-            <Button variant="outlined" onClick={handleModalOpen}>
-              <Typography textTransform={"capitalize"}>SignUp</Typography>
-            </Button>
-          </Stack>
-          <Stack
-            flexDirection={"column"}
-            alignItems={"center"}
-            gap={"24px"}
-            width={"100%"}
-          >
-            <TextField
-              label="Email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && !!formik.errors.email}
-              helperText={formik.touched.email && formik.errors.email}
-              className={styles.formfield}
-            />
-            <TextField
-              label="Password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && !!formik.errors.password}
-              helperText={formik.touched.password && formik.errors.password}
-              className={styles.formfield}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            {/* <Button onClick={handleForgotPasswordModal}>forgot password</Button> */}
-          </Stack>
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Button variant="contained" color="secondary" type="submit">
-              Submit
-            </Button>
-          )}
-        </form>
       </Stack>
-    </Modal>
+    </Dialog>
   );
 };

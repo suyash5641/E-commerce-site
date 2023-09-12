@@ -9,6 +9,7 @@ import {
   Typography,
   IconButton,
   InputAdornment,
+  Dialog,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -17,8 +18,9 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { formbackground } from "../../../../assets";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
   username: string;
@@ -50,8 +52,8 @@ export const SignUpModal = () => {
   const searchParams = new URLSearchParams(window.location.search);
   const navigate = useNavigate();
   const [isModalOpen, setModalOpen] = useState(false);
-  
-  const {register,loading} = useAuth();
+
+  const { register, loading } = useAuth();
   const formik: any = useFormik<FormValues>({
     initialValues: {
       username: "",
@@ -66,26 +68,27 @@ export const SignUpModal = () => {
         password: values?.password,
       };
       try {
-       await register(payload);
-       handleClose();
+        await register(payload);
+        handleClose();
       } catch (error) {
         setIsSnackBar({
           isOpen: true,
           message: error,
           svg: "error",
         });
-      } 
-
+      }
     },
   });
 
   const isSignUpModal = searchParams.get("signup");
 
   useEffect(() => {
-    if (searchParams.has("signup") && localStorage.getItem("authToken")==null) {
+    if (
+      searchParams.has("signup") &&
+      localStorage.getItem("authToken") == null
+    ) {
       setModalOpen(true);
-    }
-    else {
+    } else {
       setModalOpen(false);
     }
   }, [isSignUpModal]);
@@ -103,120 +106,144 @@ export const SignUpModal = () => {
     event.preventDefault();
   };
 
-  const handleModalOpen = ()=>{
+  const handleModalOpen = () => {
     searchParams.delete("signup");
-    searchParams.set("login","true");
+    searchParams.set("login", "true");
     navigate({ search: `?${searchParams.toString()}` });
-}
-
+  };
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
     navigate({ search: `?${searchParams.toString()}` });
   };
 
-  useEffect(()=>{
-      if(isModalOpen){
-        setIsSnackBar({
-          isOpen: false,
-          message: '',
-          svg: "",
-        })
-        formik.resetForm();
-      }
-  },[isModalOpen])
+  useEffect(() => {
+    if (isModalOpen) {
+      setIsSnackBar({
+        isOpen: false,
+        message: "",
+        svg: "",
+      });
+      formik.resetForm();
+    }
+  }, [isModalOpen]);
 
- 
   return (
     <>
-      <Modal open={isModalOpen} onClose={handleClose}>
+      <Dialog open={isModalOpen} onClose={handleClose} sx={{ outline: "none",borderRadius:"16px" }}>
         <Stack className={styles.loginmodal} flexDirection={"column"}>
-          {isSnackBar?.isOpen && (
-            <Stack sx={{ width: "100%" }} spacing={2}>
-              <Alert severity={isSnackBar.svg} onClose={() => {
-                setIsSnackBar({
-                  isOpen: false,
-                  message: '',
-                  svg: "",
-                })
-              }}>
-               {isSnackBar.message}
-              </Alert>
-            </Stack>
-          )}
-           <Stack flexDirection={"row"} justifyContent={"end"}>
+          <Stack className={styles.modalform}>
+            <img
+              src={formbackground}
+              alt="background"
+              width={"100%"}
+              height={"100%"}
+              style={{
+                objectFit: "cover",
+                borderRadius: "0px 0px 16px 16px",
+              }}
+            />
+            {/* <Stack flexDirection={"row"} justifyContent={"end"}>
           <IconButton onClick={handleClose}>
             <CloseIcon sx={{color:"blue"}} />
-          </IconButton>
-        </Stack>
-          <form onSubmit={formik.handleSubmit} className={styles.form}>
-            <Stack sx={{ width:"86%"}} alignItems={"center"} flexDirection={"row"} justifyContent={"space-between"}>
-            <Typography>Create a new account</Typography>
-            <Button variant="outlined" onClick={handleModalOpen}>
-            <Typography textTransform={"capitalize"}>Login</Typography>
-            </Button> 
-          </Stack>
-            <Stack
-              flexDirection={"column"}
-              alignItems={"center"}
-              gap={"24px"}
-              width={"100%"}
-            >
-              <TextField
-                label="Username"
-                name="username"
-                value={formik.values.username}
-                onChange={formik.handleChange}
-                error={formik.touched.username && !!formik.errors.username}
-                helperText={formik.touched.username && formik.errors.username}
-                className={styles.formfield}
-              />
+          </IconButton> */}
+            {/* </Stack> */}
+            <Stack className={styles.formcontainer}>
+              <form onSubmit={formik.handleSubmit} className={styles.form}>
+                {isSnackBar?.isOpen && (
+                  <Stack sx={{ width: "100%" }} spacing={2}>
+                    <Alert
+                      severity={isSnackBar.svg}
+                      onClose={() => {
+                        setIsSnackBar({
+                          isOpen: false,
+                          message: "",
+                          svg: "",
+                        });
+                      }}
+                    >
+                      {isSnackBar.message}
+                    </Alert>
+                  </Stack>
+                )}
+                <Stack
+                  sx={{ width: "86%" }}
+                  alignItems={"center"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                >
+                  <Typography className="login-text">Create an account</Typography>
+                  <Button variant="outlined" className="formbutton" onClick={handleModalOpen}>
+                    <Typography className="login-text-button" textTransform={"capitalize"}>Login</Typography>
+                  </Button>
+                </Stack>
+                <Stack
+                  flexDirection={"column"}
+                  alignItems={"center"}
+                  gap={"24px"}
+                  width={"100%"}
+                >
+                  <TextField
+                    label="Username"
+                    name="username"
+                    value={formik.values.username}
+                    onChange={formik.handleChange}
+                    error={formik.touched.username && !!formik.errors.username}
+                    helperText={
+                      formik.touched.username && formik.errors.username
+                    }
+                    className={styles.formfield}
+                  />
 
-              <TextField
-                label="Email"
-                name="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && !!formik.errors.email}
-                helperText={formik.touched.email && formik.errors.email}
-                className={styles.formfield}
-              />
+                  <TextField
+                    label="Email"
+                    name="email"
+                    value={formik.values.email}
+                    onChange={formik.handleChange}
+                    error={formik.touched.email && !!formik.errors.email}
+                    helperText={formik.touched.email && formik.errors.email}
+                    className={styles.formfield}
+                  />
 
-              <TextField
-                label="Password"
-                name="password"
-                type={showPassword ? 'text' : 'password'}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={formik.touched.password && !!formik.errors.password}
-                helperText={formik.touched.password && formik.errors.password}
-                className={styles.formfield}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
+                  <TextField
+                    label="Password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    error={formik.touched.password && !!formik.errors.password}
+                    helperText={
+                      formik.touched.password && formik.errors.password
+                    }
+                    className={styles.formfield}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Stack>
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button variant="contained" color="secondary" type="submit">
+                    Submit
+                  </Button>
+                )}
+              </form>
             </Stack>
-            {loading ? (
-              <CircularProgress />
-            ) : (
-              <Button variant="contained" color="secondary" type="submit">
-                Submit
-              </Button>
-            )}
-          </form>
+          </Stack>
         </Stack>
-      </Modal>
+      </Dialog>
     </>
   );
 };

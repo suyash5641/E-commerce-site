@@ -15,7 +15,7 @@ export const colors = {
     primaryInactive: '#828282',
     primaryButton:'#808080',
     primaryButtonText:'#000',
-    secondaryButton:'#ff7043',
+    secondaryButton:'#ff4500 ',
     secondaryButtonText:'#fff',
     secondaryError: '#F3C6C6',
     secondarySuccess: '#C6F3D2',
