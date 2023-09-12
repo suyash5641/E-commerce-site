@@ -179,6 +179,9 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   useEffect(() => {
     const categoryid = searchParams.get("categoryid");
+    const brand = searchParams.get("brand");
+    const minPrice= searchParams.get("minPrice") ?? "";
+    const maxPrice= searchParams.get("maxPrice") ?? "";
     if (categoryid) {
       setCategory(categoryid);
       getBrand({ populate: "*", "filters[categoryid][$eq]": categoryid });
@@ -186,7 +189,14 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
         category: true,
         brand: true,
       })
+      if(brand){
+        setBrand(brand)
+      }
     }
+    if(minPrice  || maxPrice ){
+       setPrice([parseInt(minPrice),parseInt(maxPrice)])
+    }
+   
   }, []);
 
   // const drawer = (
@@ -363,7 +373,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
                   {brandList?.map((data, index) => (
                     <FormControlLabel
                       key={data?.id}
-                      value={data?.id}
+                      value={data?.attributes?.brandname}
                       control={<Radio  sx={{
                         '&.Mui-checked': {
                           color: '#000',
