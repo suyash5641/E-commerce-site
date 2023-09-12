@@ -139,7 +139,8 @@ export const LoginModal = () => {
       open={isModalOpen}
       onClose={handleClose}
       className={styles.modalcontainer}
-      sx={{borderRadius:"16px"}}
+      PaperProps={{
+        style: { borderRadius: "16px" }   }}
     >
       <Stack className={styles.loginmodal} flexDirection={"column"}>
         <Stack className={styles.modalform}>

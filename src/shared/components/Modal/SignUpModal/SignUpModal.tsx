@@ -130,7 +130,13 @@ export const SignUpModal = () => {
 
   return (
     <>
-      <Dialog open={isModalOpen} onClose={handleClose} sx={{ outline: "none",borderRadius:"16px" }}>
+      <Dialog
+        open={isModalOpen}
+        onClose={handleClose}
+        PaperProps={{
+          style: { borderRadius: "16px" },
+        }}
+      >
         <Stack className={styles.loginmodal} flexDirection={"column"}>
           <Stack className={styles.modalform}>
             <img
@@ -172,9 +178,20 @@ export const SignUpModal = () => {
                   flexDirection={"row"}
                   justifyContent={"space-between"}
                 >
-                  <Typography className="login-text">Create an account</Typography>
-                  <Button variant="outlined" className="formbutton" onClick={handleModalOpen}>
-                    <Typography className="login-text-button" textTransform={"capitalize"}>Login</Typography>
+                  <Typography className="login-text">
+                    Create an account
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    className="formbutton"
+                    onClick={handleModalOpen}
+                  >
+                    <Typography
+                      className="login-text-button"
+                      textTransform={"capitalize"}
+                    >
+                      Login
+                    </Typography>
                   </Button>
                 </Stack>
                 <Stack
