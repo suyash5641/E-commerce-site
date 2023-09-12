@@ -6,4 +6,16 @@
     position: sticky;
     top: 0;
     z-index: 100; 
+    .cartproductcount{
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+        margin-bottom: 14px;
+        margin-left: 24px;
+        position: absolute;
+        .cartproductcounttext{
+            font-size: 12px;
+        }
+    }
 }

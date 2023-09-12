@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Skeleton, Stack } from "@mui/material";
+import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import styles from "./header.module.scss";
 import { Outlet, useSearchParams } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
@@ -11,7 +11,7 @@ import { UserProfile } from "../UserProfile";
 
 export const Header = () => {
   const navigate = useNavigate();
-  const { fetchLoggedInUser } = useAuth();
+  const { fetchLoggedInUser,user } = useAuth();
   const [isLogin, setIsLogin] = useState(false);
   const [show, setIsShow] = useState(false);
   const location = useLocation();
@@ -80,10 +80,10 @@ export const Header = () => {
 
   return (
     <>
-      {!show ? (
+      {false ? (
         // <Skeleton variant="rectangular" width={"100%"} className={styles.header}/>
         <Stack
-          className={styles.header}/>
+          />
       ) : (
         <Stack
           className={styles.header}
@@ -97,6 +97,9 @@ export const Header = () => {
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
               {location.pathname != "/cart" && <IconButton onClick={handleProductCartOpen} sx={{color:"#fff"}}>
               <AddShoppingCartIcon  />
+              {user?.cart && <Box className={styles.cartproductcount}>
+                <Typography className={styles.cartproductcounttext} >{user?.cart.length}</Typography>
+                </Box>}
               </IconButton> }
               <UserProfile />
               </Stack>
