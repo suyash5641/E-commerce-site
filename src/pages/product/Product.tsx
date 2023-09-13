@@ -155,7 +155,7 @@ export const Product = () => {
                       <li key={index}>{data}</li>
                     ))}
                 </Stack>
-                <Stack direction={"row"} gap={"32px"}>
+                <Stack direction={"row"} gap={"32px"} sx={{margin:"16px 0px"}}>
                   <Button
                     sx={{ width: "fit-content" }}
                     variant="contained"

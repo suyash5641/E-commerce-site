@@ -159,12 +159,32 @@ a {
    background-color: #ff4500 !important;
 }
 
+.product_card_price{
+
+    .product_price{
+        text-decoration: line-through !important;
+        color: #878787 !important;
+    
+      }
+      .product_discount{
+        color:#388E3C !important;
+      }
+}
+
 
 
 @media screen and (max-width:640px){
     .title{
         font-size: 32px !important;
         font-weight: 700 !important;
+    }
+    .product_card_price{
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 4px !important;
+        .product_card_box{
+            gap: 5px !important;
+        }
     }
 }
 
