@@ -14,6 +14,7 @@ import pagenotfound from './404.png'
 import norecordfound from './norecordfound.png'
 import nodatafound from './nodata.png'
 import formbackground from './form.jpg'
+import offer from './offer.jpg'
 
 
 export {
@@ -32,5 +33,6 @@ export {
     pagenotfound,
     norecordfound,
     nodatafound,
-    formbackground
+    formbackground,
+    offer
 }

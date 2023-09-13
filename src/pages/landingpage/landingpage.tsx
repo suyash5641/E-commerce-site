@@ -10,10 +10,11 @@ export const LandingPage =()=>{
         <>
         {/* <Carousal/> */}
         <SearchBar/>
-        <Box>
+        <Carousal/>
+        {/* <Box>
         <img src={background} width={"100%"} height={"400px"} className='cover'/>
         <Typography className="title">Shop the World: Your One-Stop E-Commerce Destination</Typography>
-        </Box>
+        </Box> */}
         <Category/>
         </>
     )
