@@ -164,39 +164,37 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   const handleFilterChange = useCallback(() => {
     // const searchParams = new URLSearchParams(window.location.search);
-
     if (category) {
       searchParams.set("categoryid", category);
     }
     if (brand) {
       searchParams.set("brand", brand);
-    }
+    } else searchParams.delete("brand");
     searchParams.set("minPrice", price[0].toString());
     searchParams.set("maxPrice", price[1].toString());
     setSearchParams(searchParams);
     setDrawerOpen(false);
-  }, [setSearchParams, price, category, brand, searchParams]);
+  }, [setSearchParams, price, category, brand, searchParams, setDrawerOpen]);
 
   useEffect(() => {
     const categoryid = searchParams.get("categoryid");
     const brand = searchParams.get("brand");
-    const minPrice= searchParams.get("minPrice") ?? "";
-    const maxPrice= searchParams.get("maxPrice") ?? "";
+    const minPrice = searchParams.get("minPrice") ?? "";
+    const maxPrice = searchParams.get("maxPrice") ?? "";
     if (categoryid) {
       setCategory(categoryid);
       getBrand({ populate: "*", "filters[categoryid][$eq]": categoryid });
       setOpen({
         category: true,
         brand: true,
-      })
-      if(brand){
-        setBrand(brand)
+      });
+      if (brand) {
+        setBrand(brand);
       }
     }
-    if(minPrice  || maxPrice ){
-       setPrice([parseInt(minPrice),parseInt(maxPrice)])
+    if (minPrice || maxPrice) {
+      setPrice([parseInt(minPrice), parseInt(maxPrice)]);
     }
-   
   }, []);
 
   // const drawer = (
@@ -287,7 +285,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
       <Typography
         variant="h3"
         textAlign={"start"}
-        sx={{ marginBottom: "36px",fontWeight:"500",marginLeft:"14px" }}
+        sx={{ marginBottom: "36px", fontWeight: "500", marginLeft: "14px" }}
       >
         Price Range
       </Typography>
@@ -323,11 +321,15 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
                 <FormControlLabel
                   key={data?.id}
                   value={data?.id}
-                  control={<Radio  sx={{
-                    '&.Mui-checked': {
-                      color: '#000',
-                    },
-                  }} />}
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#000",
+                        },
+                      }}
+                    />
+                  }
                   label={data?.attributes?.categorytype}
                 />
               ))}
@@ -335,64 +337,70 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           </FormControl>
         </List>
       </Collapse>
-      {category && category.length > 0 && <Box>
-      <ListItemButton onClick={() => handleClick("brand")}>
-        <ListItemText primary="Brand" className="listtext" />
-        {open.brand ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open.brand} timeout="auto" unmountOnExit>
-        {/* <List className="collapse_brand" component="div" disablePadding> */}
-          {errorMessage && errorMessage.length > 0 ? (
-            <Stack
-              alignItems="center"
-              sx={{ width: "100%", margin: "12px 0px" }}
-              spacing={2}
-            >
-              <Alert
-                className="errornotification"
-                severity={"error"}
-                // onClose={() => {
-                //  setErrorMessage("")
-                // }}
+      {category && category.length > 0 && (
+        <Box>
+          <ListItemButton onClick={() => handleClick("brand")}>
+            <ListItemText primary="Brand" className="listtext" />
+            {open.brand ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse in={open.brand} timeout="auto" unmountOnExit>
+            {/* <List className="collapse_brand" component="div" disablePadding> */}
+            {errorMessage && errorMessage.length > 0 ? (
+              <Stack
+                alignItems="center"
+                sx={{ width: "100%", margin: "12px 0px" }}
+                spacing={2}
               >
-                {errorMessage}
-              </Alert>
-            </Stack>
-          ) : (
-            <List className="collapse_brand" component="div" disablePadding>
-            <Box className={styles.category}>
-              <FormControl className={styles.formlabel}>
-                <RadioGroup
-                  aria-labelledby="demo-controlled-radio-buttons-group"
-                  name="controlled-radio-buttons-group"
-                  value={brand}
-                  onChange={handleBrandChange}
-
-                  // className={styles.selectdropdown}
+                <Alert
+                  className="errornotification"
+                  severity={"error"}
+                  // onClose={() => {
+                  //  setErrorMessage("")
+                  // }}
                 >
-                  {brandList?.map((data, index) => (
-                    <FormControlLabel
-                      key={data?.id}
-                      value={data?.attributes?.brandname}
-                      control={<Radio  sx={{
-                        '&.Mui-checked': {
-                          color: '#000',
-                        },
-                      }} />}
-                      label={data?.attributes?.brandname}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Box>
-            </List>
-          )}    
-      </Collapse>
-      </Box>}
+                  {errorMessage}
+                </Alert>
+              </Stack>
+            ) : (
+              <List className="collapse_brand" component="div" disablePadding>
+                <Box className={styles.category}>
+                  <FormControl className={styles.formlabel}>
+                    <RadioGroup
+                      aria-labelledby="demo-controlled-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      value={brand}
+                      onChange={handleBrandChange}
+
+                      // className={styles.selectdropdown}
+                    >
+                      {brandList?.map((data, index) => (
+                        <FormControlLabel
+                          key={data?.id}
+                          value={data?.attributes?.brandname}
+                          control={
+                            <Radio
+                              sx={{
+                                "&.Mui-checked": {
+                                  color: "#000",
+                                },
+                              }}
+                            />
+                          }
+                          label={data?.attributes?.brandname}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+              </List>
+            )}
+          </Collapse>
+        </Box>
+      )}
       <Stack
         direction={"row"}
         justifyContent={"space-between"}
-        sx={{ width: "86%",margin:"24px" }}
+        sx={{ width: "86%", margin: "24px" }}
       >
         <Button
           className={styles.categorybutton}
@@ -431,7 +439,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
             width: { xs: 340, md: 360, lg: 360, xl: 360 },
-            paddingTop:"32px"
+            paddingTop: "32px",
           },
         }}
       >
