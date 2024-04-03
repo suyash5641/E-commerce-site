@@ -34,6 +34,27 @@
   }
 }
 
+@media screen and (max-width: 380px) {
+  .header {
+    padding: 4px;
+
+    .text {
+      text-transform: capitalize;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .section {
+      gap: 8px;
+      .loginText {
+        text-transform: capitalize;
+        color: #fff;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 300px) {
   .header {
     padding: 4px;
