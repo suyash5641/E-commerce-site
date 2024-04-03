@@ -1,22 +1,38 @@
-.navbar{
-    padding: 12px 40px;
-    // max-width: 1400px;
-    margin: 0 auto;
-    position: sticky;
-    top: 100px;
-    z-index: 100;
-    background: #fff;
-    .label{
-        margin: 0px 2px;
-        color: #67718B;
-    }
-    .labeltext{
-        margin: 0px 2px;
-    }
+.navbar {
+  padding: 12px 40px;
+  // max-width: 1400px;
+  margin: 0 auto;
+  position: sticky;
+  top: 100px;
+  z-index: 100;
+  background: #fff;
+  .label {
+    margin: 0px 2px;
+    color: #67718b;
+  }
+  .labeltext {
+    margin: 0px 2px;
+  }
 }
 
-@media screen and (max-width:640px) {
-    .navbar{
+@media screen and (max-width: 640px) {
+  .navbar {
     padding: 12px 16px;
-    }
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .navbar {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    // .label {
+    //   margin: 0px 2px;
+    //   color: #67718b;
+    //   font-size: 16px;
+    // }
+    // .labeltext {
+    //   margin: 0px 2px;
+    //   font-size: 16px;
+    // }
+  }
 }

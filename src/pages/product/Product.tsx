@@ -1,14 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  Button,
-  Stack,
-  Typography,
-  Skeleton,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import { Button, Stack, Typography, Skeleton, Alert } from "@mui/material";
 import styles from "./product.module.scss";
 import { useCart } from "../../sdk/hooks/cartmanagement/useCart";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
@@ -16,7 +9,7 @@ import { Navbar } from "../../components/Navbar";
 
 export const Product = () => {
   const { getProductDetail, productDetail, loading } = useProduct();
-  const { updateCart, errorMessage, setErrorMessage,loadingCart } = useCart();
+  const { updateCart, errorMessage, setErrorMessage, loadingCart } = useCart();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   // const [isCartButtonLabel,setCartButtonLabel] = useState<boolean | null>(null);
@@ -90,6 +83,7 @@ export const Product = () => {
       setCartButtonLabel("Add to Cart"); // User is not logged in
       setIsLogin(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, token, loading]);
 
   return (
@@ -128,7 +122,7 @@ export const Product = () => {
               </Stack>
               <Stack className={styles.productinfo}>
                 {/* <Typography variant="h3">{productDetail?.attributes?.brandName}</Typography> */}
-                <Typography variant="h2">
+                <Typography variant="h2" className={styles.productTitle}>
                   {productDetail?.attributes?.title}
                 </Typography>
                 <Typography variant="h2" className={styles.discountedPrice}>
@@ -155,22 +149,34 @@ export const Product = () => {
                       <li key={index}>{data}</li>
                     ))}
                 </Stack>
-                <Stack direction={"row"} gap={"32px"} sx={{margin:"16px 0px"}}>
+                <Stack
+                  direction={"row"}
+                  gap={"32px"}
+                  sx={{ margin: "16px 0px" }}
+                >
                   <Button
                     sx={{ width: "fit-content" }}
                     variant="contained"
                     color="secondary"
                     onClick={handleBuyButtonClick}
+                    className={styles.button}
                   >
                     Buy now
                   </Button>
                   {
                     <Button
-                      disabled={ cartButtonLabel === "Go to Cart" ? false : loadingCart === false ? false : true}
+                      disabled={
+                        cartButtonLabel === "Go to Cart"
+                          ? false
+                          : loadingCart === false
+                          ? false
+                          : true
+                      }
                       sx={{ width: "fit-content" }}
                       variant="contained"
                       color="secondary"
                       onClick={handleCartButtonClick}
+                      className={styles.button}
                     >
                       {cartButtonLabel}
                     </Button>

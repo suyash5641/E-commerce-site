@@ -1,34 +1,35 @@
-import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import styles from "./header.module.scss";
-import { Outlet, useSearchParams } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { LoginModal, SignUpModal,ForgotPasswordModal } from "../../shared/components/Modal";
+import { LoginModal, SignUpModal } from "../../shared/components/Modal";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { UserProfile } from "../UserProfile";
 
-
 export const Header = () => {
   const navigate = useNavigate();
-  const { fetchLoggedInUser,user } = useAuth();
+  const { fetchLoggedInUser, user } = useAuth();
   const [isLogin, setIsLogin] = useState(false);
   const [show, setIsShow] = useState(false);
   const location = useLocation();
   const token = localStorage.getItem("authToken");
   let url = new URL(window.location.href);
   let searchParams = new URLSearchParams(url.search);
-  const addQueryParam = useCallback((key: string, value: string) => {
+  const addQueryParam = useCallback(
+    (key: string, value: string) => {
+      // const currentURL = window.location.href;
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set(key, value);
 
-    const currentURL = window.location.href;
-    const urlParams = new URLSearchParams(window.location.search); 
-    urlParams.set(key, value);
-
-    navigate({
-      pathname: window.location.pathname,
-      search: `?${urlParams.toString()}`,
-    });
-  },[navigate]);
+      navigate({
+        pathname: window.location.pathname,
+        search: `?${urlParams.toString()}`,
+      });
+    },
+    [navigate]
+  );
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
@@ -48,11 +49,11 @@ export const Header = () => {
 
   const handleProductCartOpen = useCallback(() => {
     if (isLogin) {
-      navigate('/cart');
+      navigate("/cart");
     } else {
       handleModalOpen("login");
     }
-  }, [isLogin]);
+  }, [handleModalOpen, isLogin, navigate]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -67,8 +68,7 @@ export const Header = () => {
             setIsLogin(false);
             setIsShow(true);
           }
-        } catch (error) {
-        }
+        } catch (error) {}
       } else {
         setIsLogin(false);
         setIsShow(true);
@@ -76,14 +76,14 @@ export const Header = () => {
     };
 
     fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (
     <>
       {false ? (
         // <Skeleton variant="rectangular" width={"100%"} className={styles.header}/>
-        <Stack
-          />
+        <Stack />
       ) : (
         <Stack
           className={styles.header}
@@ -93,27 +93,62 @@ export const Header = () => {
         >
           {isLogin ? (
             <>
-              <Button onClick={()=>navigate("/productlist")} sx={{textTransform:"capitalize",color:"#fff"}}>Shop Now</Button>
+              <Button
+                onClick={() => navigate("/productlist")}
+                className={styles.text}
+              >
+                Shop Now
+              </Button>
               <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
-              {location.pathname != "/cart" && <IconButton onClick={handleProductCartOpen} sx={{color:"#fff"}}>
-              <AddShoppingCartIcon  />
-              {user?.cart && <Box className={styles.cartproductcount}>
-                <Typography className={styles.cartproductcounttext} >{user?.cart.length}</Typography>
-                </Box>}
-              </IconButton> }
-              <UserProfile />
+                {location.pathname !== "/cart" && (
+                  <IconButton
+                    onClick={handleProductCartOpen}
+                    sx={{ color: "#fff" }}
+                  >
+                    <AddShoppingCartIcon />
+                    {user?.cart && (
+                      <Box className={styles.cartproductcount}>
+                        <Typography className={styles.cartproductcounttext}>
+                          {user?.cart.length}
+                        </Typography>
+                      </Box>
+                    )}
+                  </IconButton>
+                )}
+                <UserProfile />
               </Stack>
             </>
           ) : (
             <>
-              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={()=>navigate("/productlist")}>
-                Shop Now</Button>
-              <Stack flexDirection={"row"} gap={"24px"} alignItems={"center"}>
-              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={() => handleModalOpen("login")}>Login</Button>
-              <Button sx={{textTransform:"capitalize",color:"#fff"}} onClick={() => handleModalOpen("signup")}>Signup</Button>
-              <IconButton onClick={handleProductCartOpen} sx={{color:"#fff"}}>
-              <AddShoppingCartIcon  />
-              </IconButton>          
+              <Button
+                onClick={() => navigate("/productlist")}
+                className={styles.text}
+              >
+                Shop Now
+              </Button>
+              <Stack
+                className={styles.section}
+                flexDirection={"row"}
+                alignItems={"center"}
+              >
+                <Button
+                  onClick={() => handleModalOpen("login")}
+                  className={styles.loginText}
+                >
+                  Login
+                </Button>
+                <Button
+                  onClick={() => handleModalOpen("signup")}
+                  className={styles.loginText}
+                >
+                  Signup
+                </Button>
+                <IconButton
+                  onClick={handleProductCartOpen}
+                  sx={{ color: "#fff" }}
+                >
+                  <AddShoppingCartIcon />
+                </IconButton>
               </Stack>
             </>
           )}

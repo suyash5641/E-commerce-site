@@ -1,21 +1,56 @@
-.header{
-    background-color:var(--header-background);
-    color: white;
-    padding: 4px 32px;
-    height: 40px;
-    position: sticky;
-    top: 0;
-    z-index: 100; 
-    .cartproductcount{
-        width: 20px;
-        height: 20px;
-        background: red;
-        border-radius: 50%;
-        margin-bottom: 14px;
-        margin-left: 24px;
-        position: absolute;
-        .cartproductcounttext{
-            font-size: 12px;
-        }
+.header {
+  background-color: var(--header-background);
+  color: white;
+  padding: 4px 32px;
+  height: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .text {
+    text-transform: capitalize;
+    color: #fff;
+  }
+
+  .section {
+    gap: 24px;
+    .loginText {
+      text-transform: capitalize;
+      color: #fff;
     }
+  }
+
+  .cartproductcount {
+    width: 20px;
+    height: 20px;
+    background: red;
+    border-radius: 50%;
+    margin-bottom: 14px;
+    margin-left: 24px;
+    position: absolute;
+    .cartproductcounttext {
+      font-size: 12px;
+    }
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .header {
+    padding: 4px;
+
+    .text {
+      text-transform: capitalize;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .section {
+      gap: 8px;
+      .loginText {
+        text-transform: capitalize;
+        color: #fff;
+        font-size: 12px;
+      }
+    }
+  }
 }

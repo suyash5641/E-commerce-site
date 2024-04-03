@@ -438,7 +438,7 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
           display: { xs: "block", md: "block", lg: "block", xl: "block" },
           "& .MuiDrawer-paper": {
             boxSizing: "border-box",
-            width: { xs: 340, md: 360, lg: 360, xl: 360 },
+            width: { xs: 250, md: 360, lg: 360, xl: 360 },
             paddingTop: "32px",
           },
         }}

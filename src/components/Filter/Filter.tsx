@@ -3,29 +3,31 @@ import {
   Button,
   Stack,
   Typography,
-  FormControl,
-  Select,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  SelectChangeEvent,
+  // FormControl,
+  // Select,
+  // InputLabel,
+  // MenuItem,
+  // OutlinedInput,
+  // SelectChangeEvent,
   Popover,
-  ClickAwayListener,
-  makeStyles,
+  // ClickAwayListener,
+  // makeStyles,
   Box,
 } from "@mui/material";
 import styles from "./filter.module.scss";
 import CheckIcon from "@mui/icons-material/Check";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FilterDrawer } from "../../shared/components/FilterDrawer";
-import { string } from "yup";
-const sortby = [{val:"Price: High to Low",key:'price:desc'}, {val:"Price: Low to High",key:'price:asc'}];
-
+// import { string } from "yup";
+const sortby = [
+  { val: "Price: High to Low", key: "price:desc" },
+  { val: "Price: Low to High", key: "price:asc" },
+];
 
 export const Filter = () => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [sortValue,setSortValue] = useState<string>("");
+  const [sortValue, setSortValue] = useState<string>("");
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -43,7 +45,9 @@ export const Filter = () => {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set(
       "sort",
-      value === "Price: High to Low" ? "discountedPrice:desc" : "discountedPrice:asc"
+      value === "Price: High to Low"
+        ? "discountedPrice:desc"
+        : "discountedPrice:asc"
     );
     navigate({
       pathname: window.location.pathname,
@@ -54,15 +58,14 @@ export const Filter = () => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
-  useEffect(()=>{
-    const sort = searchParams.get('sort')
-    if(sort){
+  useEffect(() => {
+    const sort = searchParams.get("sort");
+    if (sort) {
       setSortValue(sort);
-    }
-    else{
+    } else {
       setSortValue("");
     }
-  },[searchParams])
+  }, [searchParams]);
 
   return (
     <Stack
@@ -94,15 +97,20 @@ export const Filter = () => {
         }}
       >
         {sortby.map((data, index) => (
-          <Stack key={index} direction={"row"} gap="12px" sx={{ padding: "8px 20px", cursor: "pointer", color: "#67718B" }}>
-            
-            <Typography
-              key={index}
-              onClick={() => handleChange(data?.val)}
-            >
+          <Stack
+            key={index}
+            direction={"row"}
+            gap="12px"
+            sx={{ padding: "8px 20px", cursor: "pointer", color: "#67718B" }}
+          >
+            <Typography key={index} onClick={() => handleChange(data?.val)}>
               {data?.val}
             </Typography>
-            {sortValue && sortValue === data?.key ? <CheckIcon/> :<Box sx={{width:'24px'}}></Box>}
+            {sortValue && sortValue === data?.key ? (
+              <CheckIcon />
+            ) : (
+              <Box sx={{ width: "24px" }}></Box>
+            )}
           </Stack>
         ))}
       </Popover>
