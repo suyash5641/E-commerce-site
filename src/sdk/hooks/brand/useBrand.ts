@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { IBrand } from "../../../shared/interfaces/interface";
 import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useBrand = () => {
   const [brandList, setBrandList] = useState<IBrand[]>();
-  const [errorMessage,setErrorMessage]= useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<Boolean>(true);
 
   const getBrand = useCallback(
@@ -20,18 +20,24 @@ export const useBrand = () => {
           setErrorMessage("");
           return response?.data;
         } else if (res.status === 401) {
-          setErrorMessage("Error Occured while fetching list of brands, try again");
+          setErrorMessage(
+            "Error Occured while fetching list of brands, try again"
+          );
         } else if (res.status === 500) {
-          setErrorMessage("Error Occured while fetching list of brands, try again");
+          setErrorMessage(
+            "Error Occured while fetching list of brands, try again"
+          );
         }
       } catch (err) {
         setLoading(false);
-        setErrorMessage("Error Occured while fetching list of brands, try again");
+        setErrorMessage(
+          "Error Occured while fetching list of brands, try again"
+        );
       } finally {
         setLoading(false);
       }
     },
-    [setLoading, setBrandList,setErrorMessage]
+    [setLoading, setBrandList, setErrorMessage]
   );
 
   return useMemo(

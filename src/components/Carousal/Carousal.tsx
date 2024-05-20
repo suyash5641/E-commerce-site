@@ -1,5 +1,5 @@
 import { background, offer } from "../../assets";
-import React, { useCallback, useState } from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
 import Carousel from "react-material-ui-carousel";
 import { Box, Stack } from "@mui/material";
@@ -9,12 +9,12 @@ const items = [
     imgPath: background,
     description: "Shop the World: Your One-Stop E-Commerce Destination",
     showAnimation: false,
-    title:""
+    title: "",
   },
   {
     imgPath: offer,
     description: "BIG SALE",
-    title:"UP TO 50% OFF",
+    title: "UP TO 50% OFF",
     showAnimation: true,
   },
 ];
@@ -25,7 +25,12 @@ export const Carousal = () => {
   const Item = ({
     item,
   }: {
-    item: { imagePath: string; description: string; showAnimation: boolean ,title:string};
+    item: {
+      imagePath: string;
+      description: string;
+      showAnimation: boolean;
+      title: string;
+    };
   }) => {
     return (
       <Box>
@@ -34,12 +39,11 @@ export const Carousal = () => {
           width={"100%"}
           height={"400px"}
           className="cover"
+          alt="carousel"
         />
         {item?.showAnimation ? (
           <Stack>
-             <Typography className={"cover-text"}>
-              {item?.title}
-            </Typography>
+            <Typography className={"cover-text"}>{item?.title}</Typography>
             <Typography className={"animate-charcter"}>
               {item?.description}
             </Typography>
@@ -69,7 +73,7 @@ export const Carousal = () => {
               imagePath: item.imgPath,
               description: item.description,
               showAnimation: item.showAnimation,
-              title:item.title
+              title: item.title,
             }}
           />
         ))}

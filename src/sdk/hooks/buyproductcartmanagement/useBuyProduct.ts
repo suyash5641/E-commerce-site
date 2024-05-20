@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   IProductLists,
-  ICategory,
-  IUser,
+  // ICategory,
+  // IUser,
   Cart,
 } from "../../../shared/interfaces/interface";
-import { useProduct } from "../products/useProduct";
+// import { useProduct } from "../products/useProduct";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
-import { ProductCard } from "../../../shared/components/ProductCard";
+// import { ProductCard } from "../../../shared/components/ProductCard";
 import { BASE_URL } from "../../../utils/constant/constant";
 // interface updateCart {
 //   productid: number,removeProduct:boolean,productQuantity?:number
@@ -16,9 +16,9 @@ import { BASE_URL } from "../../../utils/constant/constant";
 export const useBuyCart = () => {
   const [loading, setLoading] = useState<Boolean>(false);
   const [cartdetailloading, setCartDetailLoading] = useState<Boolean>(false);
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const token = localStorage.getItem("authToken");
-  const [productDetail, setProductDetail] = useState<IProductLists>();
+  // const [productDetail, setProductDetail] = useState<IProductLists>();
   const { user, fetchLoggedInUser } = useAuth();
 
   const getPayload = useCallback(
@@ -52,7 +52,12 @@ export const useBuyCart = () => {
         return payload;
       }
     },
-    [user?.cart]
+    [
+      user?.cart,
+      user?.cartActualPrice,
+      user?.cartTotalPrice,
+      user?.discountPrice,
+    ]
   );
 
   const getUpdateCartPayload = useCallback(
@@ -90,7 +95,7 @@ export const useBuyCart = () => {
         );
         const filterCart = user?.cart;
         if (
-          filterCart != undefined &&
+          filterCart !== undefined &&
           cartIndexToUpdate !== undefined &&
           cartIndexToUpdate >= 0
         ) {
@@ -135,9 +140,7 @@ export const useBuyCart = () => {
 
   const getProductDetail = useCallback(async (id: number) => {
     try {
-      const res = await fetch(
-        `${BASE_URL}/products/${id}?populate=*`
-      );
+      const res = await fetch(`${BASE_URL}/products/${id}?populate=*`);
       if (res.status === 200) {
         const response = await res.json();
         return response?.data;
@@ -169,7 +172,7 @@ export const useBuyCart = () => {
               requestOptions
             );
             if (res.status === 200) {
-              const response = await res.json();
+              // const response = await res.json();
               if (token) await fetchLoggedInUser(token);
             }
           } catch (err) {
@@ -179,7 +182,7 @@ export const useBuyCart = () => {
         }
       }
     },
-    [user, fetchLoggedInUser, getProductDetail, getPayload]
+    [user, getProductDetail, getPayload, token, fetchLoggedInUser]
   );
 
   const updateProductCart = useCallback(
@@ -216,7 +219,7 @@ export const useBuyCart = () => {
         }
       }
     },
-    [user, fetchLoggedInUser, setCartDetailLoading, getUpdateCartPayload]
+    [user, getUpdateCartPayload, token, fetchLoggedInUser]
   );
 
   const handleQuantityChange = useCallback(
@@ -227,8 +230,6 @@ export const useBuyCart = () => {
   );
 
   const emptyCart = useCallback(async () => {
-    
-    
     if (token) {
       try {
         const payload = {
@@ -246,17 +247,13 @@ export const useBuyCart = () => {
           },
           body: JSON.stringify(payload),
         };
-        const res = await fetch(
-          `${BASE_URL}/users/${userid}`,
-          requestOptions
-        );
+        await fetch(`${BASE_URL}/users/${userid}`, requestOptions);
         // if (res.status === 200) {
         //   if (token) await fetchLoggedInUser(token);
         // }
-      } catch (err) {
-      } 
+      } catch (err) {}
     }
-  }, [token,fetchLoggedInUser]);
+  }, [token, fetchLoggedInUser]);
 
   return useMemo(
     () => ({
@@ -266,6 +263,6 @@ export const useBuyCart = () => {
       loading,
       emptyCart,
     }),
-    [updateCart, handleQuantityChange, cartdetailloading, loading,emptyCart]
+    [updateCart, handleQuantityChange, cartdetailloading, loading, emptyCart]
   );
 };

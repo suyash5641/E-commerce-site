@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
 import styles from "./header.module.scss";
 import { Outlet } from "react-router-dom";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { LoginModal, SignUpModal } from "../../shared/components/Modal";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
@@ -16,7 +16,11 @@ export const Header = () => {
   const location = useLocation();
   const token = localStorage.getItem("authToken");
   let url = new URL(window.location.href);
-  let searchParams = new URLSearchParams(url.search);
+  // let searchParams = new URLSearchParams(url.search);
+  let searchParams = useMemo(() => {
+    return new URLSearchParams(url.search);
+  }, [url.search]);
+
   const addQueryParam = useCallback(
     (key: string, value: string) => {
       // const currentURL = window.location.href;
@@ -31,21 +35,27 @@ export const Header = () => {
     [navigate]
   );
 
-  const removeQueryParam = (key: string) => {
-    searchParams.delete(key);
-    navigate({
-      pathname: location.pathname,
-      search: `?${searchParams.toString()}`,
-    });
-    // navigate({ search: `?${searchParams.toString()}` });
-  };
+  const removeQueryParam = useCallback(
+    (key: string) => {
+      searchParams.delete(key);
+      navigate({
+        pathname: location.pathname,
+        search: `?${searchParams.toString()}`,
+      });
+      // navigate({ search: `?${searchParams.toString()}` });
+    },
+    [location.pathname, navigate, searchParams]
+  );
 
-  const handleModalOpen = useCallback((params: string) => {
-    addQueryParam(params, "true");
-    if (searchParams.has(params === "login" ? "signup" : "login")) {
-      removeQueryParam(params === "login" ? "signup" : "login");
-    }
-  }, []);
+  const handleModalOpen = useCallback(
+    (params: string) => {
+      addQueryParam(params, "true");
+      if (searchParams.has(params === "login" ? "signup" : "login")) {
+        removeQueryParam(params === "login" ? "signup" : "login");
+      }
+    },
+    [addQueryParam, removeQueryParam, searchParams]
+  );
 
   const handleProductCartOpen = useCallback(() => {
     if (isLogin) {

@@ -24,6 +24,7 @@ export const Product = () => {
     if (searchParams.has("id") && idParam != null) {
       getProductDetail(parseInt(idParam));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idParam]);
 
   const addQueryParam = useCallback(

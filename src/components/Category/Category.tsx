@@ -28,14 +28,28 @@ export const Category = () => {
     },
   ];
 
-  const Item = ({ item }: { item: { imagePath: string, label: string,categoryid:string } }) => {
+  const Item = ({
+    item,
+  }: {
+    item: { imagePath: string; label: string; categoryid: string };
+  }) => {
     return (
-      <Grid className={styles.card} onClick={() => {navigate(`/productlist?categoryid=${item?.categoryid}`)}}>
-        <img src={item?.imagePath} width={"100%"} height={"90%"} />
-        <Stack sx={{marginTop:"8px"}}>
-        <Typography variant="h3" textAlign={"center"}>
-          {item?.label}
-        </Typography>
+      <Grid
+        className={styles.card}
+        onClick={() => {
+          navigate(`/productlist?categoryid=${item?.categoryid}`);
+        }}
+      >
+        <img
+          src={item?.imagePath}
+          width={"100%"}
+          height={"90%"}
+          alt="product"
+        />
+        <Stack sx={{ marginTop: "8px" }}>
+          <Typography variant="h3" textAlign={"center"}>
+            {item?.label}
+          </Typography>
         </Stack>
       </Grid>
     );
@@ -46,7 +60,14 @@ export const Category = () => {
       <Typography variant="h2">Shop by category</Typography>
       <Grid container className={styles.container}>
         {images.map((item, i) => (
-          <Item key={i} item={{ imagePath: item.imgPath, label: item.label,categoryid:item.categoryid }} />
+          <Item
+            key={i}
+            item={{
+              imagePath: item.imgPath,
+              label: item.label,
+              categoryid: item.categoryid,
+            }}
+          />
         ))}
       </Grid>
     </Box>

@@ -1,9 +1,7 @@
 import {
   Alert,
-  Box,
   Button,
   CircularProgress,
-  Modal,
   Stack,
   TextField,
   Typography,
@@ -12,14 +10,14 @@ import {
   Dialog,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styles from "./signupmodal.module.scss";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SnackBar } from "../../SnackBar";
+// import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 import { formbackground } from "../../../../assets";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
@@ -41,7 +39,7 @@ const validationSchemaa = yup.object({
 });
 
 export const SignUpModal = () => {
-  const location = useLocation();
+  // const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
 
   const [isSnackBar, setIsSnackBar] = useState<any>({
@@ -91,6 +89,7 @@ export const SignUpModal = () => {
     } else {
       setModalOpen(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSignUpModal]);
 
   const handleClose = () => {
@@ -126,6 +125,7 @@ export const SignUpModal = () => {
       });
       formik.resetForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   return (

@@ -1,9 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  IProductLists,
-  ICategory,
-  IOrder,
-} from "../../../shared/interfaces/interface";
+import { useCallback, useMemo, useState } from "react";
+import { IOrder } from "../../../shared/interfaces/interface";
 import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useOrder = () => {
@@ -34,9 +30,8 @@ export const useOrder = () => {
           setOrderList(response?.data);
           setLoading(false);
           return response?.data;
-        }
-        else if(res.status === 401 || res.status === 500){
-           return ""
+        } else if (res.status === 401 || res.status === 500) {
+          return "";
         }
       } catch (err) {
         setLoading(false);
@@ -44,38 +39,32 @@ export const useOrder = () => {
         setLoading(false);
       }
     },
-    [setLoading, setOrderList]
+    [setLoading, setOrderList, token]
   );
 
   const updateOrderPaymentStatus = useCallback(
     async (status: boolean, filters: any) => {
-      try 
-      {
-      let result = await getOrder(filters);
-      if(result.length === 0){
-        result = await getOrder(filters);
-      }
-      if(result[0]?.attributes?.paymentSucessful === status)
-      return
-      const requestOptions = {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ data: { paymentSucessful: status } }),
-      };
-      const res = await fetch(
-        `${BASE_URL}/orders/${result[0]?.id}`,
-        requestOptions
-      );
-      setLoading(false);
-      }
-      catch (err) {
+      try {
+        let result = await getOrder(filters);
+        if (result.length === 0) {
+          result = await getOrder(filters);
+        }
+        if (result[0]?.attributes?.paymentSucessful === status) return;
+        const requestOptions = {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ data: { paymentSucessful: status } }),
+        };
+        await fetch(`${BASE_URL}/orders/${result[0]?.id}`, requestOptions);
+        setLoading(false);
+      } catch (err) {
         setLoading(false);
       }
     },
-    [getOrder,setLoading]
+    [getOrder, setLoading, token]
   );
 
   const getOrderDetail = useCallback(
@@ -103,7 +92,7 @@ export const useOrder = () => {
         setLoading(false);
       }
     },
-    [setLoading, setOrderDetail]
+    [setLoading, setOrderDetail, token]
   );
 
   return useMemo(

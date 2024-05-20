@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, Typography, Button } from "@mui/material";
+import { IconButton, Stack, Typography, Button } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { useProduct } from "../../sdk/hooks/products/useProduct";
 import CloseIcon from "@mui/icons-material/Close";
@@ -65,7 +65,7 @@ export const FilterList = () => {
         search: `?${searchParams.toString()}`,
       });
     },
-    [navigate]
+    [location.pathname, navigate]
   );
 
   const handleClearFilter = useCallback(() => {
@@ -79,7 +79,7 @@ export const FilterList = () => {
       pathname: location.pathname,
       search: `?${searchParams.toString()}`,
     });
-  }, [navigate]);
+  }, [location.pathname, navigate]);
 
   return (
     <>

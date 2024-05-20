@@ -17,15 +17,16 @@ export const ProductList = () => {
   const brand = searchParams.get("brand");
   const sort = searchParams.get("sort");
   const navigate = useNavigate();
-
   const getProductList = useCallback(
-    async (query: any) => {
-      await getProduct(query);
+    async (query: any, signal: AbortSignal) => {
+      await getProduct(query, signal);
     },
     [getProduct]
   );
 
   useEffect(() => {
+    const abortController = new AbortController();
+
     const query = {
       populate: "*",
       ...(searchParams.has("sort") && { sort: sort }),
@@ -43,7 +44,9 @@ export const ProductList = () => {
       }),
     };
 
-    getProductList(query);
+    getProductList(query, abortController.signal);
+
+    return () => abortController.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoryid, minPrice, maxPrice, brand, sort]);
 
@@ -76,23 +79,24 @@ export const ProductList = () => {
             </Stack>
           ) : (
             <Grid container spacing={1}>
-              {productList && productList?.length > 0 ? (
-                productList?.map((data, index) => (
-                  <Grid
-                    item
-                    xs={4}
-                    key={index}
-                    className={styles.productcard}
-                    onClick={() => handleProductCardClick(data?.id)}
-                  >
-                    <ProductCard data={data} />
-                  </Grid>
-                ))
-              ) : (
-                <Stack alignItems="center" sx={{ width: "100%" }}>
-                  <img width="240px" src={nodatafound} alt="imageproduct" />
-                </Stack>
-              )}
+              {productList && productList?.length > 0
+                ? productList?.map((data, index) => (
+                    <Grid
+                      item
+                      xs={4}
+                      key={index}
+                      className={styles.productcard}
+                      onClick={() => handleProductCardClick(data?.id)}
+                    >
+                      <ProductCard data={data} />
+                    </Grid>
+                  ))
+                : productList &&
+                  productList?.length === 0 && (
+                    <Stack alignItems="center" sx={{ width: "100%" }}>
+                      <img width="240px" src={nodatafound} alt="imageproduct" />
+                    </Stack>
+                  )}
             </Grid>
           )}
         </Stack>

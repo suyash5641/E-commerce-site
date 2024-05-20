@@ -1,5 +1,5 @@
 import { useOrder } from "../../sdk/hooks/orders/useOrder";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { CircularProgress, Stack, Typography } from "@mui/material";
 import styles from "./order.module.scss";
 import { Navbar } from "../../components/Navbar";
@@ -8,7 +8,7 @@ import { nodatafound } from "../../assets";
 export const Order = () => {
   const { getOrder, orderList, loading } = useOrder();
   const token = localStorage.getItem("authToken");
-  const { fetchLoggedInUser, user } = useAuth();
+  const { fetchLoggedInUser } = useAuth();
 
   const getOrders = useCallback(async () => {
     if (token) {
@@ -23,6 +23,7 @@ export const Order = () => {
 
   useEffect(() => {
     getOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -32,9 +33,8 @@ export const Order = () => {
         <Navbar path="order" productTitle="" changeTopPosition={"0px"} />
         {loading ? (
           <Stack direction={"column"} className="loader">
-           <CircularProgress/>
+            <CircularProgress />
           </Stack>
-         
         ) : (
           <Stack direction={"column"} className={styles.container} gap={"24px"}>
             {orderList && orderList.length > 0 ? (
@@ -82,7 +82,7 @@ export const Order = () => {
               ))
             ) : (
               <Stack alignItems="center" sx={{ width: "100%" }}>
-                <img width="240px" src={nodatafound} />
+                <img width="240px" src={nodatafound} alt="no data" />
               </Stack>
             )}
           </Stack>

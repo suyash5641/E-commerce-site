@@ -1,25 +1,23 @@
 import {
   Alert,
-  Box,
   Button,
   CircularProgress,
   Dialog,
   IconButton,
   InputAdornment,
-  Modal,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { useCallback, useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import styles from "./loginmodal.module.scss";
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { SnackBar } from "../../SnackBar";
+// import { SnackBar } from "../../SnackBar";
 import { useAuth } from "../../../../sdk/context/AuthContext/AuthProvider";
-import CloseIcon from "@mui/icons-material/Close";
+// import CloseIcon from "@mui/icons-material/Close";
 import { formbackground } from "../../../../assets";
 // import { ILoginModalProps } from "../../interfaces/interface";
 interface FormValues {
@@ -43,8 +41,12 @@ const validationSchemaa = yup.object({
 export const LoginModal = () => {
   // const [searchParams, setSearchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
-  const location = useLocation();
+  // const location = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
+  // const searchParams = useMemo(() => {
+  //   return new URLSearchParams(window.location.search);
+  // }, []);
+
   const isLoginModal = searchParams.get("login");
   const navigate = useNavigate();
   const { signIn, loading } = useAuth();
@@ -60,14 +62,14 @@ export const LoginModal = () => {
     removeQueryParam("login");
   };
 
-  const handleForgotPasswordModal = () => {
-    searchParams.set("forgotpassword", "true");
-    searchParams.delete("login");
-    navigate({
-      pathname: window.location.pathname,
-      search: `?${searchParams.toString()}`,
-    });
-  };
+  // const handleForgotPasswordModal = () => {
+  //   searchParams.set("forgotpassword", "true");
+  //   searchParams.delete("login");
+  //   navigate({
+  //     pathname: window.location.pathname,
+  //     search: `?${searchParams.toString()}`,
+  //   });
+  // };
 
   const removeQueryParam = (key: string) => {
     searchParams.delete(key);
@@ -121,6 +123,7 @@ export const LoginModal = () => {
     } else {
       setModalOpen(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoginModal]);
 
   useEffect(() => {
@@ -132,6 +135,7 @@ export const LoginModal = () => {
       });
       formik.resetForm();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen]);
 
   return (
@@ -140,7 +144,8 @@ export const LoginModal = () => {
       onClose={handleClose}
       className={styles.modalcontainer}
       PaperProps={{
-        style: { borderRadius: "16px" }   }}
+        style: { borderRadius: "16px" },
+      }}
     >
       <Stack className={styles.loginmodal} flexDirection={"column"}>
         <Stack className={styles.modalform}>
@@ -184,8 +189,17 @@ export const LoginModal = () => {
                 justifyContent={"space-between"}
               >
                 <Typography className="login-text">Login</Typography>
-                <Button variant="outlined" className="formbutton" onClick={handleModalOpen}>
-                  <Typography className="login-text-button" textTransform={"capitalize"}>SignUp</Typography>
+                <Button
+                  variant="outlined"
+                  className="formbutton"
+                  onClick={handleModalOpen}
+                >
+                  <Typography
+                    className="login-text-button"
+                    textTransform={"capitalize"}
+                  >
+                    SignUp
+                  </Typography>
                 </Button>
               </Stack>
               <Stack

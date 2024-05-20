@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
-  IProductLists,
-  ICategory,
-  IUser,
+  // IProductLists,
+  // ICategory,
+  // IUser,
   Cart,
 } from "../../../shared/interfaces/interface";
-import { useProduct } from "../products/useProduct";
+// import { useProduct } from "../products/useProduct";
 import { useAuth } from "../../context/AuthContext/AuthProvider";
-import { ProductCard } from "../../../shared/components/ProductCard";
-import { BASE_URL,stripe_key } from "../../../utils/constant/constant";
+// import { ProductCard } from "../../../shared/components/ProductCard";
+import { BASE_URL, stripe_key } from "../../../utils/constant/constant";
 import { loadStripe } from "@stripe/stripe-js";
 // interface updateCart {
 //   productid: number,removeProduct:boolean,productQuantity?:number
@@ -17,11 +17,11 @@ import { loadStripe } from "@stripe/stripe-js";
 export const useCart = () => {
   const [loadingCart, setLoading] = useState<Boolean>(false);
   const [cartdetailloading, setCartDetailLoading] = useState<Boolean>(false);
-  const [quantity, setQuantity] = useState(1);
+  // const [quantity, setQuantity] = useState(1);
   const token = localStorage.getItem("authToken");
-  const [productDetail, setProductDetail] = useState<IProductLists>();
+  // const [productDetail, setProductDetail] = useState<IProductLists>();
   const { user, fetchLoggedInUser } = useAuth();
-  const [errorMessage,setErrorMessage]= useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const getPayload = useCallback(
     (productObject: any) => {
@@ -54,13 +54,18 @@ export const useCart = () => {
         return payload;
       }
     },
-    [user?.cart]
+    [
+      user?.cart,
+      user?.cartActualPrice,
+      user?.cartTotalPrice,
+      user?.discountPrice,
+    ]
   );
 
   const getUpdateCartPayload = useCallback(
     (data: Cart, removeProduct: boolean, operationType: string) => {
       if (removeProduct) {
-        const filterCart = user?.cart?.filter((item) => item.id != data?.id);
+        const filterCart = user?.cart?.filter((item) => item.id !== data?.id);
         if (filterCart?.length === 0) {
           const payload = {
             discountPrice: null,
@@ -92,7 +97,7 @@ export const useCart = () => {
         );
         const filterCart = user?.cart;
         if (
-          filterCart != undefined &&
+          filterCart !== undefined &&
           cartIndexToUpdate !== undefined &&
           cartIndexToUpdate >= 0
         ) {
@@ -137,9 +142,7 @@ export const useCart = () => {
 
   const getProductDetail = useCallback(async (id: number) => {
     try {
-      const res = await fetch(
-        `${BASE_URL}/products/${id}?populate=*`
-      );
+      const res = await fetch(`${BASE_URL}/products/${id}?populate=*`);
       if (res.status === 200) {
         const response = await res.json();
         return response?.data;
@@ -172,10 +175,9 @@ export const useCart = () => {
               requestOptions
             );
             if (res.status === 200) {
-              const response = await res.json();
+              // const response = await res.json();
               if (token) await fetchLoggedInUser(token);
-            }
-            else if (res.status === 401 || res.status === 403) {
+            } else if (res.status === 401 || res.status === 403) {
               setErrorMessage("Error Occured while adding product to cart");
               setLoading(false);
             } else if (res.status === 500) {
@@ -186,12 +188,19 @@ export const useCart = () => {
             setErrorMessage("Error Occured while adding product to cart");
             setLoading(false);
           } finally {
-
           }
         }
       }
     },
-    [user, fetchLoggedInUser, getProductDetail, getPayload,setLoading,setErrorMessage,token]
+    [
+      user,
+      fetchLoggedInUser,
+      getProductDetail,
+      getPayload,
+      setLoading,
+      setErrorMessage,
+      token,
+    ]
   );
 
   const updateProductCart = useCallback(
@@ -218,8 +227,7 @@ export const useCart = () => {
           );
           if (token) await fetchLoggedInUser(token);
           if (res.status === 200) {
-          }
-          else if (res.status === 401 || res.status === 403) {
+          } else if (res.status === 401 || res.status === 403) {
             setErrorMessage("Error Occured while updating cart");
           } else if (res.status === 500) {
             setErrorMessage("Error Occured while updating cart");
@@ -231,7 +239,14 @@ export const useCart = () => {
         }
       }
     },
-    [user, fetchLoggedInUser, setCartDetailLoading, getUpdateCartPayload,setErrorMessage,token]
+    [
+      user,
+      fetchLoggedInUser,
+      setCartDetailLoading,
+      getUpdateCartPayload,
+      setErrorMessage,
+      token,
+    ]
   );
 
   const handleQuantityChange = useCallback(
@@ -242,8 +257,6 @@ export const useCart = () => {
   );
 
   const emptyCart = useCallback(async () => {
-    
-    
     if (token) {
       try {
         const payload = {
@@ -261,10 +274,7 @@ export const useCart = () => {
           },
           body: JSON.stringify(payload),
         };
-        const res = await fetch(
-          `${BASE_URL}/users/${userid}`,
-          requestOptions
-        );
+        const res = await fetch(`${BASE_URL}/users/${userid}`, requestOptions);
         if (res.status === 401 || res.status === 403) {
           setErrorMessage("Error Occured while updating cart");
         } else if (res.status === 500) {
@@ -275,9 +285,9 @@ export const useCart = () => {
         // }
       } catch (err) {
         setErrorMessage("Error Occured while updating cart");
-      } 
+      }
     }
-  }, [token,fetchLoggedInUser,setErrorMessage]);
+  }, [token, fetchLoggedInUser, setErrorMessage]);
 
   const handleCheckout = useCallback(async () => {
     try {
@@ -291,41 +301,46 @@ export const useCart = () => {
         },
         body: JSON.stringify({
           products: user?.cart,
-          cartflag:true
+          cartflag: true,
         }),
       };
-      const res = await fetch(
-        `${BASE_URL}/orders`,
-        requestOptions
-      );
+      const res = await fetch(`${BASE_URL}/orders`, requestOptions);
       if (res.status === 200) {
         const data = await res.json();
         await stripe?.redirectToCheckout({
-        sessionId: data?.stripeSession.id,
-      });
+          sessionId: data?.stripeSession.id,
+        });
       } else if (res.status === 401 || res.status === 403) {
         setErrorMessage("Error Occured ,please try again");
       } else if (res.status === 500) {
         setErrorMessage("Error Occured ,please try again");
-      }    
+      }
     } catch (err) {
       setErrorMessage("Error Occured ,please try again");
       console.log(err);
     }
-  
-  },[user,setErrorMessage]);
+  }, [user, setErrorMessage, token]);
 
   return useMemo(
     () => ({
       updateCart,
       handleQuantityChange,
       cartdetailloading,
-      loadingCart ,
+      loadingCart,
       emptyCart,
       errorMessage,
       setErrorMessage,
-      handleCheckout
+      handleCheckout,
     }),
-    [updateCart, handleQuantityChange, cartdetailloading, loadingCart,emptyCart,errorMessage,setErrorMessage,handleCheckout]
+    [
+      updateCart,
+      handleQuantityChange,
+      cartdetailloading,
+      loadingCart,
+      emptyCart,
+      errorMessage,
+      setErrorMessage,
+      handleCheckout,
+    ]
   );
 };

@@ -12,8 +12,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { IUser } from "../../../shared/interfaces/interface";
 import { BASE_URL } from "../../../utils/constant/constant";
 
-const BaseUrl = "";
-
 interface IProps {
   username: string;
   email: string;
@@ -99,8 +97,15 @@ const AuthContextProvider = ({ children }: any) => {
 
   const token = localStorage.getItem("authToken");
 
-  const protectedRoutes=["/cart","/orders","/buyproduct","/payment"];
-  const routes=["/cart","/orders","/productlist","/product","/buyproduct","/payment"]
+  const protectedRoutes = ["/cart", "/orders", "/buyproduct", "/payment"];
+  // const routes = [
+  //   "/cart",
+  //   "/orders",
+  //   "/productlist",
+  //   "/product",
+  //   "/buyproduct",
+  //   "/payment",
+  // ];
 
   useEffect(() => {
     try {
@@ -119,7 +124,8 @@ const AuthContextProvider = ({ children }: any) => {
         authToken: null,
       });
     }
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   useEffect(() => {
     if (authState.authToken === "loading") {
@@ -132,64 +138,75 @@ const AuthContextProvider = ({ children }: any) => {
         }
         break;
       default:
-       
         break;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, authState.authToken]);
 
   const signIn = useCallback(async (payload: ISignInProps) => {
     setIsLoading(true);
-    const response = await fetch(`${BASE_URL}/auth/local`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await response.json();
-    if (data?.error) {
-      setIsLoading(false);
-      throw data?.error?.message;
-    } else {
-      setIsLoading(false);
-      setAuthState({
-        ...authState,
-        authToken: data.jwt,
-        user: data.user,
-      });
-      localStorage.setItem("authToken", data?.jwt);
-      return true;
-    }
-  }, []);
-
-  const register = useCallback(async (payload: IProps) => {
-    setIsLoading(true);
-    const response = await fetch(
-      `${BASE_URL}/auth/local/register`,
-      {
+    try {
+      const response = await fetch(`${BASE_URL}/auth/local`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-      }
-    );
-
-    const data = await response.json();
-    if (data?.error) {
-      setIsLoading(false);
-      throw data?.error?.message;
-    } else {
-      setIsLoading(false);
-      setAuthState({
-        ...authState,
-        authToken: data.jwt,
-        user: data.user,
       });
-      localStorage.setItem("authToken", data?.jwt);
-      return true;
+
+      const data = await response.json();
+      if (data?.error) {
+        setIsLoading(false);
+        throw data?.error?.message;
+      } else {
+        setIsLoading(false);
+        setAuthState({
+          ...authState,
+          authToken: data.jwt,
+          user: data.user,
+        });
+        localStorage.setItem("authToken", data?.jwt);
+        return true;
+      }
+    } catch (error) {
+      setIsLoading(false);
+      // eslint-disable-next-line no-throw-literal
+      throw "Some Error Occurred";
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const register = useCallback(async (payload: IProps) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/auth/local/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (data?.error) {
+        setIsLoading(false);
+        throw data?.error?.message;
+      } else {
+        setIsLoading(false);
+        setAuthState({
+          ...authState,
+          authToken: data.jwt,
+          user: data.user,
+        });
+        localStorage.setItem("authToken", data?.jwt);
+        return true;
+      }
+    } catch (error) {
+      setIsLoading(false);
+      // eslint-disable-next-line no-throw-literal
+      throw "Some Error Occurred";
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchLoggedInUser = useCallback(
@@ -217,11 +234,13 @@ const AuthContextProvider = ({ children }: any) => {
           return "";
         }
       } catch (error) {
-        console.error(error);
+        // eslint-disable-next-line no-throw-literal
+        throw "Some Error Occurred";
       } finally {
         //   setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setAuthState, token]
   );
 
@@ -235,26 +254,23 @@ const AuthContextProvider = ({ children }: any) => {
 
       const data = await response.json();
       if (data.length > 0) {
-        const apiResponse = await fetch(
-          `${BASE_URL}/auth/forgot-password`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          }
-        );
+        const apiResponse = await fetch(`${BASE_URL}/api/send-email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
         if (apiResponse.status === 200) {
           setIsLoading(false);
-          return `Forgot password link send to ${payload?.email}`;
+          return `Reset password otp send to ${payload?.email}`;
         } else if (apiResponse.status === 400 || apiResponse.status === 500) {
           setIsLoading(false);
-          throw "error occured";
+          throw Error("error occured");
         }
       } else {
         setIsLoading(false);
-        throw "Email is not registered";
+        throw Error("Email is not registered");
       }
     },
     [setIsLoading]
@@ -263,16 +279,13 @@ const AuthContextProvider = ({ children }: any) => {
   const resetPassword = useCallback(
     async (payload: IResetPassword) => {
       setIsLoading(true);
-      const apiResponse = await fetch(
-        `${BASE_URL}/auth/reset-password`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const apiResponse = await fetch(`${BASE_URL}/auth/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
       if (apiResponse.status === 200) {
         setIsLoading(false);
         return `Password changed succesfully , you can login using new password`;
@@ -305,7 +318,7 @@ const AuthContextProvider = ({ children }: any) => {
       loading,
       forgotPassword,
       fetchLoggedInUser,
-      resetPassword
+      resetPassword,
     }),
     [
       authState,
@@ -315,7 +328,7 @@ const AuthContextProvider = ({ children }: any) => {
       loading,
       forgotPassword,
       fetchLoggedInUser,
-      resetPassword
+      resetPassword,
     ]
   );
 
