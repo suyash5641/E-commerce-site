@@ -15,6 +15,7 @@ import { useFormik } from "formik";
 // import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import { ResetPassword } from "../ResetPassword";
 import { BASE_URL } from "../../utils/constant/constant";
+import { sucess } from "../../assets";
 interface FormValues {
   email: string;
 }
@@ -29,7 +30,8 @@ const validationSchemaa = yup.object({
 });
 
 const ForgotPassword = () => {
-  const [activeStep, setActiveStep] = useState<number>(1);
+  const [activeStep, setActiveStep] = useState<number>(3);
+  const [title, setTitle] = useState<string>("Reset Account Password");
   const [loading, setIsLoading] = useState<boolean>(false);
   const [isSnackBar, setIsSnackBar] = useState<any>({
     isOpen: false,
@@ -97,13 +99,14 @@ const ForgotPassword = () => {
       } catch (error) {
         setIsLoading(false);
         // eslint-disable-next-line no-throw-literal
-        throw "Some Error Occurred";
+        throw error;
       }
     },
     [setIsLoading]
   );
-  const handleActiveStepChange = (data: number) => {
+  const handleActiveStepChange = (data: number, title: string) => {
     setActiveStep(data);
+    setTitle(title);
   };
 
   useEffect(() => {
@@ -126,7 +129,7 @@ const ForgotPassword = () => {
               width: "100%",
               maxWidth: "400px",
               position: "absolute",
-              top: "100px",
+              top: "64px",
             }}
             spacing={2}
           >
@@ -144,16 +147,20 @@ const ForgotPassword = () => {
             </Alert>
           </Stack>
         )}
+        <Stack className={styles.resetPasswordFormContainer}>
+          <Typography className={styles.formHeading}>{title}</Typography>
+        </Stack>
         {activeStep === 1 && (
-          <Stack sx={{ width: "100%", maxWidth: "400px" }}>
+          <Stack sx={{ width: "100%", maxWidth: "400px", height: "320px" }}>
             <form onSubmit={formik.handleSubmit} className={styles.form}>
               <Typography className={styles.formText}>
-                Enter registered email id
+                Enter Registered Email Id
               </Typography>
               <Stack
                 flexDirection={"column"}
                 alignItems={"center"}
                 width={"100%"}
+                margin={"16px 0px"}
               >
                 <TextField
                   label="Email"
@@ -166,11 +173,17 @@ const ForgotPassword = () => {
                 />
               </Stack>
               {loading ? (
-                <Stack flexDirection={"row"} justifyContent={"center"}>
+                <Stack
+                  flexDirection={"row"}
+                  justifyContent={"center"}
+                  margin={"16px 0px 16px 0px"}
+                  height="36px"
+                >
                   <CircularProgress
                     sx={{
                       height: "16px !important",
                       width: "16px !important",
+                      marginTop: "8px",
                     }}
                   />
                 </Stack>
@@ -178,7 +191,7 @@ const ForgotPassword = () => {
                 <Stack
                   flexDirection={"row"}
                   justifyContent={"center"}
-                  margin={"8px 0px 8px 0px"}
+                  margin={"16px 0px 16px 0px"}
                 >
                   <Button variant="contained" color="secondary" type="submit">
                     Submit
@@ -188,7 +201,22 @@ const ForgotPassword = () => {
             </form>
           </Stack>
         )}
-        {activeStep === 2 && <ResetPassword />}
+        {activeStep === 2 && (
+          <ResetPassword
+            email={formik.values.email}
+            handleActiveStepChange={handleActiveStepChange}
+          />
+        )}
+        {activeStep === 3 && (
+          <Stack className={styles.passwordSucessForm}>
+            <Typography className={styles.resetPasswordText}>
+              Password Reset Sucessfully
+            </Typography>
+            <Stack className={styles.imageSection}>
+              <img src={sucess} alt="success" className={styles.image} />
+            </Stack>
+          </Stack>
+        )}
       </Stack>
     </Stack>
   );

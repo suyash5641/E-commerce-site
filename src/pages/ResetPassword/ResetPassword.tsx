@@ -15,6 +15,18 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import styles from "./resetpassword.module.scss";
+import { BASE_URL } from "../../utils/constant/constant";
+
+interface IResetPassword {
+  identifier: string;
+  newPassword: string;
+  resendPasswordOtp: string;
+}
+
+interface IProps {
+  email: string;
+  handleActiveStepChange: (step: number, title: string) => void;
+}
 
 const ResponsiveInput = styled("input")(({ theme }) => ({
   width: "36px !important",
@@ -25,7 +37,7 @@ const ResponsiveInput = styled("input")(({ theme }) => ({
   },
 }));
 
-export const ResetPassword = () => {
+export const ResetPassword = ({ handleActiveStepChange, email }: IProps) => {
   const [showPassword, setShowPassword] = useState<Boolean>(false);
   // const [code, setCode] = useState<string>("");
   const [otp, setOtp] = useState("");
@@ -40,6 +52,9 @@ export const ResetPassword = () => {
   });
 
   const validationSchema = Yup.object().shape({
+    otp: Yup.string()
+      .matches(/^\d{6}$/, "OTP must be exactly 6 digits")
+      .required("OTP is required"),
     password: Yup.string()
       .min(6, "Password must be at least 6 characters")
       .required("Password is required"),
@@ -52,16 +67,31 @@ export const ResetPassword = () => {
     initialValues: {
       password: "",
       confirmPassword: "",
+      otp: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const payload = {
-        password: values?.password,
-        passwordConfirmation: values?.confirmPassword,
+        newPassword: values?.password,
+        resendPasswordOtp: values?.otp,
+        identifier: email,
       };
-      setLoading(true);
 
-      setLoading(false);
+      try {
+        const result = await resetPassword(payload);
+        setIsSnackBar({
+          isOpen: true,
+          message: result,
+          svg: "success",
+        });
+        handleActiveStepChange(3, "");
+      } catch (error) {
+        setIsSnackBar({
+          isOpen: true,
+          message: error,
+          svg: "error",
+        });
+      }
     },
   });
 
@@ -77,12 +107,36 @@ export const ResetPassword = () => {
     event.preventDefault();
   };
 
+  const resetPassword = async (payload: IResetPassword) => {
+    try {
+      const apiResponse = await fetch(`${BASE_URL}/reset-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      if (apiResponse.status === 200) {
+        setLoading(false);
+        return `Password Reset Sucessfully`;
+      } else if (apiResponse.status === 400 || apiResponse.status === 500) {
+        setLoading(false);
+        // eslint-disable-next-line no-throw-literal
+        throw "Some Error Occurred";
+      }
+    } catch (error) {
+      setLoading(false);
+      // eslint-disable-next-line no-throw-literal
+      throw error;
+    }
+  };
+
   return (
     // <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexDirection: 'column' }}>
     <Stack flexDirection={"column"} alignItems={"center"}>
       {isSnackBar?.isOpen && (
         <Stack
-          sx={{ width: "240px", position: "absolute", top: "100px" }}
+          sx={{ width: "240px", position: "absolute", top: "64px" }}
           spacing={2}
         >
           <Alert
@@ -114,12 +168,19 @@ export const ResetPassword = () => {
           </Typography>
         </Stack>
         <OtpInput
-          value={otp}
-          onChange={setOtp}
+          // value={otp}
+          // onChange={setOtp}
+          value={formik.values.otp}
+          onChange={(value) => formik.setFieldValue("otp", value)}
           numInputs={6}
           renderSeparator={<span>-</span>}
           renderInput={(props) => <ResponsiveInput {...props} />}
         />
+        {formik.errors.otp && formik.touched.otp ? (
+          <Stack>
+            <Typography>{formik.errors.otp}</Typography>
+          </Stack>
+        ) : null}
         <Stack className={styles.createPassword}>
           <Typography
             variant="h3"
