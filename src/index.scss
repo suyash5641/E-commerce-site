@@ -170,6 +170,7 @@ a {
   .title {
     font-size: 32px !important;
     font-weight: 700 !important;
+    top: 120px;
   }
   .product_card_price {
     flex-direction: column !important;
@@ -184,6 +185,14 @@ a {
     justify-content: flex-start;
     margin-left: 21px !important;
     display: flex;
+  }
+
+  .cover-text {
+    top: 70px;
+  }
+
+  .animate-charcter {
+    top: 100px;
   }
 }
 

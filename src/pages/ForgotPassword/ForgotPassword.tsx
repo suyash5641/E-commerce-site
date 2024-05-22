@@ -16,6 +16,7 @@ import { useFormik } from "formik";
 import { ResetPassword } from "../ResetPassword";
 import { BASE_URL } from "../../utils/constant/constant";
 import { sucess } from "../../assets";
+import { useNavigate } from "react-router-dom";
 interface FormValues {
   email: string;
 }
@@ -30,7 +31,8 @@ const validationSchemaa = yup.object({
 });
 
 const ForgotPassword = () => {
-  const [activeStep, setActiveStep] = useState<number>(3);
+  const navigate = useNavigate();
+  const [activeStep, setActiveStep] = useState<number>(1);
   const [title, setTitle] = useState<string>("Reset Account Password");
   const [loading, setIsLoading] = useState<boolean>(false);
   const [isSnackBar, setIsSnackBar] = useState<any>({
@@ -107,6 +109,29 @@ const ForgotPassword = () => {
   const handleActiveStepChange = (data: number, title: string) => {
     setActiveStep(data);
     setTitle(title);
+  };
+
+  const handleSnackBar = () => {
+    setIsSnackBar({
+      isOpen: false,
+      message: "",
+      svg: "",
+    });
+  };
+
+  const addQueryParam = (key: string, value: string) => {
+    // const currentURL = window.location.href;
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set(key, value);
+
+    navigate({
+      pathname: window.location.pathname,
+      search: `?${urlParams.toString()}`,
+    });
+  };
+
+  const handleLoginForm = () => {
+    addQueryParam("login", "true");
   };
 
   useEffect(() => {
@@ -205,6 +230,7 @@ const ForgotPassword = () => {
           <ResetPassword
             email={formik.values.email}
             handleActiveStepChange={handleActiveStepChange}
+            handleSnackBar={handleSnackBar}
           />
         )}
         {activeStep === 3 && (
@@ -215,6 +241,13 @@ const ForgotPassword = () => {
             <Stack className={styles.imageSection}>
               <img src={sucess} alt="success" className={styles.image} />
             </Stack>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleLoginForm}
+            >
+              Click Here To Login
+            </Button>
           </Stack>
         )}
       </Stack>

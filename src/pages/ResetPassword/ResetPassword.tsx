@@ -26,6 +26,7 @@ interface IResetPassword {
 interface IProps {
   email: string;
   handleActiveStepChange: (step: number, title: string) => void;
+  handleSnackBar: () => void;
 }
 
 const ResponsiveInput = styled("input")(({ theme }) => ({
@@ -37,10 +38,13 @@ const ResponsiveInput = styled("input")(({ theme }) => ({
   },
 }));
 
-export const ResetPassword = ({ handleActiveStepChange, email }: IProps) => {
+export const ResetPassword = ({
+  handleActiveStepChange,
+  email,
+  handleSnackBar,
+}: IProps) => {
   const [showPassword, setShowPassword] = useState<Boolean>(false);
-  // const [code, setCode] = useState<string>("");
-  const [otp, setOtp] = useState("");
+
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<Boolean>(false);
   const [loading, setLoading] = useState<Boolean>(false);
@@ -76,15 +80,17 @@ export const ResetPassword = ({ handleActiveStepChange, email }: IProps) => {
         resendPasswordOtp: values?.otp,
         identifier: email,
       };
+      handleSnackBar();
 
       try {
         const result = await resetPassword(payload);
+
+        handleActiveStepChange(3, "");
         setIsSnackBar({
           isOpen: true,
           message: result,
           svg: "success",
         });
-        handleActiveStepChange(3, "");
       } catch (error) {
         setIsSnackBar({
           isOpen: true,
@@ -116,13 +122,19 @@ export const ResetPassword = ({ handleActiveStepChange, email }: IProps) => {
         },
         body: JSON.stringify(payload),
       });
+      const response = await apiResponse.json();
+
       if (apiResponse.status === 200) {
         setLoading(false);
         return `Password Reset Sucessfully`;
-      } else if (apiResponse.status === 400 || apiResponse.status === 500) {
+      } else if (
+        apiResponse.status === 400 ||
+        apiResponse.status === 500 ||
+        apiResponse.status === 401
+      ) {
         setLoading(false);
         // eslint-disable-next-line no-throw-literal
-        throw "Some Error Occurred";
+        throw response?.error?.message;
       }
     } catch (error) {
       setLoading(false);
@@ -136,7 +148,7 @@ export const ResetPassword = ({ handleActiveStepChange, email }: IProps) => {
     <Stack flexDirection={"column"} alignItems={"center"}>
       {isSnackBar?.isOpen && (
         <Stack
-          sx={{ width: "240px", position: "absolute", top: "64px" }}
+          sx={{ width: "250px", position: "absolute", top: "64px" }}
           spacing={2}
         >
           <Alert

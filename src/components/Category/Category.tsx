@@ -43,10 +43,10 @@ export const Category = () => {
         <img
           src={item?.imagePath}
           width={"100%"}
-          height={"90%"}
+          height={"85%"}
           alt="product"
         />
-        <Stack sx={{ marginTop: "8px" }}>
+        <Stack sx={{ marginTop: { xs: "0px", sm: "0px", md: "12px" } }}>
           <Typography variant="h3" textAlign={"center"}>
             {item?.label}
           </Typography>
@@ -57,7 +57,9 @@ export const Category = () => {
 
   return (
     <Box className={styles.box}>
-      <Typography variant="h2">Shop by category</Typography>
+      <Typography variant="h2" textAlign="center">
+        Shop By Category
+      </Typography>
       <Grid container className={styles.container}>
         {images.map((item, i) => (
           <Item

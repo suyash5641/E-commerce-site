@@ -98,14 +98,7 @@ const AuthContextProvider = ({ children }: any) => {
   const token = localStorage.getItem("authToken");
 
   const protectedRoutes = ["/cart", "/orders", "/buyproduct", "/payment"];
-  // const routes = [
-  //   "/cart",
-  //   "/orders",
-  //   "/productlist",
-  //   "/product",
-  //   "/buyproduct",
-  //   "/payment",
-  // ];
+  const routes = ["/forgot-password"];
 
   useEffect(() => {
     try {
@@ -127,6 +120,10 @@ const AuthContextProvider = ({ children }: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+  const isValidToken = (token: string | null) => {
+    return token && token !== null;
+  };
+
   useEffect(() => {
     if (authState.authToken === "loading") {
       return;
@@ -137,7 +134,13 @@ const AuthContextProvider = ({ children }: any) => {
           navigate("/");
         }
         break;
+
       default:
+        if (isValidToken(authState?.authToken)) {
+          if (routes.includes(location.pathname)) {
+            navigate("/");
+          }
+        }
         break;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,7 +174,7 @@ const AuthContextProvider = ({ children }: any) => {
     } catch (error) {
       setIsLoading(false);
       // eslint-disable-next-line no-throw-literal
-      throw "Some Error Occurred";
+      throw error;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

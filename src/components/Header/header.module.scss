@@ -67,11 +67,12 @@
     }
 
     .section {
-      gap: 8px;
+      gap: 4px;
       .loginText {
         text-transform: capitalize;
         color: #fff;
         font-size: 12px;
+        min-width: 54px;
       }
     }
   }
