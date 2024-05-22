@@ -17,7 +17,7 @@ import {
   Radio,
   CircularProgress,
 } from "@mui/material";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import styles from "./filterdrawer.module.scss";
 import { useProduct } from "../../../sdk/hooks/products/useProduct";
 import { useSearchParams } from "react-router-dom";
@@ -37,7 +37,7 @@ interface OpenState {
 
 export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const abortControllerRef = useRef<AbortController | null>(null);
   const { categoryList } = useProduct();
   const { brandList, getBrand, errorMessage, loading } = useBrand();
   const handleDrawerToggle = useCallback(() => {
@@ -116,11 +116,19 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
 
   const handleChange = useCallback(
     (event: SelectChangeEvent) => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
       setCategory(event.target.value);
-      getBrand({
-        populate: "*",
-        "filters[categoryid][$eq]": event.target.value,
-      });
+      getBrand(
+        {
+          populate: "*",
+          "filters[categoryid][$eq]": event.target.value,
+        },
+        controller?.signal
+      );
       setBrand("");
     },
     [setCategory, getBrand, setBrand]
@@ -166,13 +174,17 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
   }, [setSearchParams, price, category, brand, searchParams, setDrawerOpen]);
 
   useEffect(() => {
+    const abortController = new AbortController();
     const categoryid = searchParams.get("categoryid");
     const brand = searchParams.get("brand");
     const minPrice = searchParams.get("minPrice") ?? "";
     const maxPrice = searchParams.get("maxPrice") ?? "";
     if (categoryid) {
       setCategory(categoryid);
-      getBrand({ populate: "*", "filters[categoryid][$eq]": categoryid });
+      getBrand(
+        { populate: "*", "filters[categoryid][$eq]": categoryid },
+        abortController?.signal
+      );
       setOpen({
         category: true,
         brand: true,
@@ -184,6 +196,8 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     if (minPrice || maxPrice) {
       setPrice([parseInt(minPrice), parseInt(maxPrice)]);
     }
+
+    return () => abortController.abort();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

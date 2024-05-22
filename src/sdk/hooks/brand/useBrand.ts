@@ -8,11 +8,13 @@ export const useBrand = () => {
   const [loading, setLoading] = useState<Boolean>(true);
 
   const getBrand = useCallback(
-    async (filters: any) => {
+    async (filters: any, signal: AbortSignal) => {
       try {
         const queryParams = new URLSearchParams(filters);
         setLoading(true);
-        const res = await fetch(`${BASE_URL}/brands?${queryParams}`);
+        const res = await fetch(`${BASE_URL}/brands?${queryParams}`, {
+          signal: signal,
+        });
         if (res.status === 200) {
           const response = await res.json();
           setBrandList(response?.data);
@@ -20,19 +22,17 @@ export const useBrand = () => {
           setErrorMessage("");
           return response?.data;
         } else if (res.status === 401) {
-          setErrorMessage(
-            "Error Occured while fetching list of brands, try again"
-          );
+          setErrorMessage("Error Occured try again");
         } else if (res.status === 500) {
-          setErrorMessage(
-            "Error Occured while fetching list of brands, try again"
-          );
+          setErrorMessage("Error Occured try again");
         }
-      } catch (err) {
+      } catch (err: any) {
         setLoading(false);
-        setErrorMessage(
-          "Error Occured while fetching list of brands, try again"
-        );
+        if (err.name === "AbortError") {
+          console.log("Fetch aborted");
+        } else {
+          setErrorMessage("Error Occured try again");
+        }
       } finally {
         setLoading(false);
       }
