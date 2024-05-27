@@ -55,10 +55,11 @@ export const useOrder = () => {
         console.log(
           orderWithSessionId,
           "test",
-          orderWithSessionId?.attributes?.paymentSucessful,
-          orderWithSessionId?.attributes?.paymentSucessful !== null
+          orderWithSessionId[0]?.attributes?.paymentSucessful,
+          orderWithSessionId[0]?.attributes?.paymentSucessful !== null
         );
-        if (orderWithSessionId?.attributes?.paymentSucessful !== null) return;
+        if (orderWithSessionId[0]?.attributes?.paymentSucessful !== null)
+          return;
         const requestOptions = {
           method: "PUT",
           headers: {
