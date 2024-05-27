@@ -52,6 +52,12 @@ export const useOrder = () => {
         const orderWithSessionId = result.filter(
           (order: IOrder) => order?.attributes?.stripeId === sessionId
         );
+        console.log(
+          orderWithSessionId,
+          "test",
+          orderWithSessionId?.attributes?.paymentSucessful,
+          orderWithSessionId?.attributes?.paymentSucessful !== null
+        );
         if (orderWithSessionId?.attributes?.paymentSucessful !== null) return;
         const requestOptions = {
           method: "PUT",
