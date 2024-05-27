@@ -22,21 +22,26 @@ export const PaymentConfirmation = () => {
 
   const updateCart = useCallback(
     async (sessionid: string) => {
-      const paymentStatus = searchParams.get("success");
-      const removeCartItem = searchParams.get("cartflag");
-      // const bytes = AES.decrypt(id, secret);
-      // const decryptedText = bytes.toString(enc.Utf8);
-      // setDecrypted(decryptedText);
+      try {
+        const paymentStatus = searchParams.get("success");
+        const removeCartItem = searchParams.get("cartflag");
 
-      if (paymentStatus === "true") {
-        setPaymentSucessfull(true);
-        if (removeCartItem === "true") await emptyCart();
-      } else {
-        setPaymentSucessfull(false);
+        if (paymentStatus === "true") {
+          setPaymentSucessfull(true);
+          if (removeCartItem === "true") await emptyCart();
+        } else {
+          setPaymentSucessfull(false);
+        }
+        const filter = { populate: "*", "filters[stripeId][$eq]": sessionid };
+        await updateOrderPaymentStatus(
+          paymentStatus === "true",
+          filter,
+          sessionid
+        );
+        setLoading(false);
+      } catch (error) {
+        throw error;
       }
-      const filter = { populate: "*", "filters[stripeId][$eq]": sessionid };
-      await updateOrderPaymentStatus(paymentStatus === "true", filter);
-      setLoading(false);
     },
     [
       searchParams,
@@ -57,7 +62,7 @@ export const PaymentConfirmation = () => {
   return (
     <>
       {loading ? (
-        <Skeleton variant="rectangular" width={"100%"} height={"90vh"} />
+        <Skeleton variant="rectangular" width={"100%"} height={"100vh"} />
       ) : (
         <Stack direction={"column"} className={styles.container}>
           <Box className={styles.box}>

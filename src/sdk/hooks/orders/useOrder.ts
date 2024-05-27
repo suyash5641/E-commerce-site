@@ -43,13 +43,16 @@ export const useOrder = () => {
   );
 
   const updateOrderPaymentStatus = useCallback(
-    async (status: boolean, filters: any) => {
+    async (status: boolean, filters: any, sessionId: string) => {
       try {
         let result = await getOrder(filters);
         if (result.length === 0) {
           result = await getOrder(filters);
         }
-        if (result[0]?.attributes?.paymentSucessful === status) return;
+        const orderWithSessionId = result.filter(
+          (order: IOrder) => order?.attributes?.stripeId === sessionId
+        );
+        if (orderWithSessionId.length > 0) return;
         const requestOptions = {
           method: "PUT",
           headers: {

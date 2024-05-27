@@ -1,4 +1,11 @@
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import styles from "./header.module.scss";
 import { Outlet } from "react-router-dom";
 import { useEffect, useState, useCallback, useMemo } from "react";
@@ -10,9 +17,10 @@ import { UserProfile } from "../UserProfile";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const [hasMounted, setHasMounted] = useState<boolean>(false);
   const { fetchLoggedInUser, user } = useAuth();
-  const [isLogin, setIsLogin] = useState(false);
-  const [show, setIsShow] = useState(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [show, setIsShow] = useState<boolean>(false);
   const location = useLocation();
   const token = localStorage.getItem("authToken");
   let url = new URL(window.location.href);
@@ -89,12 +97,28 @@ export const Header = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setHasMounted(true);
+    }, 1500);
+
+    // Cleanup function to clear the timeout
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <>
-      {false ? (
-        // <Skeleton variant="rectangular" width={"100%"} className={styles.header}/>
-        <Stack />
+      {!hasMounted ? (
+        <Stack
+          className={styles.header}
+          flexDirection={"row"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+        />
       ) : (
+        // <Stack />
         <Stack
           className={styles.header}
           flexDirection={"row"}

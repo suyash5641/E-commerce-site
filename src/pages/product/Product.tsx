@@ -90,7 +90,7 @@ export const Product = () => {
   return (
     <>
       {loading ? (
-        <Skeleton variant="rectangular" width={"100%"} height={"99vh"} />
+        <Skeleton variant="rectangular" width={"100%"} height={"100vh"} />
       ) : (
         <>
           <Navbar

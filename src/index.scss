@@ -7,6 +7,10 @@ li {
   font-family: "Lato";
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 button {
   font-family: Lato;
 }
