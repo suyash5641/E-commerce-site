@@ -52,7 +52,7 @@ export const useOrder = () => {
         const orderWithSessionId = result.filter(
           (order: IOrder) => order?.attributes?.stripeId === sessionId
         );
-        if (orderWithSessionId.length > 0) return;
+        if (orderWithSessionId?.attributes?.paymentSucessful! == null) return;
         const requestOptions = {
           method: "PUT",
           headers: {
