@@ -43,15 +43,13 @@ export const useOrder = () => {
   );
 
   const updateOrderPaymentStatus = useCallback(
-    async (status: boolean, filters: any, sessionId: string) => {
+    async (status: boolean, filters: any) => {
       try {
-        let result = await getOrder(filters);
-        if (result.length === 0) {
-          result = await getOrder(filters);
+        let orderWithSessionId = await getOrder(filters);
+        if (orderWithSessionId.length === 0) {
+          orderWithSessionId = await getOrder(filters);
         }
-        const orderWithSessionId = result.filter(
-          (order: IOrder) => order?.attributes?.stripeId === sessionId
-        );
+
         if (orderWithSessionId[0]?.attributes?.paymentSucessful !== null)
           return;
         const requestOptions = {
@@ -62,7 +60,10 @@ export const useOrder = () => {
           },
           body: JSON.stringify({ data: { paymentSucessful: status } }),
         };
-        await fetch(`${BASE_URL}/orders/${result[0]?.id}`, requestOptions);
+        await fetch(
+          `${BASE_URL}/orders/${orderWithSessionId[0]?.id}`,
+          requestOptions
+        );
         setLoading(false);
       } catch (err) {
         setLoading(false);

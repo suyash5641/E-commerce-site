@@ -33,11 +33,7 @@ export const PaymentConfirmation = () => {
           setPaymentSucessfull(false);
         }
         const filter = { populate: "*", "filters[stripeId][$eq]": sessionid };
-        await updateOrderPaymentStatus(
-          paymentStatus === "true",
-          filter,
-          sessionid
-        );
+        await updateOrderPaymentStatus(paymentStatus === "true", filter);
         setLoading(false);
       } catch (error) {
         throw error;
