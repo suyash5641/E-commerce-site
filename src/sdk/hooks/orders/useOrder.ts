@@ -3,14 +3,19 @@ import { IOrder } from "../../../shared/interfaces/interface";
 import { BASE_URL } from "../../../utils/constant/constant";
 
 export const useOrder = () => {
-  const [orderList, setOrderList] = useState<IOrder[]>();
+  const [orderList, setOrderList] = useState<IOrder[] | null>(null);
   //   const [categoryList, setCategoryList] = useState<ICategory[]>();
-  const [loading, setLoading] = useState<Boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const [orderDetail, setOrderDetail] = useState<IOrder>();
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const token = localStorage.getItem("authToken");
 
   const getOrder = useCallback(
-    async (filters: any) => {
+    async (
+      filters: any,
+      maximumRetryAttempt: number = 1,
+      attempts: number = 1
+    ) => {
       try {
         const queryParams = new URLSearchParams(filters);
         setLoading(true);
@@ -25,18 +30,21 @@ export const useOrder = () => {
           `${BASE_URL}/orders?${queryParams}`,
           requestOptions
         );
+        const response = await res.json();
         if (res.status === 200) {
-          const response = await res.json();
           setOrderList(response?.data);
           setLoading(false);
           return response?.data;
         } else if (res.status === 401 || res.status === 500) {
-          return "";
+          throw response?.error?.message;
         }
       } catch (err) {
-        setLoading(false);
-      } finally {
-        setLoading(false);
+        if (attempts <= maximumRetryAttempt)
+          getOrder(filters, maximumRetryAttempt, attempts + 1);
+        else {
+          setErrorMessage("Error Occured, try again");
+          setLoading(false);
+        }
       }
     },
     [setLoading, setOrderList, token]
@@ -45,11 +53,7 @@ export const useOrder = () => {
   const updateOrderPaymentStatus = useCallback(
     async (status: boolean, filters: any) => {
       try {
-        let orderWithSessionId = await getOrder(filters);
-        if (orderWithSessionId.length === 0) {
-          orderWithSessionId = await getOrder(filters);
-        }
-
+        const orderWithSessionId = await getOrder(filters);
         if (orderWithSessionId[0]?.attributes?.paymentSucessful !== null)
           return;
         const requestOptions = {
@@ -109,6 +113,8 @@ export const useOrder = () => {
       loading,
       setOrderList,
       updateOrderPaymentStatus,
+      errorMessage,
+      setErrorMessage,
     }),
     [
       getOrder,
@@ -118,6 +124,8 @@ export const useOrder = () => {
       loading,
       setOrderList,
       updateOrderPaymentStatus,
+      errorMessage,
+      setErrorMessage,
     ]
   );
 };

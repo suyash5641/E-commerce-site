@@ -8,7 +8,9 @@ import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import { Navbar } from "../../components/Navbar";
 
 export const Product = () => {
-  const { getProductDetail, productDetail, loading } = useProduct();
+  const { getProductDetail, productDetail, loading, setError, error } =
+    useProduct();
+
   const { updateCart, errorMessage, setErrorMessage, loadingCart } = useCart();
   const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -98,94 +100,102 @@ export const Product = () => {
             productTitle={productDetail?.attributes?.name ?? ""}
             changeTopPosition={"40px"}
           />
-          {errorMessage && errorMessage.length > 0 && (
+          {(errorMessage && errorMessage.length > 0) ||
+          (error && error.length > 0) ? (
             <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
               <Alert
                 className="errornotification"
                 severity={"error"}
                 onClose={() => {
                   setErrorMessage("");
+                  setError("");
                 }}
               >
-                {errorMessage}
+                {errorMessage || error}
               </Alert>
             </Stack>
-          )}
-          <Stack direction="column">
-            <Stack className={styles.productcontainer}>
-              <Stack className={styles.productimage}>
-                <img
-                  src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
-                  height={"95%"}
-                  width={"95%"}
-                  alt="product"
-                />
-              </Stack>
-              <Stack className={styles.productinfo}>
-                {/* <Typography variant="h3">{productDetail?.attributes?.brandName}</Typography> */}
-                <Typography variant="h2" className={styles.productTitle}>
-                  {productDetail?.attributes?.title}
-                </Typography>
-                <Typography variant="h2" className={styles.discountedPrice}>
-                  Rs {productDetail?.attributes?.discountedPrice}
-                </Typography>
-                <Stack direction={"row"} gap={"24px"}>
-                  <Typography variant="h5" className={styles.price}>
-                    Rs {productDetail?.attributes?.price}
-                  </Typography>
-                  <Typography variant="h5" className={styles.discountPercent}>
-                    {productDetail?.attributes?.discountPercent}
-                    {" off"}
-                  </Typography>
-                </Stack>
-                <Stack gap={"8px"} sx={{ margin: "12px 0px" }}>
-                  <Typography variant="h3">About Item</Typography>
-                  {/* <Typography variant="h5" >
+          ) : (
+            productDetail && (
+              <Stack direction="column">
+                <Stack className={styles.productcontainer}>
+                  <Stack className={styles.productimage}>
+                    <img
+                      src={`${productDetail?.attributes?.imageurl?.data?.attributes?.url}`}
+                      height={"95%"}
+                      width={"95%"}
+                      alt="product"
+                    />
+                  </Stack>
+                  <Stack className={styles.productinfo}>
+                    {/* <Typography variant="h3">{productDetail?.attributes?.brandName}</Typography> */}
+                    <Typography variant="h2" className={styles.productTitle}>
+                      {productDetail?.attributes?.title}
+                    </Typography>
+                    <Typography variant="h2" className={styles.discountedPrice}>
+                      Rs {productDetail?.attributes?.discountedPrice}
+                    </Typography>
+                    <Stack direction={"row"} gap={"24px"}>
+                      <Typography variant="h5" className={styles.price}>
+                        Rs {productDetail?.attributes?.price}
+                      </Typography>
+                      <Typography
+                        variant="h5"
+                        className={styles.discountPercent}
+                      >
+                        {productDetail?.attributes?.discountPercent}
+                        {" off"}
+                      </Typography>
+                    </Stack>
+                    <Stack gap={"8px"} sx={{ margin: "12px 0px" }}>
+                      <Typography variant="h3">About Item</Typography>
+                      {/* <Typography variant="h5" >
                   {productDetail?.attributes?.description}
                  
                 </Typography> */}
-                  {productDetail?.attributes?.description
-                    .split("##")
-                    .map((data, index) => (
-                      <li key={index}>{data}</li>
-                    ))}
-                </Stack>
-                <Stack
-                  direction={"row"}
-                  gap={"32px"}
-                  sx={{ margin: "16px 0px" }}
-                >
-                  <Button
-                    sx={{ width: "fit-content" }}
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleBuyButtonClick}
-                    className={styles.button}
-                  >
-                    Buy now
-                  </Button>
-                  {
-                    <Button
-                      disabled={
-                        cartButtonLabel === "Go to Cart"
-                          ? false
-                          : loadingCart === false
-                          ? false
-                          : true
-                      }
-                      sx={{ width: "fit-content" }}
-                      variant="contained"
-                      color="secondary"
-                      onClick={handleCartButtonClick}
-                      className={styles.button}
+                      {productDetail?.attributes?.description
+                        .split("##")
+                        .map((data, index) => (
+                          <li key={index}>{data}</li>
+                        ))}
+                    </Stack>
+                    <Stack
+                      direction={"row"}
+                      gap={"32px"}
+                      sx={{ margin: "16px 0px" }}
                     >
-                      {cartButtonLabel}
-                    </Button>
-                  }
+                      <Button
+                        sx={{ width: "fit-content" }}
+                        variant="contained"
+                        color="secondary"
+                        onClick={handleBuyButtonClick}
+                        className={styles.button}
+                      >
+                        Buy now
+                      </Button>
+                      {
+                        <Button
+                          disabled={
+                            cartButtonLabel === "Go to Cart"
+                              ? false
+                              : loadingCart === false
+                              ? false
+                              : true
+                          }
+                          sx={{ width: "fit-content" }}
+                          variant="contained"
+                          color="secondary"
+                          onClick={handleCartButtonClick}
+                          className={styles.button}
+                        >
+                          {cartButtonLabel}
+                        </Button>
+                      }
+                    </Stack>
+                  </Stack>
                 </Stack>
               </Stack>
-            </Stack>
-          </Stack>
+            )
+          )}
         </>
       )}
     </>

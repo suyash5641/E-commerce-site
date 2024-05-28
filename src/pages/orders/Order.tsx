@@ -1,12 +1,13 @@
 import { useOrder } from "../../sdk/hooks/orders/useOrder";
 import { useCallback, useEffect } from "react";
-import { CircularProgress, Stack, Typography } from "@mui/material";
+import { Alert, CircularProgress, Stack, Typography } from "@mui/material";
 import styles from "./order.module.scss";
 import { Navbar } from "../../components/Navbar";
 import { useAuth } from "../../sdk/context/AuthContext/AuthProvider";
 import { nodatafound } from "../../assets";
 export const Order = () => {
-  const { getOrder, orderList, loading } = useOrder();
+  const { getOrder, orderList, loading, errorMessage, setErrorMessage } =
+    useOrder();
   const token = localStorage.getItem("authToken");
   const { fetchLoggedInUser } = useAuth();
 
@@ -37,7 +38,19 @@ export const Order = () => {
           </Stack>
         ) : (
           <Stack direction={"column"} className={styles.container} gap={"24px"}>
-            {orderList && orderList.length > 0 ? (
+            {errorMessage && errorMessage.length > 0 ? (
+              <Stack alignItems="center" sx={{ width: "100%" }} spacing={2}>
+                <Alert
+                  className="errornotification"
+                  severity={"error"}
+                  onClose={() => {
+                    setErrorMessage("");
+                  }}
+                >
+                  {errorMessage}
+                </Alert>
+              </Stack>
+            ) : orderList && orderList.length > 0 ? (
               orderList?.map((data, index) => (
                 <Stack key={index} direction={"column"} gap={"24px"}>
                   <Typography textAlign={"center"}>
@@ -81,9 +94,12 @@ export const Order = () => {
                 </Stack>
               ))
             ) : (
-              <Stack alignItems="center" sx={{ width: "100%" }}>
-                <img width="240px" src={nodatafound} alt="no data" />
-              </Stack>
+              orderList &&
+              orderList.length === 0 && (
+                <Stack alignItems="center" sx={{ width: "100%" }}>
+                  <img width="240px" src={nodatafound} alt="no data" />
+                </Stack>
+              )
             )}
           </Stack>
         )}

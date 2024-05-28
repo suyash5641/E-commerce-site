@@ -100,7 +100,7 @@ export const Header = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setHasMounted(true);
-    }, 1500);
+    }, 1100);
 
     // Cleanup function to clear the timeout
     return () => {

@@ -8,9 +8,12 @@ export const useProduct = () => {
   const [productList, setProductList] = useState<IProductLists[] | null>(null);
   const [categoryList, setCategoryList] = useState<ICategory[]>();
   const [loading, setLoading] = useState<Boolean>(true);
-  const [productDetail, setProductDetail] = useState<IProductLists>();
+  const [productDetail, setProductDetail] = useState<IProductLists | null>(
+    null
+  );
   // const [searchParams,setSearchParams] = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const getProduct = useCallback(
     async (filters: any, signal?: AbortSignal) => {
@@ -55,19 +58,21 @@ export const useProduct = () => {
         if (res.status === 200) {
           const response = await res.json();
           setProductDetail(response?.data);
-        } else if (res.status === 401) {
-          setErrorMessage("Error Occured, try again");
-        } else if (res.status === 500) {
-          setErrorMessage("Error Occured, try again");
+        } else if (
+          res.status === 401 ||
+          res.status === 500 ||
+          res.status === 404
+        ) {
+          setError("Error Occured, try again");
         }
       } catch (err) {
         setLoading(false);
-        setErrorMessage("Error Occured, try again");
+        setError("Error Occured, try again");
       } finally {
         setLoading(false);
       }
     },
-    [setLoading, setProductDetail, setErrorMessage]
+    [setLoading, setProductDetail, setError]
   );
 
   useEffect(() => {
@@ -86,6 +91,8 @@ export const useProduct = () => {
       setProductList,
       errorMessage,
       setErrorMessage,
+      setError,
+      error,
     }),
     [
       getProduct,
@@ -97,6 +104,8 @@ export const useProduct = () => {
       setProductList,
       errorMessage,
       setErrorMessage,
+      setError,
+      error,
     ]
   );
 };
