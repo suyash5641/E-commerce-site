@@ -32,9 +32,9 @@ interface IProps {
 const ResponsiveInput = styled("input")(({ theme }) => ({
   width: "36px !important",
   height: "40px",
-  [theme.breakpoints.down(280)]: {
-    width: "33px !important",
-    height: "40px",
+  [theme.breakpoints.down(300)]: {
+    width: "28px !important",
+    height: "32px",
   },
 }));
 
@@ -145,12 +145,13 @@ export const ResetPassword = ({
 
   return (
     // <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexDirection: 'column' }}>
-    <Stack flexDirection={"column"} alignItems={"center"}>
+    <Stack
+      flexDirection={"column"}
+      alignItems={"center"}
+      className={styles.resetPasswordBoxContainer}
+    >
       {isSnackBar?.isOpen && (
-        <Stack
-          sx={{ width: "250px", position: "absolute", top: "64px" }}
-          spacing={2}
-        >
+        <Stack spacing={2} className={styles.snackBarContainer}>
           <Alert
             severity={isSnackBar.svg}
             onClose={() => {
