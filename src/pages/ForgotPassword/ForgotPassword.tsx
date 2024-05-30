@@ -46,7 +46,7 @@ const ForgotPassword = () => {
       email: "",
     },
     validationSchema: validationSchemaa,
-    onSubmit: async (values: any) => {
+    onSubmit: async (values: any, { resetForm }) => {
       const payload = {
         email: values?.email,
       };
@@ -57,6 +57,7 @@ const ForgotPassword = () => {
           message: result,
           svg: "success",
         });
+        resetForm();
         setActiveStep(2);
       } catch (error) {
         setIsSnackBar({

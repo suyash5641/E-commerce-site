@@ -74,7 +74,7 @@ export const ResetPassword = ({
       otp: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const payload = {
         newPassword: values?.password,
         resendPasswordOtp: values?.otp,
@@ -84,7 +84,7 @@ export const ResetPassword = ({
 
       try {
         const result = await resetPassword(payload);
-
+        resetForm();
         handleActiveStepChange(3, "");
         setIsSnackBar({
           isOpen: true,
@@ -261,9 +261,10 @@ export const ResetPassword = ({
                 variant="contained"
                 color="secondary"
                 className={styles.resetPasswordButton}
-                onClick={() =>
-                  handleActiveStepChange(1, "Reset Account Password")
-                }
+                onClick={() => {
+                  handleSnackBar();
+                  handleActiveStepChange(1, "Reset Account Password");
+                }}
               >
                 Back
               </Button>
