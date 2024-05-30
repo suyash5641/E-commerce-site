@@ -123,15 +123,10 @@ export const ResetPassword = ({
         body: JSON.stringify(payload),
       });
       const response = await apiResponse.json();
-
       if (apiResponse.status === 200) {
         setLoading(false);
         return `Password Reset Sucessfully`;
-      } else if (
-        apiResponse.status === 400 ||
-        apiResponse.status === 500 ||
-        apiResponse.status === 401
-      ) {
+      } else if (!apiResponse?.ok) {
         setLoading(false);
         // eslint-disable-next-line no-throw-literal
         throw response?.error?.message;
@@ -144,12 +139,7 @@ export const ResetPassword = ({
   };
 
   return (
-    // <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexDirection: 'column' }}>
-    <Stack
-      flexDirection={"column"}
-      alignItems={"center"}
-      className={styles.resetPasswordBoxContainer}
-    >
+    <>
       {isSnackBar?.isOpen && (
         <Stack spacing={2} className={styles.snackBarContainer}>
           <Alert
@@ -169,106 +159,126 @@ export const ResetPassword = ({
       <Stack
         flexDirection={"column"}
         alignItems={"center"}
-        className={styles.resetPasswordForm}
+        className={styles.resetPasswordBoxContainer}
       >
-        <Stack className={styles.textBox}>
-          <Typography
-            variant="h3"
-            textAlign={"start"}
-            className={styles.textTitle}
-          >
-            Enter six digit otp
-          </Typography>
-        </Stack>
-        <OtpInput
-          // value={otp}
-          // onChange={setOtp}
-          value={formik.values.otp}
-          onChange={(value) => formik.setFieldValue("otp", value)}
-          numInputs={6}
-          renderSeparator={<span>-</span>}
-          renderInput={(props) => <ResponsiveInput {...props} />}
-        />
-        {formik.errors.otp && formik.touched.otp ? (
-          <Stack>
-            <Typography>{formik.errors.otp}</Typography>
+        <Stack
+          flexDirection={"column"}
+          alignItems={"center"}
+          className={styles.resetPasswordForm}
+        >
+          <Stack className={styles.textBox}>
+            <Typography
+              variant="h3"
+              textAlign={"start"}
+              className={styles.textTitle}
+            >
+              Enter six digit otp
+            </Typography>
           </Stack>
-        ) : null}
-        <Stack className={styles.createPassword}>
-          <Typography
-            variant="h3"
-            textAlign={"start"}
-            className={styles.textTitle}
-          >
-            Create a password
-          </Typography>
+          <OtpInput
+            // value={otp}
+            // onChange={setOtp}
+            value={formik.values.otp}
+            onChange={(value) => formik.setFieldValue("otp", value)}
+            numInputs={6}
+            renderSeparator={<span>-</span>}
+            renderInput={(props) => <ResponsiveInput {...props} />}
+          />
+          {formik.errors.otp && formik.touched.otp ? (
+            <Stack>
+              <Typography color="#E13A3A" fontSize="12px" textAlign={"start"}>
+                {formik.errors.otp}
+              </Typography>
+            </Stack>
+          ) : null}
+          <Stack className={styles.createPassword}>
+            <Typography
+              variant="h3"
+              textAlign={"start"}
+              className={styles.textTitle}
+            >
+              Create a password
+            </Typography>
+          </Stack>
+          <form onSubmit={formik.handleSubmit} className={styles.resetForm}>
+            <TextField
+              label=""
+              name="password"
+              placeholder="Enter password"
+              type={showPassword ? "text" : "password"}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <TextField
+              type={showConfirmPassword ? "text" : "password"}
+              label=""
+              name="confirmPassword"
+              placeholder="Confirm password"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.confirmPassword &&
+                Boolean(formik.errors.confirmPassword)
+              }
+              helperText={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+              required
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Stack flexDirection={"row"} gap={2.5}>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={styles.resetPasswordButton}
+                onClick={() =>
+                  handleActiveStepChange(1, "Reset Account Password")
+                }
+              >
+                Back
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                className={styles.resetPasswordButton}
+              >
+                {loading ? <CircularProgress /> : "Submit"}
+              </Button>
+            </Stack>
+          </form>
         </Stack>
-        <form onSubmit={formik.handleSubmit} className={styles.resetForm}>
-          <TextField
-            label=""
-            name="password"
-            placeholder="Enter password"
-            type={showPassword ? "text" : "password"}
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            type={showConfirmPassword ? "text" : "password"}
-            label=""
-            name="confirmPassword"
-            placeholder="Confirm password"
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            error={
-              formik.touched.confirmPassword &&
-              Boolean(formik.errors.confirmPassword)
-            }
-            helperText={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-            }
-            required
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            className={styles.resetPasswordButton}
-          >
-            {loading ? <CircularProgress /> : "Submit"}
-          </Button>
-        </form>
       </Stack>
-    </Stack>
+    </>
   );
 };

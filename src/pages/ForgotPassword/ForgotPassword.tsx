@@ -88,7 +88,7 @@ const ForgotPassword = () => {
           if (apiResponse.status === 200) {
             setIsLoading(false);
             return `Reset password otp send to ${payload?.email}`;
-          } else if (apiResponse.status === 400 || apiResponse.status === 500) {
+          } else if (!apiResponse?.ok) {
             setIsLoading(false);
             // eslint-disable-next-line no-throw-literal
             throw "Some Error Occurred";
