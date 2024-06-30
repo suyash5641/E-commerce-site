@@ -35,6 +35,7 @@ const ForgotPassword = () => {
   const [activeStep, setActiveStep] = useState<number>(1);
   const [title, setTitle] = useState<string>("Reset Account Password");
   const [loading, setIsLoading] = useState<boolean>(false);
+  const [userEmail, setEmail] = useState<string>("");
   const [isSnackBar, setIsSnackBar] = useState<any>({
     isOpen: false,
     message: "",
@@ -50,6 +51,7 @@ const ForgotPassword = () => {
       const payload = {
         email: values?.email,
       };
+      setEmail(values?.email);
       try {
         const result = await forgotPassword(payload);
         setIsSnackBar({
@@ -229,7 +231,7 @@ const ForgotPassword = () => {
         )}
         {activeStep === 2 && (
           <ResetPassword
-            email={formik.values.email}
+            email={userEmail}
             handleActiveStepChange={handleActiveStepChange}
             handleSnackBar={handleSnackBar}
           />
