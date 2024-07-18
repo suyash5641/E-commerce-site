@@ -26,7 +26,6 @@ export const useProduct = () => {
         if (res.status === 200) {
           const response = await res.json();
           setProductList(response?.data);
-          setLoading(false);
           return response?.data;
         } else if (res.status === 401) {
           setErrorMessage("Error Occured, try again");

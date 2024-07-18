@@ -201,6 +201,45 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const categoryid = searchParams.get("categoryid");
+    const brand = searchParams.get("brand");
+    const minPrice = searchParams.get("minPrice") ?? "";
+    const maxPrice = searchParams.get("maxPrice") ?? "";
+    const allValuesEmpty = !categoryid && !brand && !minPrice && !maxPrice;
+    if (allValuesEmpty) {
+      setOpen({
+        category: false,
+        brand: false,
+      });
+      setPrice([500, 30000]);
+      setCategory("");
+      setBrand("");
+    } else if (!brand) {
+      setBrand("");
+      if (!categoryid) {
+        setOpen({
+          category: false,
+          brand: false,
+        });
+        setCategory("");
+      } else
+        setOpen({
+          category: true,
+          brand: false,
+        });
+    } else if (!categoryid && brand) {
+      setOpen({
+        category: false,
+        brand: true,
+      });
+      setCategory("");
+      setBrand(brand);
+    } else if (!minPrice && !maxPrice) {
+      setPrice([500, 30000]);
+    }
+  }, [searchParams]);
+
   // const drawer = (
   //   <Box
   //     className={styles.filter}
@@ -429,6 +468,106 @@ export const FilterDrawer = ({ drawerOpen, setDrawerOpen }: Props) => {
               <List className="collapse_brand" component="div" disablePadding>
                 <Box className={styles.category}>
                   {loading ? (
+                    <Stack
+                      sx={{
+                        height: "36px",
+                        alignItems: "center",
+                        paddingTop: "10px",
+                      }}
+                    >
+                      <CircularProgress
+                        sx={{
+                          height: "16px !important",
+                          width: "16px !important",
+                          // paddingBottom: "12px",
+                        }}
+                      />
+                    </Stack>
+                  ) : (
+                    <FormControl className={styles.formlabel}>
+                      <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        value={brand}
+                        onChange={handleBrandChange}
+
+                        // className={styles.selectdropdown}
+                      >
+                        {brandList?.map((data, index) => (
+                          <FormControlLabel
+                            key={data?.id}
+                            value={data?.attributes?.brandname}
+                            control={
+                              <Radio
+                                sx={{
+                                  "&.Mui-checked": {
+                                    color: "#000",
+                                  },
+                                  padding: "6px",
+                                }}
+                              />
+                            }
+                            label={data?.attributes?.brandname}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  )}
+                </Box>
+              </List>
+            )}
+          </Collapse>
+        </Box>
+      )}
+      {category.length === 0 && brand && (
+        <Box
+          sx={{
+            backgroundColor: "#F2F2F2",
+            marginTop: "24px",
+            // borderBottomRadiusLeft: "8px",
+            // borderBottomRadiusRight: "8px",
+          }}
+        >
+          <ListItemButton onClick={() => handleClick("brand")}>
+            <ListItemText
+              primary="Brand"
+              className="listtext"
+              primaryTypographyProps={{
+                fontFamily: "Montserrat, sans-serif",
+                color: "#0a0c0f",
+                fontSize: "14px",
+                fontWeight: "500",
+              }}
+            />
+            {open.brand ? <ExpandLess /> : <ExpandMore />}
+          </ListItemButton>
+          <Collapse
+            in={open.brand}
+            timeout="auto"
+            unmountOnExit
+            sx={{ backgroundColor: "#F2F2F2", paddingBottom: "16px" }}
+          >
+            {/* <List className="collapse_brand" component="div" disablePadding> */}
+            {errorMessage && errorMessage.length > 0 ? (
+              <Stack
+                alignItems="center"
+                sx={{ width: "100%", margin: "12px 0px" }}
+                spacing={2}
+              >
+                <Alert
+                  className="errornotification"
+                  severity={"error"}
+                  // onClose={() => {
+                  //  setErrorMessage("")
+                  // }}
+                >
+                  {errorMessage}
+                </Alert>
+              </Stack>
+            ) : (
+              <List className="collapse_brand" component="div" disablePadding>
+                <Box className={styles.category}>
+                  {false ? (
                     <Stack
                       sx={{
                         height: "36px",

@@ -11,44 +11,31 @@ export const ProductList = () => {
   const { getProduct, productList, loading, errorMessage, setErrorMessage } =
     useProduct();
   const [searchParams, setSearchParams] = useSearchParams();
-  const categoryid = searchParams.get("categoryid");
-  const minPrice = searchParams.get("minPrice");
-  const maxPrice = searchParams.get("maxPrice");
-  const brand = searchParams.get("brand");
-  const sort = searchParams.get("sort");
+
   const navigate = useNavigate();
-  const getProductList = useCallback(
-    async (query: any, signal: AbortSignal) => {
-      await getProduct(query, signal);
-    },
-    [getProduct]
-  );
 
   useEffect(() => {
     const abortController = new AbortController();
-
-    const query = {
+    const categoryid = searchParams.get("categoryid");
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
+    const brand = searchParams.get("brand");
+    const sort = searchParams.get("sort");
+    const query: Record<string, any> = {
       populate: "*",
-      ...(searchParams.has("sort") && { sort: sort }),
-      ...(searchParams.has("categoryid") && {
-        "filters[categoryid][$contains]": categoryid,
-      }),
-      ...(searchParams.has("minPrice") && {
-        "filters[price][$gte]": minPrice,
-      }),
-      ...(searchParams.has("maxPrice") && {
-        "filters[price][$lte]": maxPrice,
-      }),
-      ...(searchParams.has("brand") && {
-        "filters[brandName][$eq]": brand,
-      }),
     };
+    if (searchParams.has("sort")) query.sort = sort;
+    if (searchParams.has("categoryid"))
+      query["filters[categoryid][$eq]"] = categoryid;
+    if (searchParams.has("minPrice")) query["filters[price][$gte]"] = minPrice;
+    if (searchParams.has("maxPrice")) query["filters[price][$lte]"] = maxPrice;
+    if (searchParams.has("brand")) query["filters[brandName][$eq]"] = brand;
+    getProduct(query, abortController.signal);
 
-    getProductList(query, abortController.signal);
-
-    return () => abortController.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [categoryid, minPrice, maxPrice, brand, sort]);
+    return () => {
+      abortController.abort();
+    };
+  }, [getProduct, searchParams]);
 
   const handleProductCardClick = (id: number) => {
     navigate({
@@ -56,7 +43,6 @@ export const ProductList = () => {
       search: `?id=${id.toString()}`,
     });
   };
-
   return (
     <>
       {loading ? (
