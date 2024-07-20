@@ -17,6 +17,7 @@ export const useProduct = () => {
 
   const getProduct = useCallback(
     async (filters: any, signal?: AbortSignal) => {
+      let fetchAbort = false;
       try {
         const queryParams = new URLSearchParams(filters);
         setLoading(true);
@@ -35,11 +36,13 @@ export const useProduct = () => {
       } catch (err: any) {
         if (err.name === "AbortError") {
           console.log("Fetch aborted");
+          fetchAbort = true;
         } else {
           setErrorMessage("Error Occured, try again");
         }
       } finally {
-        setLoading(false);
+        if (fetchAbort) setLoading(true);
+        else setLoading(false);
       }
     },
     [setLoading, setProductList, setErrorMessage]
