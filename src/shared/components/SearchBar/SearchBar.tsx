@@ -1,4 +1,10 @@
-import { IconButton, Stack, TextField, Typography } from "@mui/material";
+import {
+  CircularProgress,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useState, useEffect, useCallback, useRef } from "react";
@@ -10,7 +16,7 @@ import { norecordfound } from "../../../assets";
 
 export const SearchBar = () => {
   const [searchText, setSearchText] = useState("");
-  const { getProduct, productList, setProductList } = useProduct();
+  const { getProduct, productList, setProductList, loading } = useProduct();
   // const popoverRef = useRef<HTMLDivElement | null>(null);
   const debouncedValue = useDebounce<string>(searchText, 1000);
   // const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
@@ -44,14 +50,19 @@ export const SearchBar = () => {
   );
 
   useEffect(() => {
+    const abortController = new AbortController();
     if (debouncedValue) {
       const query = {
         populate: "*",
         "filters[title][$containsi]": debouncedValue,
       };
-      getProduct(query);
+      getProduct(query, abortController.signal);
       setIsOpen(true);
     }
+
+    return () => {
+      abortController.abort();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue]);
 
@@ -104,7 +115,7 @@ export const SearchBar = () => {
       />
       {isOpen && debouncedValue && productList && (
         <Stack className={styles.box} ref={divRef}>
-          {productList.length > 0 ? (
+          {productList.length > 0 && !loading ? (
             productList?.map((data, index) => (
               <Stack
                 key={index}
@@ -124,12 +135,16 @@ export const SearchBar = () => {
             ))
           ) : (
             <Stack className={styles.emptysearchresult}>
-              <img
-                src={norecordfound}
-                width={"200px"}
-                height={"200px"}
-                alt="no record found"
-              />
+              {!loading ? (
+                <img
+                  src={norecordfound}
+                  width={"200px"}
+                  height={"200px"}
+                  alt="no record found"
+                />
+              ) : (
+                <CircularProgress />
+              )}
             </Stack>
           )}
         </Stack>

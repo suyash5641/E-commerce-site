@@ -1,28 +1,31 @@
-.textfield{
-    input{
-        padding: 8px 0px;
-    }
+.textfield {
+  input {
+    padding: 8px 0px;
+  }
 }
-.box{
-    margin-top: 48px;
-    z-index: 12;
-    position: absolute;
-    background: white;
-    width: 100%;
-    max-height: 300px;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    .searchitem{
-        padding: 8px 20px;
-        cursor: pointer;
-        color: #67718B;
-    }
-    .searchitem:hover{
-       background: #e7e8eb;
-    }
-    .emptysearchresult{
-        justify-content: center;
-        align-items: center;
-        height: 260px;
-    }
+.box {
+  margin-top: 48px;
+  z-index: 12;
+  position: absolute;
+  background: white;
+  width: 100%;
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  .searchitem {
+    padding: 8px 20px;
+    cursor: pointer;
+    color: #67718b;
+  }
+  .searchitem:hover {
+    background: #e7e8eb;
+  }
+  .emptysearchresult {
+    justify-content: center;
+    align-items: center;
+    height: 260px;
+  }
+}
+.box::-webkit-scrollbar {
+  display: none;
 }
