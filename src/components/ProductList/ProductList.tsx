@@ -11,31 +11,30 @@ export const ProductList = () => {
   const { getProduct, productList, loading, errorMessage, setErrorMessage } =
     useProduct();
   const [searchParams, setSearchParams] = useSearchParams();
+  const categoryid = searchParams.get("categoryid");
+  const minPrice = searchParams.get("minPrice");
+  const maxPrice = searchParams.get("maxPrice");
+  const brand = searchParams.get("brand");
+  const sort = searchParams.get("sort");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const abortController = new AbortController();
-    const categoryid = searchParams.get("categoryid");
-    const minPrice = searchParams.get("minPrice");
-    const maxPrice = searchParams.get("maxPrice");
-    const brand = searchParams.get("brand");
-    const sort = searchParams.get("sort");
     const query: Record<string, any> = {
       populate: "*",
     };
-    if (searchParams.has("sort")) query.sort = sort;
-    if (searchParams.has("categoryid"))
-      query["filters[categoryid][$eq]"] = categoryid;
-    if (searchParams.has("minPrice")) query["filters[price][$gte]"] = minPrice;
-    if (searchParams.has("maxPrice")) query["filters[price][$lte]"] = maxPrice;
-    if (searchParams.has("brand")) query["filters[brandName][$eq]"] = brand;
+    if (sort) query.sort = sort;
+    if (categoryid) query["filters[categoryid][$eq]"] = categoryid;
+    if (minPrice) query["filters[price][$gte]"] = minPrice;
+    if (maxPrice) query["filters[price][$lte]"] = maxPrice;
+    if (brand) query["filters[brandName][$eq]"] = brand;
     getProduct(query, abortController.signal);
 
     return () => {
       abortController.abort();
     };
-  }, [getProduct, searchParams]);
+  }, [brand, categoryid, getProduct, maxPrice, minPrice, sort]);
 
   const handleProductCardClick = (id: number) => {
     navigate({
